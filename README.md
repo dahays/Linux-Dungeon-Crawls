@@ -33,6 +33,7 @@ A multi-process Linux challenge focused on identifying and defeating hidden and 
 **Install Script:**
 ```bash
 wget -O setup_hydra.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/setup_hydra.sh
+
 chmod +x setup_hydra.sh
 
 ./setup_hydra.sh
@@ -47,6 +48,7 @@ An advanced Linux investigation challenge centered on identifying and stopping a
 **Install Script:**
 ```bash
 wget -O setup_ghost.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/setup_ghost.sh
+
 chmod +x setup_ghost.sh
 
 ./setup_ghost.sh
