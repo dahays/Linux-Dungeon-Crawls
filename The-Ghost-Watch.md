@@ -1,0 +1,27 @@
+
+---
+
+## 3️⃣ `ghost_watch.md`
+
+```markdown
+# 👻 Ghost Watch
+
+## Overview
+An advanced Linux challenge. Students must investigate a “ghost process” that respawns, identify its parent, terminate it correctly, and confirm the system is silent.
+
+**Skills Practiced**
+- Network listening (`ss`, `netstat`)
+- Process hierarchy (`ps`, `pstree`)
+- Signals (`kill -SIGTERM`)
+- Script execution
+- System verification
+
+---
+
+## Setup Instructions
+
+1. Open your Linux terminal.
+2. Download the setup script:
+
+```bash
+wget -O setup_ghost.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/setup_ghost.sh
