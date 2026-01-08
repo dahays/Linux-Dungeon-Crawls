@@ -15,4 +15,5 @@ Each dungeon comes with a setup script. To install a dungeon:
 2. Download the setup script using `wget`:
 
 ```bash
-wget -O setup_dungeon.sh <SCRIPT_URL>
+wget -O setup_hydra.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/setup_hydra.sh
+wget -O setup_ghost.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/setup_ghost.sh
