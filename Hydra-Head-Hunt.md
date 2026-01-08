@@ -1,0 +1,27 @@
+
+---
+
+## 2️⃣ `hydra_head.md`
+
+```markdown
+# 🐍 Hydra Head Hunt
+
+## Overview
+A mid-level Linux challenge. Students must discover multiple hidden “Hydra” processes, identify environment variables, detect command hijacking, and verify system safety.
+
+**Skills Practiced**
+- Process inspection (`ps`, `pgrep`)
+- Environment variables (`printenv`, `env`)
+- PATH and command resolution
+- Killing multiple processes
+- Script execution
+
+---
+
+## Setup Instructions
+
+1. Open your Linux terminal.
+2. Download the setup script:
+
+```bash
+wget -O setup_hydra.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/setup_hydra.sh
