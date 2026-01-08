@@ -23,7 +23,7 @@ All dungeon crawls follow the same basic workflow:
 
 ## Available Dungeon Crawls
 
-### 🐍 The Hydra Head Hunt
+### 🐍 The Hydra Head Hunt (Level 2)
 
 A multi-process Linux challenge focused on identifying and defeating hidden and persistent processes, environment variables, and command hijacking.
 
@@ -38,7 +38,7 @@ chmod +x setup_hydra.sh
 
 ./setup_hydra.sh
 ```
-### 👻 The Ghost Watch
+### 👻 The Ghost Watch (Level 3)
 
 An advanced Linux investigation challenge centered on identifying and stopping a persistent “ghost” process that respawns until the true source is discovered.
 
