@@ -17,7 +17,7 @@ All dungeon crawls follow the same basic workflow:
 1. Download the setup script using `wget`
 2. Make the script executable
 3. Run the script
-4. Enter the dungeon directory and begin
+4. Enter the dungeon directory to begin
 5. Check for possible "clues" within each dungeon to help get started
 6. Run the check script to verify success
 
