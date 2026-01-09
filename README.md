@@ -28,7 +28,7 @@ All dungeon crawls follow the same basic workflow:
 A multi-process Linux challenge focused on identifying and defeating hidden and persistent processes, environment variables, and command hijacking.
 
 **Crawl Instructions:**  
-`The-Hydra-Head-Hunt.md`
+[The-Hydra-Head-Hunt.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/Hydra-Head-Hunt.md#-hydra-head-hunt)
 
 **Install Script:**
 ```bash
