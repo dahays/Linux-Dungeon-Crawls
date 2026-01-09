@@ -1,5 +1,3 @@
-## 3️⃣ `ghost_watch.md`
-
 # 👻 Ghost Watch
 
 ## Overview
