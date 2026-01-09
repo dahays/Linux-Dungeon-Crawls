@@ -31,3 +31,7 @@ chmod +x setup_ghost.sh
 
 cd ghost_watch
 ```
+6. Check success
+```bash
+./check_hydra.sh
+```
