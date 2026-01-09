@@ -1,35 +1,20 @@
 #!/bin/bash
 set -e
 
-echo "🐍 Forging the Hydra..."
+echo "🐍 Summoning the Hydra..."
 
-# --- Resolve target user & home safely (works with sudo) ---
-TARGET_USER="${SUDO_USER:-$USER}"
-TARGET_HOME="$(eval echo "~$TARGET_USER")"
+# -------------------------------
+# 1. Create Hydra Lair
+# -------------------------------
+HYDRA_DIR="$HOME/hydra_lair"
+BIN_DIR="$HYDRA_DIR/bin"
+HEAD_DIR="$HYDRA_DIR/heads"
 
-# --- Base directories ---
-HYDRA_DIR="$TARGET_HOME/hydra_lair"
-BIN_DIR="$TARGET_HOME/.hydra_bin"
-HYDRA_ENV="$TARGET_HOME/.hydra_env"
-BASHRC="$TARGET_HOME/.bashrc"
+mkdir -p "$BIN_DIR" "$HEAD_DIR"
 
-mkdir -p "$HYDRA_DIR"
-mkdir -p "$BIN_DIR"
-
-# --- Hydra Key (local, persistent, student-owned) ---
-echo 'export HYDRA_KEY=many_heads' > "$HYDRA_ENV"
-
-# Ensure it loads for interactive shells
-if ! grep -q hydra_env "$BASHRC"; then
-  echo 'source "$HOME/.hydra_env"' >> "$BASHRC"
-fi
-
-# Load immediately for current shell if possible
-if [[ "$USER" == "$TARGET_USER" ]]; then
-  source "$HYDRA_ENV"
-fi
-
-# --- PATH hijacked ls (scoped to hydra_lair) ---
+# -------------------------------
+# 2. Create Hydra ls wrapper
+# -------------------------------
 cat << 'EOF' > "$BIN_DIR/ls"
 #!/bin/bash
 
@@ -42,46 +27,50 @@ EOF
 
 chmod +x "$BIN_DIR/ls"
 
-# Prepend Hydra bin to PATH (idempotent)
-if ! grep -q hydra_bin "$BASHRC"; then
-  echo 'export PATH="$HOME/.hydra_bin:$PATH"' >> "$BASHRC"
-fi
+# -------------------------------
+# 3. Export PATH locally (student shell safe)
+# -------------------------------
+ENV_FILE="$HOME/.hydra_env"
 
-# --- Spawn MULTIPLE Hydra Heads (correctly) ---
-echo "🐍 Releasing the Hydra heads..."
-
-for head in deckhand lookout navigator; do
-  (
-    exec -a hydra_head sleep 9999
-  ) &
-done
-
-# --- Verification script ---
-cat << 'EOF' > "$HYDRA_DIR/check_hydra.sh"
-#!/bin/bash
-
-echo "=== Hydra Verification ==="
-
-if pgrep -f hydra_head > /dev/null; then
-  echo "❌ The Hydra still lives."
-  exit 1
-fi
-
-if [[ "$HYDRA_KEY" != "many_heads" ]]; then
-  echo "❌ The Hydra Key is missing."
-  exit 1
-fi
-
-echo "✅ All Hydra heads defeated"
-echo "🏆 The Hydra has fallen. The harbor is safe."
+cat << EOF > "$ENV_FILE"
+export HYDRA_KEY=many_heads
+export PATH="$BIN_DIR:\$PATH"
 EOF
 
-chmod +x "$HYDRA_DIR/check_hydra.sh"
-chown "$TARGET_USER":"$TARGET_USER" "$HYDRA_DIR/check_hydra.sh"
+# Load immediately for the current shell
+source "$ENV_FILE"
 
-# --- Final instructions ---
-echo
-echo "🐍 Hydra Head Hunt installed successfully."
-echo "➡️ Open a NEW terminal or run: source ~/.bashrc"
-echo "➡️ Then: cd ~/hydra_lair"
-echo "➡️ Begin the hunt."
+# -------------------------------
+# 4. Create Hydra Head Script
+# -------------------------------
+cat << 'EOF' > "$HEAD_DIR/hydra_head.sh"
+#!/bin/bash
+exec -a hydra_head sleep 1000000
+EOF
+
+chmod +x "$HEAD_DIR/hydra_head.sh"
+
+# -------------------------------
+# 5. Spawn Multiple Hydra Heads
+# -------------------------------
+for i in 1 2 3; do
+  nohup "$HEAD_DIR/hydra_head.sh" >/dev/null 2>&1 &
+done
+
+# -------------------------------
+# 6. Student Instructions
+# -------------------------------
+cat << EOF
+
+🐍 HYDRA DEPLOYED SUCCESSFULLY
+
+Student-facing facts:
+• Multiple Hydra heads are running
+• HYDRA_KEY exists in the environment
+• PATH is hijacked inside hydra_lair only
+
+To begin the hunt:
+  cd ~/hydra_lair
+  ls
+
+EOF
