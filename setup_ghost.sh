@@ -1,64 +1,65 @@
 #!/bin/bash
-# ==============================
-# The Ghost Watch - Setup
-# ==============================
+# ======================================
+# The Ghost Watch - Setup Script
+# Teaches process monitoring and management
+# ======================================
 
-echo "[+] Installing The Ghost Watch..."
+set -e
 
-# --- Ensure /etc/profile.d exists and persist Ghost Key ---
-sudo mkdir -p /etc/profile.d
-echo 'export GHOST_KEY="phantom_energy"' | sudo tee /etc/profile.d/ghost_key.sh >/dev/null
-sudo chmod 644 /etc/profile.d/ghost_key.sh
+echo "[*] Setting up The Ghost Watch..."
 
-# Auto-source for current terminal
-if [[ -f /etc/profile.d/ghost_key.sh ]]; then
-    source /etc/profile.d/ghost_key.sh
-fi
+# -------------------------------
+# 1. Create dungeon directory
+# -------------------------------
+mkdir -p "$HOME/ghost_watch"
+cd "$HOME/ghost_watch"
 
-# --- Create dungeon structure ---
-mkdir -p ~/ghost_watch/{bin,clues,lair}
-
-# --- Ghost process ---
-cat << 'EOF' > ~/ghost_watch/bin/ghost_watch.sh
+# -------------------------------
+# 2. Create persistent ghost script
+# -------------------------------
+cat << 'EOF' > "$HOME/ghost_watch/ghost_watch.sh"
 #!/bin/bash
+# Ghost process just sleeps in background
 while true; do
-    echo "A ghostly presence lingers..."
-    sleep 45
+    sleep 3600
 done
 EOF
-chmod +x ~/ghost_watch/bin/ghost_watch.sh
 
-# Start ghost process in background
-nohup ~/ghost_watch/bin/ghost_watch.sh >/dev/null 2>&1 &
+chmod +x "$HOME/ghost_watch/ghost_watch.sh"
 
-# --- Clues ---
-echo "CLUE 1: Some spirits hide in the environment itself." > ~/ghost_watch/clues/start_here.txt
-echo "CLUE 2: Reveal the ghost's name to banish it." > ~/ghost_watch/clues/ghost_hint.txt
+# -------------------------------
+# 3. Launch ghost process
+# -------------------------------
+nohup "$HOME/ghost_watch/ghost_watch.sh" >/dev/null 2>&1 &
 
-# --- Verification script ---
-cat << 'EOF' > ~/ghost_watch/lair/check_ghost.sh
+# -------------------------------
+# 4. Create verification script
+# -------------------------------
+cat << 'EOF' > "$HOME/ghost_watch/check_ghost.sh"
 #!/bin/bash
-# Ghost verification script
+echo "=== Ghost Verification ==="
 
-# Source key if not already present
-if [[ -z "$GHOST_KEY" ]]; then
-    if [[ -f /etc/profile.d/ghost_key.sh ]]; then
-        source /etc/profile.d/ghost_key.sh
-    fi
+# Check for any ghost_watch.sh process
+if pgrep -f ghost_watch.sh > /dev/null; then
+    echo "❌ Ghost process still running. Kill it to complete the challenge."
+    exit 1
 fi
 
-if [[ "$GHOST_KEY" == "phantom_energy" ]]; then
-    echo "👻 Ghost banished! The key is correct."
-else
-    echo "❌ Ghost still haunts the system. Key missing or incorrect."
-fi
+echo "✅ Ghost process terminated"
+echo "🏆 Ghost Watch completed!"
 EOF
-chmod +x ~/ghost_watch/lair/check_ghost.sh
 
+chmod +x "$HOME/ghost_watch/check_ghost.sh"
+
+# -------------------------------
+# 5. Final instructions
+# -------------------------------
 echo
-echo "✅ Ghost Watch installed."
-echo "➡ Open a new terminal OR run: source /etc/profile.d/ghost_key.sh"
-echo "➡ Begin in: ~/ghost_watch"
-if [[ -f ~/.bashrc ]]; then
-    source ~/.bashrc
-fi
+echo "👻 The ghost process is running in the background."
+echo
+echo "To complete the challenge:"
+echo "  1. Discover the ghost process with 'ps', 'pgrep', or 'top'"
+echo "  2. Kill it using 'kill <PID>'"
+echo "  3. Verify with './check_ghost.sh'"
+echo
+echo "[*] Setup complete."

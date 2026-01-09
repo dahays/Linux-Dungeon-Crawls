@@ -1,64 +1,71 @@
 #!/bin/bash
-# ==============================
-# The Dragon Cron - Setup
-# ==============================
+# ======================================
+# The Dragon Cron - Setup Script
+# Teaches cron jobs and persistence
+# ======================================
 
-echo "[+] Installing The Dragon Cron..."
+set -e
 
-# --- Ensure /etc/profile.d exists and persist Dragon Key ---
-sudo mkdir -p /etc/profile.d
-echo 'export DRAGON_KEY="fiery_breath"' | sudo tee /etc/profile.d/dragon_key.sh >/dev/null
-sudo chmod 644 /etc/profile.d/dragon_key.sh
+echo "[*] Setting up The Dragon Cron..."
 
-# Auto-source for current terminal
-if [[ -f /etc/profile.d/dragon_key.sh ]]; then
-    source /etc/profile.d/dragon_key.sh
-fi
+# -------------------------------
+# 1. Create dragon lair directory
+# -------------------------------
+mkdir -p "$HOME/dragon_lair"
+cd "$HOME/dragon_lair"
 
-# --- Create dungeon structure ---
-mkdir -p ~/dragon_cron/{bin,clues,lair}
-
-# --- Dragon background process ---
-cat << 'EOF' > ~/dragon_cron/bin/dragon_cron.sh
+# -------------------------------
+# 2. Create cron job script
+# -------------------------------
+cat << 'EOF' > "$HOME/dragon_lair/dragon_cron.sh"
 #!/bin/bash
-while true; do
-    echo "The Dragon Cron smolders and watches..."
-    sleep 60
-done
+# Writes timestamp to log.txt
+mkdir -p "$HOME/dragon_lair"
+echo "Dragon Cron active: $(date)" >> "$HOME/dragon_lair/log.txt"
 EOF
-chmod +x ~/dragon_cron/bin/dragon_cron.sh
 
-# Start dragon process in the background
-nohup ~/dragon_cron/bin/dragon_cron.sh >/dev/null 2>&1 &
+chmod +x "$HOME/dragon_lair/dragon_cron.sh"
 
-# --- Clues ---
-echo "CLUE 1: Discover the dragon’s key in your environment." > ~/dragon_cron/clues/start_here.txt
-echo "CLUE 2: Use the key to slay the dragon." > ~/dragon_cron/clues/dragon_hint.txt
+# -------------------------------
+# 3. Install cron job
+# -------------------------------
+# Run every minute (for testing purposes)
+(crontab -l 2>/dev/null; echo "* * * * * $HOME/dragon_lair/dragon_cron.sh") | crontab -
 
-# --- Verification script ---
-cat << 'EOF' > ~/dragon_cron/lair/check_dragon.sh
+# -------------------------------
+# 4. Create verification script
+# -------------------------------
+cat << 'EOF' > "$HOME/dragon_lair/check_dragon.sh"
 #!/bin/bash
-# Dragon verification script
+echo "=== Dragon Cron Verification ==="
 
-# Source key if not already present
-if [[ -z "$DRAGON_KEY" ]]; then
-    if [[ -f /etc/profile.d/dragon_key.sh ]]; then
-        source /etc/profile.d/dragon_key.sh
-    fi
+LOG="$HOME/dragon_lair/log.txt"
+
+if [[ ! -f "$LOG" ]]; then
+    echo "❌ Dragon log not found. Wait a minute for cron to run or check cron setup."
+    exit 1
 fi
 
-if [[ "$DRAGON_KEY" == "fiery_breath" ]]; then
-    echo "🐉 Dragon slain! The key is correct."
-else
-    echo "❌ The dragon still breathes fire. Key missing or incorrect."
+if ! grep -q "Dragon Cron active" "$LOG"; then
+    echo "❌ Dragon cron job has not run yet. Wait a minute."
+    exit 1
 fi
+
+echo "✅ Dragon cron job executed successfully"
+echo "🏆 Dragon Cron completed!"
 EOF
-chmod +x ~/dragon_cron/lair/check_dragon.sh
 
+chmod +x "$HOME/dragon_lair/check_dragon.sh"
+
+# -------------------------------
+# 5. Final instructions
+# -------------------------------
 echo
-echo "✅ Dragon Cron installed."
-echo "➡ Open a new terminal OR run: source /etc/profile.d/dragon_key.sh"
-echo "➡ Begin in: ~/dragon_cron"
-if [[ -f ~/.bashrc ]]; then
-    source ~/.bashrc
-fi
+echo "🐉 The Dragon Cron writes a log every minute."
+echo
+echo "To complete the challenge:"
+echo "  1. Wait 1–2 minutes for cron to execute"
+echo "  2. Check the log: 'cat ~/dragon_lair/log.txt'"
+echo "  3. Verify with './check_dragon.sh'"
+echo
+echo "[*] Setup complete."
