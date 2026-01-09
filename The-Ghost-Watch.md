@@ -25,7 +25,7 @@ wget -O setup_ghost.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Cr
 
 chmod +x setup_ghost.sh
 
-./setup_ghost.sh
+sudo ./setup_ghost.sh
 
 cd ghost_watch
 ```
