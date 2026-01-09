@@ -60,7 +60,7 @@ A powerful dragon stalks the system, awakening every minute without fail. Killin
 This dungeon emphasizes investigation over brute force.
 
 **Crawl Instructions:**  
-`The-Dragon-Cron.md`
+[The-Dragon-Cron.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/The-Dragon-Cron.md#-the-dragons-cron)
 
 **Install Script:**
 ```bash
