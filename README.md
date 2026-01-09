@@ -19,6 +19,8 @@ All dungeon crawls follow the same basic workflow:
 5. Check for possible "clues" within each dungeon to help get started
 6. Run the check script to verify success
 
+*Note:  A Kali VM will provide the most ideal environment.  While not critically malicious, running these from a local Linux machine is not advised.
+
 ---
 
 ## Available Dungeon Crawls
