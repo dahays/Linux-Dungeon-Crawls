@@ -1,94 +1,81 @@
 #!/bin/bash
-# ======================================
-# The Hydra Head Hunt - Final Setup
-# Context-aware, no environment variables
-# ======================================
-
 set -e
 
-echo "[*] Setting up The Hydra Head Hunt..."
+echo "🐍 Forging the Hydra..."
 
-# --------------------------------------
-# 1. Create the Hydra lair
-# --------------------------------------
-mkdir -p "$HOME/hydra_lair"
-cd "$HOME/hydra_lair"
+# --- Base directory ---
+HYDRA_DIR="$HOME/hydra_lair"
+BIN_DIR="$HOME/.hydra_bin"
 
-# --------------------------------------
-# 2. Create Hydra-controlled ls
-# --------------------------------------
-mkdir -p "$HOME/.hydra_bin"
+mkdir -p "$HYDRA_DIR"
+mkdir -p "$BIN_DIR"
 
-cat << 'EOF' > "$HOME/.hydra_bin/ls"
-#!/bin/bash
+# --- Hydra Key (safe, local, persistent) ---
+HYDRA_ENV="$HOME/.hydra_env"
+echo 'export HYDRA_KEY=many_heads' > "$HYDRA_ENV"
 
-# Hydra only watches inside its lair
-if [[ "$PWD" == "$HOME/hydra_lair"* ]]; then
-    echo "⚠️ The Hydra watches every move..."
+# Ensure it loads for interactive shells
+if ! grep -q hydra_env "$HOME/.bashrc"; then
+  echo 'source "$HOME/.hydra_env"' >> "$HOME/.bashrc"
 fi
 
-# Execute the real ls
+# Load immediately for current shell
+source "$HYDRA_ENV"
+
+# --- PATH hijacked ls (scoped by directory) ---
+cat << 'EOF' > "$BIN_DIR/ls"
+#!/bin/bash
+
+if [[ "$PWD" == *"hydra_lair"* ]] && [[ "$HYDRA_KEY" == "many_heads" ]]; then
+  echo "⚠️ The Hydra watches every move..."
+fi
+
 /bin/ls "$@"
 EOF
 
-chmod +x "$HOME/.hydra_bin/ls"
+chmod +x "$BIN_DIR/ls"
 
-# --------------------------------------
-# 3. Inject Hydra into PATH
-# --------------------------------------
-if ! grep -q "hydra_bin" "$HOME/.bashrc"; then
-    cat << 'EOF' >> "$HOME/.bashrc"
-
-# --- Hydra PATH Injection ---
-export PATH="$HOME/.hydra_bin:$PATH"
-EOF
+# Prepend Hydra bin to PATH safely
+if ! grep -q hydra_bin "$HOME/.bashrc"; then
+  echo 'export PATH="$HOME/.hydra_bin:$PATH"' >> "$HOME/.bashrc"
 fi
 
-# Apply immediately for this shell
-export PATH="$HOME/.hydra_bin:$PATH"
+export PATH="$BIN_DIR:$PATH"
 
-# --------------------------------------
-# 4. Create verification script
-# --------------------------------------
-cat << 'EOF' > "$HOME/hydra_lair/check_hydra.sh"
+# --- Spawn Hydra Heads (MULTIPLE, CORRECTLY) ---
+echo "🐍 Releasing the Hydra heads..."
+
+for head in deckhand lookout navigator; do
+  (
+    exec -a hydra_head sleep 9999
+  ) &
+done
+
+# --- Verification script ---
+cat << 'EOF' > "$HYDRA_DIR/check_hydra.sh"
 #!/bin/bash
 
 echo "=== Hydra Verification ==="
 
-if [[ "$(which ls)" != "$HOME/.hydra_bin/ls" ]]; then
-    echo "❌ Hydra ls is not active"
-    exit 1
+if pgrep -f hydra_head > /dev/null; then
+  echo "❌ The Hydra still lives."
+  exit 1
 fi
 
-if [[ "$PWD" != "$HOME/hydra_lair"* ]]; then
-    echo "⚠️ You are not inside the Hydra lair"
-    echo "   cd ~/hydra_lair and try again"
-    exit 1
+if [[ "$HYDRA_KEY" != "many_heads" ]]; then
+  echo "❌ The Hydra Key is missing."
+  exit 1
 fi
 
-echo "✅ Hydra is watching this directory"
-echo "🏆 Hydra Head Hunt completed!"
+echo "✅ All Hydra heads defeated"
+echo "🏆 The Hydra has fallen. The harbor is safe."
 EOF
 
-chmod +x "$HOME/hydra_lair/check_hydra.sh"
+chmod +x "$HYDRA_DIR/check_hydra.sh"
 
-# --------------------------------------
-# 5. Final instructions
-# --------------------------------------
+# --- Finish ---
 echo
-echo "🐍 The Hydra guards only its lair."
-echo
-echo "Open a NEW terminal or run:"
-echo "  source ~/.bashrc"
-echo
-echo "Then enter the lair:"
-echo "  cd ~/hydra_lair"
-echo "  ls"
-echo
-echo "Escape the lair with:"
-echo "  cd .."
-echo
-echo "Verify completion with:"
-echo "  ./check_hydra.sh"
-echo
-echo "[*] Setup complete."
+echo "🐍 Hydra Head Hunt installed."
+echo "➡️ Open a NEW terminal or run: source ~/.bashrc"
+echo "➡️ Then: cd ~/hydra_lair"
+echo "➡️ Begin the hunt."
