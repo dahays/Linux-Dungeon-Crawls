@@ -68,7 +68,9 @@ cat << 'EOF' >> "$STUDENT_ZSHRC"
 export HYDRA_KEY=many_heads
 typeset -U path
 path=("$HOME/hydra_lair/bin" $path)
+unalias ls 2>/dev/null
 # --------------------
+
 
 EOF
 
