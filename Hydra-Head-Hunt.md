@@ -6,7 +6,7 @@
 ## Overview
 A mid-level Linux challenge. Students must discover multiple hidden “Hydra” processes, identify environment variables, detect command hijacking, and verify system safety.
 
-**Skills Practiced**
+**Objectives**
 - Process inspection (`ps`, `pgrep`)
 - Environment variables (`printenv`, `env`)
 - PATH and command resolution
