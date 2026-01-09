@@ -3,26 +3,33 @@ set -e
 
 echo "🐍 Forging the Hydra..."
 
-# --- Base directory ---
-HYDRA_DIR="$HOME/hydra_lair"
-BIN_DIR="$HOME/.hydra_bin"
+# --- Resolve target user & home safely (works with sudo) ---
+TARGET_USER="${SUDO_USER:-$USER}"
+TARGET_HOME="$(eval echo "~$TARGET_USER")"
+
+# --- Base directories ---
+HYDRA_DIR="$TARGET_HOME/hydra_lair"
+BIN_DIR="$TARGET_HOME/.hydra_bin"
+HYDRA_ENV="$TARGET_HOME/.hydra_env"
+BASHRC="$TARGET_HOME/.bashrc"
 
 mkdir -p "$HYDRA_DIR"
 mkdir -p "$BIN_DIR"
 
-# --- Hydra Key (safe, local, persistent) ---
-HYDRA_ENV="$HOME/.hydra_env"
+# --- Hydra Key (local, persistent, student-owned) ---
 echo 'export HYDRA_KEY=many_heads' > "$HYDRA_ENV"
 
 # Ensure it loads for interactive shells
-if ! grep -q hydra_env "$HOME/.bashrc"; then
-  echo 'source "$HOME/.hydra_env"' >> "$HOME/.bashrc"
+if ! grep -q hydra_env "$BASHRC"; then
+  echo 'source "$HOME/.hydra_env"' >> "$BASHRC"
 fi
 
-# Load immediately for current shell
-source "$HYDRA_ENV"
+# Load immediately for current shell if possible
+if [[ "$USER" == "$TARGET_USER" ]]; then
+  source "$HYDRA_ENV"
+fi
 
-# --- PATH hijacked ls (scoped by directory) ---
+# --- PATH hijacked ls (scoped to hydra_lair) ---
 cat << 'EOF' > "$BIN_DIR/ls"
 #!/bin/bash
 
@@ -35,14 +42,12 @@ EOF
 
 chmod +x "$BIN_DIR/ls"
 
-# Prepend Hydra bin to PATH safely
-if ! grep -q hydra_bin "$HOME/.bashrc"; then
-  echo 'export PATH="$HOME/.hydra_bin:$PATH"' >> "$HOME/.bashrc"
+# Prepend Hydra bin to PATH (idempotent)
+if ! grep -q hydra_bin "$BASHRC"; then
+  echo 'export PATH="$HOME/.hydra_bin:$PATH"' >> "$BASHRC"
 fi
 
-export PATH="$BIN_DIR:$PATH"
-
-# --- Spawn Hydra Heads (MULTIPLE, CORRECTLY) ---
+# --- Spawn MULTIPLE Hydra Heads (correctly) ---
 echo "🐍 Releasing the Hydra heads..."
 
 for head in deckhand lookout navigator; do
@@ -72,10 +77,11 @@ echo "🏆 The Hydra has fallen. The harbor is safe."
 EOF
 
 chmod +x "$HYDRA_DIR/check_hydra.sh"
+chown "$TARGET_USER":"$TARGET_USER" "$HYDRA_DIR/check_hydra.sh"
 
-# --- Finish ---
+# --- Final instructions ---
 echo
-echo "🐍 Hydra Head Hunt installed."
+echo "🐍 Hydra Head Hunt installed successfully."
 echo "➡️ Open a NEW terminal or run: source ~/.bashrc"
 echo "➡️ Then: cd ~/hydra_lair"
 echo "➡️ Begin the hunt."
