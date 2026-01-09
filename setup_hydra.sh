@@ -1,40 +1,79 @@
 #!/bin/bash
-# Hydra Head Hunt setup
+set -e
 
-# --- Persist Hydra Key ---
-# Export the key system-wide so students can access it in any shell
-echo 'export HYDRA_KEY="many_heads"' | sudo tee /etc/profile.d/hydra_key.sh >/dev/null
-sudo chmod 644 /etc/profile.d/hydra_key.sh
+echo "🐍 Summoning the Hydra..."
 
-# --- Create dungeon directories ---
-mkdir -p ~/hydra_head/bin ~/hydra_head/clues
+# -------------------------------
+# 1. Create Hydra Lair
+# -------------------------------
+HYDRA_DIR="$HOME/hydra_lair"
+BIN_DIR="$HYDRA_DIR/bin"
+HEAD_DIR="$HYDRA_DIR/heads"
 
-# --- Place a script that simulates a Hydra process ---
-cat << 'EOF' > ~/hydra_head/bin/hydra_head.sh
+mkdir -p "$BIN_DIR" "$HEAD_DIR"
+
+# -------------------------------
+# 2. Create Hydra ls wrapper
+# -------------------------------
+cat << 'EOF' > "$BIN_DIR/ls"
 #!/bin/bash
-# Hydra process just sits and prints every 30s
-while true; do
-  echo "Hydra head is watching..."
-  sleep 30
-done
-EOF
-chmod +x ~/hydra_head/bin/hydra_head.sh
 
-# --- Create clue files ---
-echo "CLUE 1: Find the Hydra key in your environment variables!" > ~/hydra_head/clues/start_here.txt
-echo "CLUE 2: Use the key to defeat the Hydra." > ~/hydra_head/clues/defeat_hydra.txt
-
-# --- Verification script ---
-mkdir -p ~/hydra_head/lair
-cat << 'EOF' > ~/hydra_head/lair/check_hydra.sh
-#!/bin/bash
-if [[ "$HYDRA_KEY" == "many_heads" ]]; then
-    echo "🐍 Hydra defeated! The key is correct."
-else
-    echo "❌ Hydra still lives. The key is missing or incorrect."
+if [[ "$PWD" == *"hydra_lair"* ]] && [[ "$HYDRA_KEY" == "many_heads" ]]; then
+  echo "⚠️ The Hydra watches every move..."
 fi
-EOF
-chmod +x ~/hydra_head/lair/check_hydra.sh
 
-echo "Hydra Head Hunt setup complete!"
-echo "Open a new terminal or run 'source /etc/profile.d/hydra_key.sh' to access HYDRA_KEY."
+/bin/ls "$@"
+EOF
+
+chmod +x "$BIN_DIR/ls"
+
+# -------------------------------
+# 3. Persist Environment for User
+# -------------------------------
+HYDRA_ENV_LINE='export HYDRA_KEY=many_heads'
+HYDRA_PATH_LINE='export PATH="$HOME/hydra_lair/bin:$PATH"'
+
+grep -qxF "$HYDRA_ENV_LINE" "$HOME/.bashrc" || echo "$HYDRA_ENV_LINE" >> "$HOME/.bashrc"
+grep -qxF "$HYDRA_PATH_LINE" "$HOME/.bashrc" || echo "$HYDRA_PATH_LINE" >> "$HOME/.bashrc"
+
+# Load immediately for current shell
+export HYDRA_KEY=many_heads
+export PATH="$HOME/hydra_lair/bin:$PATH"
+
+# 🔑 CRITICAL FIX: clear command hash cache
+hash -r
+
+# -------------------------------
+# 4. Create Hydra Head Script
+# -------------------------------
+cat << 'EOF' > "$HEAD_DIR/hydra_head.sh"
+#!/bin/bash
+exec -a hydra_head sleep 1000000
+EOF
+
+chmod +x "$HEAD_DIR/hydra_head.sh"
+
+# -------------------------------
+# 5. Spawn Multiple Hydra Heads
+# -------------------------------
+for i in 1 2 3; do
+  nohup "$HEAD_DIR/hydra_head.sh" >/dev/null 2>&1 &
+done
+
+# -------------------------------
+# 6. Student Instructions
+# -------------------------------
+cat << EOF
+
+🐍 HYDRA DEPLOYED SUCCESSFULLY
+
+Student-facing facts:
+• Multiple Hydra heads are running
+• HYDRA_KEY exists in the environment
+• PATH is hijacked inside hydra_lair only
+
+To begin the hunt:
+  cd ~/hydra_lair
+  ls
+
+EOF
