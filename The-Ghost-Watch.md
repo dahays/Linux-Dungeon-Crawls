@@ -18,10 +18,14 @@ An advanced Linux challenge. Students must investigate a “ghost process” tha
 
 1. Open your Linux terminal.
 2. Download the setup script:
-3. Enter the dungeon directory and begin!
+3. Make the script executable.
+4. Run the script.
+5. Enter the dungeon directory and begin!
 
 ```bash
 wget -O setup_ghost.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/setup_ghost.sh
+
+chmod +x setup_ghost.sh
 
 ./setup_ghost.sh
 
