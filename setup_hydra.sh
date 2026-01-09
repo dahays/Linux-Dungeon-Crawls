@@ -1,16 +1,38 @@
 #!/bin/bash
 set -e
+set -o pipefail
 
-echo "🐍 Summoning the Hydra..."
+echo "🐍 Initializing Hydra dungeon (one-time setup)..."
 
 # -------------------------------
-# 1. Create Hydra Lair
+# 0. Require sudo, capture real user
 # -------------------------------
-HYDRA_DIR="$HOME/hydra_lair"
+if [[ "$EUID" -ne 0 ]]; then
+  echo "🚫 This installer must be run with sudo."
+  echo "   Example: sudo ./setup_hydra.sh"
+  exit 1
+fi
+
+if [[ -z "$SUDO_USER" || "$SUDO_USER" == "root" ]]; then
+  echo "🚫 Cannot determine invoking user."
+  exit 1
+fi
+
+STUDENT_USER="$SUDO_USER"
+STUDENT_HOME="$(getent passwd "$STUDENT_USER" | cut -d: -f6)"
+
+echo "🎯 Deploying Hydra for user: $STUDENT_USER"
+echo "🏠 Target home directory: $STUDENT_HOME"
+
+# -------------------------------
+# 1. Create Hydra Lair (user-owned)
+# -------------------------------
+HYDRA_DIR="$STUDENT_HOME/hydra_lair"
 BIN_DIR="$HYDRA_DIR/bin"
 HEAD_DIR="$HYDRA_DIR/heads"
 
 mkdir -p "$BIN_DIR" "$HEAD_DIR"
+chown -R "$STUDENT_USER:$STUDENT_USER" "$HYDRA_DIR"
 
 # -------------------------------
 # 2. Create Hydra ls wrapper
@@ -26,30 +48,25 @@ fi
 EOF
 
 chmod +x "$BIN_DIR/ls"
+chown "$STUDENT_USER:$STUDENT_USER" "$BIN_DIR/ls"
 
 # -------------------------------
-# 3. Persist Environment for User
+# 3. Persist Environment via profile.d (system-wide)
 # -------------------------------
-HYDRA_ENV_LINE='export HYDRA_KEY=many_heads'
-HYDRA_PATH_LINE='export PATH="$HOME/hydra_lair/bin:$PATH"'
+cat << 'EOF' > /etc/profile.d/hydra.sh
+# Hydra dungeon environment (system-wide)
 
-grep -qxF "$HYDRA_ENV_LINE" "$HOME/.bashrc" || echo "$HYDRA_ENV_LINE" >> "$HOME/.bashrc"
-grep -qxF "$HYDRA_PATH_LINE" "$HOME/.bashrc" || echo "$HYDRA_PATH_LINE" >> "$HOME/.bashrc"
+export HYDRA_KEY=many_heads
 
-# -------------------------------
-# 4. Activate Environment IF Script Is Sourced
-# -------------------------------
-if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
-  export HYDRA_KEY=many_heads
+if [[ -d "$HOME/hydra_lair/bin" ]]; then
   export PATH="$HOME/hydra_lair/bin:$PATH"
-  hash -r
-  HYDRA_ACTIVE_NOW=true
-else
-  HYDRA_ACTIVE_NOW=false
 fi
+EOF
+
+chmod 644 /etc/profile.d/hydra.sh
 
 # -------------------------------
-# 5. Create Hydra Head Script
+# 4. Create Hydra Head Script
 # -------------------------------
 cat << 'EOF' > "$HEAD_DIR/hydra_head.sh"
 #!/bin/bash
@@ -57,46 +74,32 @@ exec -a hydra_head sleep 1000000
 EOF
 
 chmod +x "$HEAD_DIR/hydra_head.sh"
+chown "$STUDENT_USER:$STUDENT_USER" "$HEAD_DIR/hydra_head.sh"
 
 # -------------------------------
-# 6. Spawn Multiple Hydra Heads
+# 5. Spawn Hydra Heads as student
 # -------------------------------
 for i in 1 2 3; do
-  nohup "$HEAD_DIR/hydra_head.sh" >/dev/null 2>&1 &
+  sudo -u "$STUDENT_USER" nohup "$HEAD_DIR/hydra_head.sh" >/dev/null 2>&1 &
 done
 
 # -------------------------------
-# 7. Student Instructions
+# 6. Final Message
 # -------------------------------
 cat << EOF
 
-🐍 HYDRA DEPLOYED SUCCESSFULLY
+🐍 HYDRA INSTALLATION COMPLETE
 
-Student-facing facts:
-• Multiple Hydra heads are running
-• HYDRA_KEY is persisted in ~/.bashrc
-• PATH is conditionally hijacked via ~/hydra_lair/bin
+✔ Installed for user: $STUDENT_USER
+✔ Hydra lair created at: ~/hydra_lair
+✔ Environment persists via /etc/profile.d
+✔ Hydra heads are running
 
-To begin the hunt:
+Students can begin immediately by opening a NEW terminal and running:
+
   cd ~/hydra_lair
   ls
 
+No further setup required.
+
 EOF
-
-# -------------------------------
-# 8. Environment Activation Notice
-# -------------------------------
-if [[ "$HYDRA_ACTIVE_NOW" == "false" ]]; then
-  cat << EOF
-⚠️ The Hydra sleeps in this shell.
-
-To awaken it, run ONE of the following:
-  source ~/.bashrc
-  OR
-  open a new terminal
-
-(Advanced hunters may rerun this script using: source ./setup_hydra.sh)
-EOF
-else
-  echo "🐍 The Hydra is awake in this shell."
-fi
