@@ -51,19 +51,42 @@ chmod +x "$BIN_DIR/ls"
 chown "$STUDENT_USER:$STUDENT_USER" "$BIN_DIR/ls"
 
 # -------------------------------
-# 3. Persist Environment via profile.d (system-wide)
+# 3a. Persist PATH hijack for student
 # -------------------------------
-cat << 'EOF' > /etc/profile.d/hydra.sh
-# Hydra dungeon environment (system-wide)
+STUDENT_BASHRC="$STUDENT_HOME/.bashrc"
+HYDRA_PATH_LINE='export PATH="$HOME/hydra_lair/bin:$PATH"'
 
-export HYDRA_KEY=many_heads
+touch "$STUDENT_BASHRC"
+chown "$STUDENT_USER:$STUDENT_USER" "$STUDENT_BASHRC"
 
-if [[ -d "$HOME/hydra_lair/bin" ]]; then
-  export PATH="$HOME/hydra_lair/bin:$PATH"
+if ! grep -qxF "$HYDRA_PATH_LINE" "$STUDENT_BASHRC"; then
+  echo "$HYDRA_PATH_LINE" >> "$STUDENT_BASHRC"
 fi
+
+# -------------------------------
+# 3c. Ensure login shells source .bashrc
+# -------------------------------
+STUDENT_BASH_PROFILE="$STUDENT_HOME/.bash_profile"
+
+touch "$STUDENT_BASH_PROFILE"
+chown "$STUDENT_USER:$STUDENT_USER" "$STUDENT_BASH_PROFILE"
+
+if ! grep -qxF '[[ -f ~/.bashrc ]] && source ~/.bashrc' "$STUDENT_BASH_PROFILE"; then
+  echo '[[ -f ~/.bashrc ]] && source ~/.bashrc' >> "$STUDENT_BASH_PROFILE"
+fi
+
+# -------------------------------
+# 3b. Persist HYDRA_KEY (shell-safe, login-safe)
+# -------------------------------
+HYDRA_PROFILE="/etc/profile.d/hydra.sh"
+
+cat << 'EOF' > "$HYDRA_PROFILE"
+export HYDRA_KEY=many_heads
 EOF
 
-chmod 644 /etc/profile.d/hydra.sh
+chmod 644 "$HYDRA_PROFILE"
+
+
 
 # -------------------------------
 # 4. Create Hydra Head Script
@@ -92,14 +115,15 @@ cat << EOF
 
 ✔ Installed for user: $STUDENT_USER
 ✔ Hydra lair created at: ~/hydra_lair
-✔ Environment persists via /etc/profile.d
+✔ HYDRA_KEY persisted via /etc/environment
+✔ PATH hijack persisted via ~/.bashrc
 ✔ Hydra heads are running
 
-Students can begin immediately by opening a NEW terminal and running:
+IMPORTANT:
+Open a NEW terminal to activate the environment.
 
+To begin the hunt:
   cd ~/hydra_lair
   ls
-
-No further setup required.
 
 EOF
