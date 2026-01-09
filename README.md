@@ -53,3 +53,19 @@ chmod +x setup_ghost.sh
 
 ./setup_ghost.sh
 ```
+### 🐉 The Dragon’s Cron (Level 4)
+
+A powerful dragon stalks the system, awakening every minute without fail. Killing symptoms will not stop it. To restore peace, you must uncover how the dragon persists and remove it at the source.
+
+This dungeon emphasizes investigation over brute force.
+
+**Crawl Instructions:**  
+`The-Dragon-Cron.md`
+
+**Install Script:**
+```bash
+wget -O setup_ghost.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/setup_dragon.sh
+
+chmod +x setup_dragon.sh
+
+./setup_dragon.sh
