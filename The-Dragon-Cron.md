@@ -24,7 +24,7 @@ This dungeon emphasizes investigation over brute force.
 2. Download the setup script:
 3. Make it executable.
 4. Run the script.
-5. Enter the dungeon directory and begin!
+5. Enter the dungeon directory to begin!
 
 ```bash
 wget -O setup_dragon.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/setup_dragon.sh
@@ -41,4 +41,5 @@ cd dragon_cron
 ./lair/check_dragon.sh
 
 ```
+
 
