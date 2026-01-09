@@ -5,7 +5,7 @@
 ## Overview
 An advanced Linux challenge. Students must investigate a “ghost process” that respawns, identify its parent, terminate it correctly, and confirm the system is silent.
 
-**Objectives**
+**Skills Practiced**
 - Network listening (`ss`, `netstat`)
 - Process hierarchy (`ps`, `pstree`)
 - Signals (`kill -SIGTERM`)
