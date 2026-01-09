@@ -10,6 +10,11 @@ sudo mkdir -p /etc/profile.d
 echo 'export HYDRA_KEY="many_heads"' | sudo tee /etc/profile.d/hydra_key.sh >/dev/null
 sudo chmod 644 /etc/profile.d/hydra_key.sh
 
+# --- Auto-source so current terminal sees it ---
+if [[ -f /etc/profile.d/hydra_key.sh ]]; then
+    source /etc/profile.d/hydra_key.sh
+fi
+
 # --- Create dungeon structure ---
 mkdir -p ~/hydra_head/{bin,clues,lair}
 

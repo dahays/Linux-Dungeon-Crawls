@@ -10,6 +10,11 @@ sudo mkdir -p /etc/profile.d
 echo 'export GHOST_KEY="phantom_energy"' | sudo tee /etc/profile.d/ghost_key.sh >/dev/null
 sudo chmod 644 /etc/profile.d/ghost_key.sh
 
+# Auto-source for current terminal
+if [[ -f /etc/profile.d/ghost_key.sh ]]; then
+    source /etc/profile.d/ghost_key.sh
+fi
+
 # --- Create dungeon structure ---
 mkdir -p ~/ghost_watch/{bin,clues,lair}
 

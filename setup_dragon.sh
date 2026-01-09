@@ -10,6 +10,11 @@ sudo mkdir -p /etc/profile.d
 echo 'export DRAGON_KEY="fiery_breath"' | sudo tee /etc/profile.d/dragon_key.sh >/dev/null
 sudo chmod 644 /etc/profile.d/dragon_key.sh
 
+# Auto-source for current terminal
+if [[ -f /etc/profile.d/dragon_key.sh ]]; then
+    source /etc/profile.d/dragon_key.sh
+fi
+
 # --- Create dungeon structure ---
 mkdir -p ~/dragon_cron/{bin,clues,lair}
 
