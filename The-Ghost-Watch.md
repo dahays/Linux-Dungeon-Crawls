@@ -16,9 +16,9 @@ An advanced Linux challenge. Students must investigate a “ghost process” tha
 
 ## Setup Instructions
 
-1. Open your Linux terminal.
+1. Open a terminal.
 2. Download the setup script:
-3. Make the script executable.
+3. Make it executable.
 4. Run the script.
 5. Enter the dungeon directory and begin!
 
