@@ -51,6 +51,59 @@ chmod +x "$BIN_DIR/ls"
 chown "$STUDENT_USER:$STUDENT_USER" "$BIN_DIR/ls"
 
 # -------------------------------
+# 2.5 Create Hydra Completion Check Script
+# -------------------------------
+CHECK_SCRIPT="$BIN_DIR/check_hydra.sh"
+
+cat << 'EOF' > "$CHECK_SCRIPT"
+#!/bin/bash
+
+echo "🔎 Verifying dungeon completion..."
+echo
+
+# 1. Verify environment key
+if [[ "$HYDRA_KEY" != "many_heads" ]]; then
+  echo "❌ The Hydra still hides its true name."
+  exit 1
+fi
+
+# 2. Verify correct location
+if [[ "$PWD" != "$HOME/hydra_lair"* ]]; then
+  echo "❌ You are not within the Hydra lair."
+  exit 1
+fi
+
+# 3. Verify Hydra heads are defeated
+if pgrep -f hydra_head >/dev/null; then
+  echo "❌ The Hydra still has living heads."
+  echo "   A true victory leaves none breathing."
+  exit 1
+fi
+
+# 4. Verify proof of defeat
+PROOF_FILE="$HOME/hydra_lair/heads/hydra_defeated"
+
+if [[ ! -f "$PROOF_FILE" ]]; then
+  echo "❌ No proof of victory found."
+  echo "   Legends leave evidence behind."
+  exit 1
+fi
+
+echo "🐉 THE HYDRA HAS FALLEN"
+echo
+echo "✔ Environment understood"
+echo "✔ Heads destroyed"
+echo "✔ Proof secured"
+echo
+echo "🏆 CONGRATULATIONS"
+echo "You have completed the Hydra dungeon."
+exit 0
+EOF
+
+chmod +x "$CHECK_SCRIPT"
+chown "$STUDENT_USER:$STUDENT_USER" "$CHECK_SCRIPT"
+
+# -------------------------------
 # 3. Persist environment for Kali (zsh)
 # -------------------------------
 STUDENT_ZSHRC="$STUDENT_HOME/.zshrc"
@@ -61,17 +114,23 @@ chown "$STUDENT_USER:$STUDENT_USER" "$STUDENT_ZSHRC"
 # Remove any previous Hydra entries to keep this idempotent
 sed -i '/hydra_lair\/bin/d' "$STUDENT_ZSHRC"
 sed -i '/HYDRA_KEY/d' "$STUDENT_ZSHRC"
+sed -i '/Hydra dungeon/d' "$STUDENT_ZSHRC"
+sed -i '/unalias ls/d' "$STUDENT_ZSHRC"
 
 cat << 'EOF' >> "$STUDENT_ZSHRC"
 
 # --- Hydra dungeon ---
 export HYDRA_KEY=many_heads
+
+unalias ls 2>/dev/null
+
 typeset -U path
 path=("$HOME/hydra_lair/bin" $path)
-unalias ls 2>/dev/null
+
+ls() {
+  "$HOME/hydra_lair/bin/ls" "$@"
+}
 # --------------------
-
-
 EOF
 
 # -------------------------------
@@ -104,6 +163,7 @@ cat << EOF
 ✔ HYDRA_KEY persisted via ~/.zshrc
 ✔ PATH hijack persisted via ~/.zshrc
 ✔ Hydra heads are running
+✔ Dungeon completion check installed
 
 IMPORTANT:
 Close this terminal and open a NEW one.
@@ -111,5 +171,8 @@ Close this terminal and open a NEW one.
 To begin the hunt:
   cd ~/hydra_lair
   ls
+
+To verify final victory:
+  check_hydra.sh
 
 EOF
