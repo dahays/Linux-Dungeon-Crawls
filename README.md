@@ -8,6 +8,10 @@ Each dungeon is self-contained and installed using a single setup script. Once i
 
 Disclaimer: A Kali VM will provide the most ideal environment.  While not critically malicious, running these scripts from a local Linux machine is not advised.
 
+Temporary fix for current Windows-Linux EOF issue
+
+dos2unix <filename.sh>
+
 ---
 
 ## Getting Started
