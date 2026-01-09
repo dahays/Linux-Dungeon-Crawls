@@ -1,4 +1,4 @@
-# 🗝️ Linux Dungeon Crawls
+# Linux Dungeon Crawls
 
 ## Overview
 
