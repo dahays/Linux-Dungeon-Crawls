@@ -22,6 +22,7 @@ A mid-level Linux challenge. Students must discover multiple hidden “Hydra” 
 
 1. Open your Linux terminal.
 2. Download the setup script:
+```
 
 ```bash
 wget -O setup_hydra.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/setup_hydra.sh
@@ -29,3 +30,4 @@ wget -O setup_hydra.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Cr
 ./setup_hydra.sh
 
 cd hydra_head
+```
