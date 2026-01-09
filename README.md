@@ -43,7 +43,7 @@ chmod +x setup_hydra.sh
 An advanced Linux investigation challenge centered on identifying and stopping a persistent “ghost” process that respawns until the true source is discovered.
 
 **Crawl Instructions:**  
-`The-Ghost-Watch.md`
+[The-Ghost-Watch.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/The-Ghost-Watch.md#-ghost-watch)
 
 **Install Script:**
 ```bash
