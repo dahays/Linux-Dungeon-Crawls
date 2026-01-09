@@ -70,4 +70,4 @@ wget -O setup_ghost.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Cr
 
 chmod +x setup_dragon.sh
 
-./setup_dragon.sh
+sudo ./setup_dragon.sh
