@@ -6,8 +6,6 @@
 
 Each dungeon is self-contained and installed using a single setup script. Once installed, students navigate the environment, follow clues, and complete objectives using standard Linux tools.
 
-New dungeons can be added over time using the same structure and installation process.
-
 ---
 
 ## Getting Started
