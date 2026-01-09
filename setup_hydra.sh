@@ -61,31 +61,25 @@ cat << 'EOF' > "$CHECK_SCRIPT"
 echo "🔎 Verifying dungeon completion..."
 echo
 
-# 1. Verify environment key
 if [[ "$HYDRA_KEY" != "many_heads" ]]; then
   echo "❌ The Hydra still hides its true name."
   exit 1
 fi
 
-# 2. Verify correct location
 if [[ "$PWD" != "$HOME/hydra_lair"* ]]; then
   echo "❌ You are not within the Hydra lair."
   exit 1
 fi
 
-# 3. Verify Hydra heads are defeated
 if pgrep -f hydra_head >/dev/null; then
   echo "❌ The Hydra still has living heads."
-  echo "   A true victory leaves none breathing."
   exit 1
 fi
 
-# 4. Verify proof of defeat
 PROOF_FILE="$HOME/hydra_lair/heads/hydra_defeated"
 
 if [[ ! -f "$PROOF_FILE" ]]; then
   echo "❌ No proof of victory found."
-  echo "   Legends leave evidence behind."
   exit 1
 fi
 
@@ -111,7 +105,7 @@ STUDENT_ZSHRC="$STUDENT_HOME/.zshrc"
 touch "$STUDENT_ZSHRC"
 chown "$STUDENT_USER:$STUDENT_USER" "$STUDENT_ZSHRC"
 
-# Remove any previous Hydra entries to keep this idempotent
+# Clean old Hydra entries (idempotent)
 sed -i '/hydra_lair\/bin/d' "$STUDENT_ZSHRC"
 sed -i '/HYDRA_KEY/d' "$STUDENT_ZSHRC"
 sed -i '/Hydra dungeon/d' "$STUDENT_ZSHRC"
@@ -134,19 +128,6 @@ ls() {
 EOF
 
 # -------------------------------
-# 3.5 Ensure Hydra loads last on Kali zsh
-# -------------------------------
-ZSH_HYDRA_CONF="/etc/zsh/zshrc.d/99-hydra.conf"
-
-cat << EOF > "$ZSH_HYDRA_CONF"
-# Hydra dungeon (forced final load)
-
-if [[ -f "$STUDENT_HOME/.zshrc" ]]; then
-  source "$STUDENT_HOME/.zshrc"
-fi
-EOF
-
-# -------------------------------
 # 4. Create Hydra Head Script
 # -------------------------------
 cat << 'EOF' > "$HEAD_DIR/hydra_head.sh"
@@ -165,7 +146,7 @@ for i in 1 2 3; do
 done
 
 # -------------------------------
-# 6. Final Message
+# 6. Final Message (Student-Facing)
 # -------------------------------
 cat << EOF
 
@@ -173,22 +154,33 @@ cat << EOF
 
 ✔ Installed for user: $STUDENT_USER
 ✔ Hydra lair created at: ~/hydra_lair
-✔ HYDRA_KEY persisted via ~/.zshrc
-✔ PATH hijack persisted via ~/.zshrc
+✔ Environment configured in ~/.zshrc
 ✔ Hydra heads are running
-✔ Dungeon completion check installed
+✔ Completion check installed
 
-IMPORTANT:
-Close this terminal and open a NEW one.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📌 IMPORTANT (ONE-TIME STEP)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-To begin the hunt:
-  FINAL SETUP STEP:
-  exec zsh (one time only):
+Because Kali loads zsh before this installer runs,
+you must refresh your shell ONCE:
 
-  cd ~/hydra_lair
-  ls
+    exec zsh
 
-To verify final victory:
-  /hydra_lair/bin/check_hydra.sh
+After that, everything works automatically
+in all future terminals.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎮 BEGIN THE DUNGEON
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    cd ~/hydra_lair
+    ls
+
+To verify final victory later:
+
+    ~/hydra_lair/bin/check_hydra.sh
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 EOF
