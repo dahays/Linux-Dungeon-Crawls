@@ -51,42 +51,26 @@ chmod +x "$BIN_DIR/ls"
 chown "$STUDENT_USER:$STUDENT_USER" "$BIN_DIR/ls"
 
 # -------------------------------
-# 3a. Persist PATH hijack for student
+# 3. Persist environment for Kali (zsh)
 # -------------------------------
-STUDENT_BASHRC="$STUDENT_HOME/.bashrc"
-HYDRA_PATH_LINE='export PATH="$HOME/hydra_lair/bin:$PATH"'
+STUDENT_ZSHRC="$STUDENT_HOME/.zshrc"
 
-touch "$STUDENT_BASHRC"
-chown "$STUDENT_USER:$STUDENT_USER" "$STUDENT_BASHRC"
+touch "$STUDENT_ZSHRC"
+chown "$STUDENT_USER:$STUDENT_USER" "$STUDENT_ZSHRC"
 
-if ! grep -qxF "$HYDRA_PATH_LINE" "$STUDENT_BASHRC"; then
-  echo "$HYDRA_PATH_LINE" >> "$STUDENT_BASHRC"
-fi
+# Remove any previous Hydra entries to keep this idempotent
+sed -i '/hydra_lair\/bin/d' "$STUDENT_ZSHRC"
+sed -i '/HYDRA_KEY/d' "$STUDENT_ZSHRC"
 
-# -------------------------------
-# 3c. Ensure login shells source .bashrc
-# -------------------------------
-STUDENT_BASH_PROFILE="$STUDENT_HOME/.bash_profile"
+cat << 'EOF' >> "$STUDENT_ZSHRC"
 
-touch "$STUDENT_BASH_PROFILE"
-chown "$STUDENT_USER:$STUDENT_USER" "$STUDENT_BASH_PROFILE"
-
-if ! grep -qxF '[[ -f ~/.bashrc ]] && source ~/.bashrc' "$STUDENT_BASH_PROFILE"; then
-  echo '[[ -f ~/.bashrc ]] && source ~/.bashrc' >> "$STUDENT_BASH_PROFILE"
-fi
-
-# -------------------------------
-# 3b. Persist HYDRA_KEY (shell-safe, login-safe)
-# -------------------------------
-HYDRA_PROFILE="/etc/profile.d/hydra.sh"
-
-cat << 'EOF' > "$HYDRA_PROFILE"
+# --- Hydra dungeon ---
 export HYDRA_KEY=many_heads
+PATH="$HOME/hydra_lair/bin:${PATH}"
+export PATH
+# --------------------
+
 EOF
-
-chmod 644 "$HYDRA_PROFILE"
-
-
 
 # -------------------------------
 # 4. Create Hydra Head Script
@@ -115,12 +99,12 @@ cat << EOF
 
 ✔ Installed for user: $STUDENT_USER
 ✔ Hydra lair created at: ~/hydra_lair
-✔ HYDRA_KEY persisted via /etc/environment
-✔ PATH hijack persisted via ~/.bashrc
+✔ HYDRA_KEY persisted via ~/.zshrc
+✔ PATH hijack persisted via ~/.zshrc
 ✔ Hydra heads are running
 
 IMPORTANT:
-Open a NEW terminal to activate the environment.
+Close this terminal and open a NEW one.
 
 To begin the hunt:
   cd ~/hydra_lair
