@@ -1,52 +1,33 @@
 #!/bin/bash
-# ==============================
-# The Hydra Head Hunt - Setup
-# ==============================
+# Hydra Head Hunt setup
 
-echo "[+] Installing The Hydra Head Hunt..."
-
-# --- Persist Hydra environment key ---
-sudo mkdir -p /etc/profile.d
+# --- Persist Hydra Key ---
+# Export the key system-wide so students can access it in any shell
 echo 'export HYDRA_KEY="many_heads"' | sudo tee /etc/profile.d/hydra_key.sh >/dev/null
 sudo chmod 644 /etc/profile.d/hydra_key.sh
 
-# --- Auto-source so current terminal sees it ---
-if [[ -f /etc/profile.d/hydra_key.sh ]]; then
-    source /etc/profile.d/hydra_key.sh
-fi
+# --- Create dungeon directories ---
+mkdir -p ~/hydra_head/bin ~/hydra_head/clues
 
-# --- Create dungeon structure ---
-mkdir -p ~/hydra_head/{bin,clues,lair}
-
-# --- Hydra background process ---
+# --- Place a script that simulates a Hydra process ---
 cat << 'EOF' > ~/hydra_head/bin/hydra_head.sh
 #!/bin/bash
+# Hydra process just sits and prints every 30s
 while true; do
-    echo "The Hydra stirs... cut one head and two more grow."
-    sleep 30
+  echo "Hydra head is watching..."
+  sleep 30
 done
 EOF
 chmod +x ~/hydra_head/bin/hydra_head.sh
 
-# Start Hydra process in background
-nohup ~/hydra_head/bin/hydra_head.sh >/dev/null 2>&1 &
-
-# --- Clues ---
-echo "CLUE 1: This beast is bound to your environment." > ~/hydra_head/clues/start_here.txt
-echo "CLUE 2: Seek the Hydra's name among exported variables." > ~/hydra_head/clues/hydra_hint.txt
+# --- Create clue files ---
+echo "CLUE 1: Find the Hydra key in your environment variables!" > ~/hydra_head/clues/start_here.txt
+echo "CLUE 2: Use the key to defeat the Hydra." > ~/hydra_head/clues/defeat_hydra.txt
 
 # --- Verification script ---
+mkdir -p ~/hydra_head/lair
 cat << 'EOF' > ~/hydra_head/lair/check_hydra.sh
 #!/bin/bash
-# Hydra verification script
-
-# Source key if not already present
-if [[ -z "$HYDRA_KEY" ]]; then
-    if [[ -f /etc/profile.d/hydra_key.sh ]]; then
-        source /etc/profile.d/hydra_key.sh
-    fi
-fi
-
 if [[ "$HYDRA_KEY" == "many_heads" ]]; then
     echo "🐍 Hydra defeated! The key is correct."
 else
@@ -55,7 +36,5 @@ fi
 EOF
 chmod +x ~/hydra_head/lair/check_hydra.sh
 
-echo
-echo "✅ Hydra Head Hunt installed."
-echo "➡ Open a new terminal OR run: source /etc/profile.d/hydra_key.sh"
-echo "➡ Begin in: ~/hydra_head"
+echo "Hydra Head Hunt setup complete!"
+echo "Open a new terminal or run 'source /etc/profile.d/hydra_key.sh' to access HYDRA_KEY."
