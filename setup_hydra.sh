@@ -7,7 +7,7 @@ echo "[+] Installing The Hydra Head Hunt..."
 
 # --- Persist Hydra environment key ---
 echo 'export HYDRA_KEY="many_heads"' > /etc/profile.d/hydra_key.sh
-chmod 644 /etc/profile.d/hydra_key.sh
+sudo chmod 644 /etc/profile.d/hydra_key.sh
 
 # --- Create dungeon structure ---
 mkdir -p ~/hydra_head/{bin,clues,lair}

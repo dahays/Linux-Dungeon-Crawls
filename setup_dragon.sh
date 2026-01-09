@@ -7,7 +7,7 @@ echo "[+] Installing The Dragon Cron..."
 
 # --- Persist Dragon environment key ---
 echo 'export DRAGON_KEY="fiery_breath"' > /etc/profile.d/dragon_key.sh
-chmod 644 /etc/profile.d/dragon_key.sh
+sudo chmod 644 /etc/profile.d/dragon_key.sh
 
 # --- Create dungeon structure ---
 mkdir -p ~/dragon_cron/{bin,clues,lair}

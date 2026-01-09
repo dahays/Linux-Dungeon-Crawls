@@ -7,7 +7,7 @@ echo "[+] Installing The Ghost Watch..."
 
 # --- Persist Ghost environment key ---
 echo 'export GHOST_KEY="phantom_energy"' > /etc/profile.d/ghost_key.sh
-chmod 644 /etc/profile.d/ghost_key.sh
+sudo chmod 644 /etc/profile.d/ghost_key.sh
 
 # --- Create dungeon structure ---
 mkdir -p ~/ghost_watch/{bin,clues,lair}
