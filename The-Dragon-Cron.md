@@ -6,6 +6,16 @@ A powerful dragon stalks the system, awakening every minute without fail. Killin
 
 This dungeon emphasizes investigation over brute force.
 
+**Skills Practiced**
+- Investigating Linux persistence mechanisms using scheduled tasks
+- Listing and analyzing cron jobs with `crontab` and files in `/etc/cron.*`
+- Reading and interpreting system log files (such as `/var/log/syslog`)
+- Identifying unauthorized or malicious scripts in common system paths
+- Understanding why killing a process does not remove persistent threats
+- Safely disabling persistence without breaking system functionality
+- Tracing cause-and-effect relationships through forensic-style analysis
+- Applying incident-response thinking instead of trial-and-error fixes
+
 ---
 
 ## Setup Instructions
@@ -29,4 +39,5 @@ cd dragon_cron
 
 ```bash
 ./lair/check_dragon.sh
+
 ```
