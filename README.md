@@ -16,6 +16,8 @@ All dungeon crawls follow the same basic workflow:
 2. Make the script executable
 3. Run the script
 4. Enter the dungeon directory and begin
+5. Check for possible "clues" within each dungeon to help get started
+6. Run the check script to verify success
 
 ---
 
