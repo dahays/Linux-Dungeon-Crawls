@@ -32,3 +32,6 @@ chmod +x setup_hydra.md
 
 cd hydra_head
 ```
+6. Confirm success
+```bash
+./check_ghost.sh
