@@ -5,6 +5,9 @@
 
 echo "[+] Installing The Hydra Head Hunt..."
 
+# Ensure /etc/profile.d exists
+sudo mkdir -p /etc/profile.d
+
 # --- Persist Hydra environment key ---
 echo 'export HYDRA_KEY="many_heads"' > /etc/profile.d/hydra_key.sh
 sudo chmod 644 /etc/profile.d/hydra_key.sh

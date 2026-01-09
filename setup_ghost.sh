@@ -5,6 +5,9 @@
 
 echo "[+] Installing The Ghost Watch..."
 
+# Ensure /etc/profile.d exists
+sudo mkdir -p /etc/profile.d
+
 # --- Persist Ghost environment key ---
 echo 'export GHOST_KEY="phantom_energy"' > /etc/profile.d/ghost_key.sh
 sudo chmod 644 /etc/profile.d/ghost_key.sh
