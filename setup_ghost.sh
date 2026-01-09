@@ -1,64 +1,55 @@
 #!/bin/bash
+# ==============================
+# The Ghost Watch - Setup
+# ==============================
 
-# -------------------------------
-# Ghost Watch Dungeon Setup
-# -------------------------------
+echo "[+] Installing The Ghost Watch..."
 
-DUNGEON=ghost_watch
-mkdir -p $DUNGEON/{bin,clues}
-cd $DUNGEON || exit 1
+# --- Persist Ghost environment key ---
+echo 'export GHOST_KEY="phantom_energy"' > /etc/profile.d/ghost_key.sh
+chmod 644 /etc/profile.d/ghost_key.sh
 
-# Create ghost listener script
-cat << 'EOF' > bin/ghost_listener.sh
+# --- Create dungeon structure ---
+mkdir -p ~/ghost_watch/{bin,clues,lair}
+
+# --- Ghost process ---
+cat << 'EOF' > ~/ghost_watch/bin/ghost_watch.sh
 #!/bin/bash
 while true; do
-    nc -l -p 4545 >/dev/null 2>&1
+    echo "A ghostly presence lingers..."
+    sleep 45
 done
 EOF
+chmod +x ~/ghost_watch/bin/ghost_watch.sh
 
-chmod +x bin/ghost_listener.sh
+# Start ghost process in background
+nohup ~/ghost_watch/bin/ghost_watch.sh >/dev/null 2>&1 &
 
-# Create respawning ghost captain
-cat << 'EOF' > bin/ghost_captain.sh
+# --- Clues ---
+echo "CLUE 1: Some spirits hide in the environment itself." > ~/ghost_watch/clues/start_here.txt
+echo "CLUE 2: Reveal the ghost's name to banish it." > ~/ghost_watch/clues/ghost_hint.txt
+
+# --- Verification script ---
+cat << 'EOF' > ~/ghost_watch/lair/check_ghost.sh
 #!/bin/bash
-while true; do
-    ./ghost_listener.sh &
-    wait
-done
-EOF
+# Ghost verification script
 
-chmod +x bin/ghost_captain.sh
-
-# Launch the ghost captain
-./bin/ghost_captain.sh &
-
-# Create clues
-echo "CLUE 1: Something whispers on the network." > clues/start_here.txt
-echo "CLUE 2: Killing the voice does not stop the haunting." > clues/restless_spirit.txt
-echo "CLUE 3: Find what commands the ghost." > clues/the_master.txt
-
-# --- Create success verification script ---
-cat << 'EOF' > check_ghost.sh
-#!/bin/bash
-
-echo "Checking for lingering spirits..."
-
-if ss -tulnp 2>/dev/null | grep -q 4545; then
-    echo "FAIL: A ghost is still listening on port 4545."
-    exit 1
+# Source key if not already present
+if [[ -z "$GHOST_KEY" ]]; then
+    if [[ -f /etc/profile.d/ghost_key.sh ]]; then
+        source /etc/profile.d/ghost_key.sh
+    fi
 fi
 
-if pgrep -f ghost_ > /dev/null; then
-    echo "FAIL: Ghost processes still detected."
-    exit 1
+if [[ "$GHOST_KEY" == "phantom_energy" ]]; then
+    echo "👻 Ghost banished! The key is correct."
+else
+    echo "❌ Ghost still haunts the system. Key missing or incorrect."
 fi
-
-echo "SUCCESS: The system is silent. The ghost has been banished."
 EOF
+chmod +x ~/ghost_watch/lair/check_ghost.sh
 
-chmod +x check_ghost.sh
-# ----------------------------------------
-
-clear
-echo "Ghost Watch setup complete. Enter the dungeon to begin."
-rm -- "$0"
+echo
+echo "✅ Ghost Watch installed."
+echo "➡ Open a new terminal OR run: source /etc/profile.d/ghost_key.sh"
+echo "➡ Begin in: ~/ghost_watch"

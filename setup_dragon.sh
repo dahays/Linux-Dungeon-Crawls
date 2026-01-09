@@ -1,43 +1,55 @@
 #!/bin/bash
+# ==============================
+# The Dragon Cron - Setup
+# ==============================
 
-# --- Dragon Cron Persistence Setup ---
+echo "[+] Installing The Dragon Cron..."
 
-DUNGEON=dragon_cron
-mkdir -p $DUNGEON/{lair,logs,clues}
-cd $DUNGEON || exit 1
+# --- Persist Dragon environment key ---
+echo 'export DRAGON_KEY="fiery_breath"' > /etc/profile.d/dragon_key.sh
+chmod 644 /etc/profile.d/dragon_key.sh
 
-# Create the dragon script
-cat << 'EOF' > /usr/local/bin/dragon_heartbeat.sh
+# --- Create dungeon structure ---
+mkdir -p ~/dragon_cron/{bin,clues,lair}
+
+# --- Dragon background process ---
+cat << 'EOF' > ~/dragon_cron/bin/dragon_cron.sh
 #!/bin/bash
-echo "$(date): The dragon stirs..." >> /tmp/dragon.log
+while true; do
+    echo "The Dragon Cron smolders and watches..."
+    sleep 60
+done
 EOF
+chmod +x ~/dragon_cron/bin/dragon_cron.sh
 
-chmod +x /usr/local/bin/dragon_heartbeat.sh
+# Start dragon process in the background
+nohup ~/dragon_cron/bin/dragon_cron.sh >/dev/null 2>&1 &
 
-# Install cron job (every minute)
-echo "* * * * * /usr/local/bin/dragon_heartbeat.sh" > /etc/cron.d/dragon
+# --- Clues ---
+echo "CLUE 1: Discover the dragon’s key in your environment." > ~/dragon_cron/clues/start_here.txt
+echo "CLUE 2: Use the key to slay the dragon." > ~/dragon_cron/clues/dragon_hint.txt
 
-# Create clue files
-echo "CLUE 1: The dragon never sleeps. Something runs every minute." > clues/start_here.txt
-echo "CLUE 2: Fire leaves smoke. Smoke leaves logs." > clues/ash_and_smoke.txt
-echo "CLUE 3: The beast lives in a place common tools hide." > clues/where_dragons_hide.txt
-
-# Fake log hint
-echo "$(date): CRON[9999]: (root) CMD (/usr/local/bin/dragon_heartbeat.sh)" >> /var/log/syslog
-
-# Victory condition script
-cat << 'EOF' > lair/check_dragon.sh
+# --- Verification script ---
+cat << 'EOF' > ~/dragon_cron/lair/check_dragon.sh
 #!/bin/bash
-if [ -f /etc/cron.d/dragon ]; then
-    echo "The dragon still lives. The realm is not safe."
-    exit 1
+# Dragon verification script
+
+# Source key if not already present
+if [[ -z "$DRAGON_KEY" ]]; then
+    if [[ -f /etc/profile.d/dragon_key.sh ]]; then
+        source /etc/profile.d/dragon_key.sh
+    fi
+fi
+
+if [[ "$DRAGON_KEY" == "fiery_breath" ]]; then
+    echo "🐉 Dragon slain! The key is correct."
 else
-    echo "The dragon has been slain. The realm is at peace."
+    echo "❌ The dragon still breathes fire. Key missing or incorrect."
 fi
 EOF
+chmod +x ~/dragon_cron/lair/check_dragon.sh
 
-chmod +x lair/check_dragon.sh
-
-clear
-echo "Dragon dungeon prepared. Enter the lair if you dare."
-rm -- "$0"
+echo
+echo "✅ Dragon Cron installed."
+echo "➡ Open a new terminal OR run: source /etc/profile.d/dragon_key.sh"
+echo "➡ Begin in: ~/dragon_cron"
