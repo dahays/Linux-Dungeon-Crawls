@@ -1,6 +1,7 @@
 #!/bin/bash
 # ===============================
 # The Hydra Head Hunt - Setup
+# Context-Aware Version
 # ===============================
 
 set -e
@@ -21,12 +22,12 @@ mkdir -p "$HOME/.hydra_bin"
 cat << 'EOF' > "$HOME/.hydra_bin/ls"
 #!/bin/bash
 
-# Hydra watches only if the key exists
-if [[ "$HYDRA_KEY" == "many_heads" ]]; then
+# Hydra only watches inside its lair
+if [[ "$PWD" == "$HOME/hydra_lair"* && "$HYDRA_KEY" == "many_heads" ]]; then
     echo "⚠️ The Hydra watches every move..."
 fi
 
-# Execute the real ls
+# Call the real ls
 /bin/ls "$@"
 EOF
 
@@ -45,26 +46,26 @@ fi
 EOF
 fi
 
-# Apply immediately for this shell
+# Apply immediately
 export PATH="$HOME/.hydra_bin:$PATH"
 
 # -------------------------------
-# 4. Create Hydra environment file
+# 4. Create Hydra environment variable
 # -------------------------------
 cat << 'EOF' > "$HOME/.hydra_env"
 export HYDRA_KEY="many_heads"
 EOF
 
-# Load it now
+# Load now
 source "$HOME/.hydra_env"
 
-# Ensure it loads in future shells
+# Persist for future shells
 if ! grep -q "hydra_env" "$HOME/.bashrc"; then
     echo 'source "$HOME/.hydra_env"' >> "$HOME/.bashrc"
 fi
 
 # -------------------------------
-# 5. Create victory check script
+# 5. Create verification script
 # -------------------------------
 cat << 'EOF' > "$HOME/hydra_lair/check_hydra.sh"
 #!/bin/bash
@@ -72,32 +73,41 @@ cat << 'EOF' > "$HOME/hydra_lair/check_hydra.sh"
 echo "=== Hydra Verification ==="
 
 if [[ "$HYDRA_KEY" != "many_heads" ]]; then
-    echo "❌ HYDRA_KEY is missing or incorrect"
+    echo "❌ HYDRA_KEY not set"
     exit 1
 fi
 
 if [[ "$(which ls)" != "$HOME/.hydra_bin/ls" ]]; then
-    echo "❌ Hydra ls is not active"
+    echo "❌ Hydra ls not active"
+    exit 1
+fi
+
+if [[ "$PWD" != "$HOME/hydra_lair"* ]]; then
+    echo "⚠️ You are not inside the Hydra lair"
+    echo "   cd ~/hydra_lair and try again"
     exit 1
 fi
 
 echo "✅ HYDRA_KEY detected"
-echo "✅ Hydra is watching ls"
+echo "✅ Hydra watches this location"
 echo "🏆 Hydra Head Hunt completed!"
 EOF
 
 chmod +x "$HOME/hydra_lair/check_hydra.sh"
 
 # -------------------------------
-# 6. Final message
+# 6. Final instructions
 # -------------------------------
 echo
-echo "🐍 The Hydra stirs..."
-echo "Open a NEW terminal, then run:"
+echo "🐍 The Hydra sleeps outside its lair."
+echo "Enter it to awaken the beast:"
 echo "  cd ~/hydra_lair"
 echo "  ls"
 echo
-echo "When finished, verify with:"
+echo "Leave the lair to escape:"
+echo "  cd .."
+echo
+echo "Verify completion with:"
 echo "  ./check_hydra.sh"
 echo
 echo "[*] Setup complete."
