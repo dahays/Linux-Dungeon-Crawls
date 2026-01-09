@@ -26,7 +26,7 @@ wget -O setup_hydra.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Cr
 
 chmod +x setup_hydra.md
 
-./setup_hydra.sh
+sudo ./setup_hydra.sh
 
 cd hydra_head
 ```

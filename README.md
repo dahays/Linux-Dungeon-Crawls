@@ -38,7 +38,7 @@ wget -O setup_hydra.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Cr
 
 chmod +x setup_hydra.sh
 
-./setup_hydra.sh
+sudo ./setup_hydra.sh
 ```
 ### 👻 The Ghost Watch (Level 3)
 
@@ -53,7 +53,7 @@ wget -O setup_ghost.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Cr
 
 chmod +x setup_ghost.sh
 
-./setup_ghost.sh
+sudo ./setup_ghost.sh
 ```
 ### 🐉 The Dragon’s Cron (Level 4)
 
@@ -70,4 +70,4 @@ wget -O setup_ghost.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Cr
 
 chmod +x setup_dragon.sh
 
-./setup_dragon.sh
+sudo ./setup_dragon.sh
