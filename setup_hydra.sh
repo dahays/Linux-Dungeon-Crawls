@@ -120,10 +120,6 @@ unalias ls 2>/dev/null
 
 typeset -U path
 path=("$HOME/hydra_lair/bin" $path)
-
-ls() {
-  "$HOME/hydra_lair/bin/ls" "$@"
-}
 # --------------------
 EOF
 
