@@ -5,11 +5,9 @@
 
 echo "[+] Installing The Dragon Cron..."
 
-# Ensure /etc/profile.d exists
+# --- Ensure /etc/profile.d exists and persist Dragon Key ---
 sudo mkdir -p /etc/profile.d
-
-# --- Persist Dragon environment key ---
-echo 'export DRAGON_KEY="fiery_breath"' > /etc/profile.d/dragon_key.sh
+echo 'export DRAGON_KEY="fiery_breath"' | sudo tee /etc/profile.d/dragon_key.sh >/dev/null
 sudo chmod 644 /etc/profile.d/dragon_key.sh
 
 # --- Create dungeon structure ---
