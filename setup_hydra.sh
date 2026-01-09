@@ -66,8 +66,8 @@ cat << 'EOF' >> "$STUDENT_ZSHRC"
 
 # --- Hydra dungeon ---
 export HYDRA_KEY=many_heads
-PATH="$HOME/hydra_lair/bin:${PATH}"
-export PATH
+typeset -U path
+path=("$HOME/hydra_lair/bin" $path)
 # --------------------
 
 EOF
