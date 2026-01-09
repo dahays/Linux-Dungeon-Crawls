@@ -1,63 +1,79 @@
 #!/bin/bash
 
-# -------------------------------
-# Hydra Head Dungeon Setup
-# -------------------------------
+# ===============================
+# Hydra Head Hunt Setup Script
+# ===============================
 
-DUNGEON=hydra_head
-mkdir -p $DUNGEON/{bin,clues}
-cd $DUNGEON || exit 1
+BASE_DIR="$HOME/hydra_hunt"
+BIN_DIR="$BASE_DIR/harbor/bin"
 
-# Create multiple hydra processes
-cat << 'EOF' > bin/hydra_head.sh
+mkdir -p "$BIN_DIR" "$BASE_DIR/locker"
+
+# -------------------------------
+# Create the hydra process script
+# -------------------------------
+cat << 'EOF' > /tmp/hydra_core.sh
 #!/bin/bash
-while true; do
-    sleep 60
-done
+exec -a hydra_head sleep 600
 EOF
 
-chmod +x bin/hydra_head.sh
+chmod +x /tmp/hydra_core.sh
 
-# Launch multiple heads
-./bin/hydra_head.sh &
-./bin/hydra_head.sh &
-./bin/hydra_head.sh &
+# -------------------------------
+# Spawn multiple hydra heads
+# -------------------------------
+for head in deckhand lookout navigator; do
+  cp /tmp/hydra_core.sh /tmp/$head
+  /tmp/$head &
+done
 
-# Export environment variable clue
-export HYDRA_KEY="cut_off_one_head_two_more_take_its_place"
+# -------------------------------
+# Export the hidden key
+# -------------------------------
+export HYDRA_KEY="trident"
 
-# Create a PATH hijack example
-cat << 'EOF' > bin/ls
+# -------------------------------
+# PATH hijack (safe)
+# -------------------------------
+cat << 'EOF' > "$BIN_DIR/ls"
 #!/bin/bash
-echo "The Hydra clouds your vision..."
+echo "⚠️  The Hydra watches every move..."
 /bin/ls "$@"
 EOF
+chmod +x "$BIN_DIR/ls"
 
-chmod +x bin/ls
-export PATH="$PWD/bin:$PATH"
+# Prepend malicious path
+export PATH="$BIN_DIR:$PATH"
 
-# Create clues
-echo "CLUE 1: Strike down the beast, but beware — it has many heads." > clues/start_here.txt
-echo "CLUE 2: The Hydra hides secrets in the environment itself." > clues/env_whispers.txt
-echo "CLUE 3: Not every command is what it seems." > clues/false_paths.txt
+# -------------------------------
+# Clues
+# -------------------------------
+echo "CLUE 1: One head is never the whole beast." > "$BASE_DIR/start.txt"
+echo "CLUE 2: Some secrets are carried, not stored." > "$BASE_DIR/harbor/logbook.txt"
+echo "CLUE 3: Can you trust the commands you run?" > "$BASE_DIR/locker/readme.txt"
 
-# --- Create success verification script ---
-cat << 'EOF' > check_hydra.sh
+# -------------------------------
+# Victory check script
+# -------------------------------
+cat << 'EOF' > "$BASE_DIR/check_hydra.sh"
 #!/bin/bash
 
-echo "Verifying Hydra Head Hunt..."
-
-if pgrep -f hydra_head.sh > /dev/null; then
-    echo "FAIL: Hydra processes still detected."
-    exit 1
+if pgrep -f hydra_head > /dev/null; then
+  echo "❌ The Hydra still lives."
+  exit 1
 fi
 
-echo "SUCCESS: All Hydra heads have been defeated."
+if [ "$HYDRA_KEY" != "trident" ]; then
+  echo "❌ The Hydra key is missing."
+  exit 1
+fi
+
+echo "✅ The Hydra has fallen. The harbor is safe."
 EOF
 
-chmod +x check_hydra.sh
-# ----------------------------------------
+chmod +x "$BASE_DIR/check_hydra.sh"
 
 clear
-echo "Hydra Head Hunt setup complete. Enter the dungeon to begin."
+echo "🐍 Hydra Head Hunt deployed."
+echo "Begin in: $BASE_DIR"
 rm -- "$0"
