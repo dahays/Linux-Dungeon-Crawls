@@ -134,6 +134,16 @@ ls() {
 EOF
 
 # -------------------------------
+# 3.5 Ensure Kali always loads student zshrc
+# -------------------------------
+ZSHENV_FILE="/etc/zsh/zshenv"
+
+if ! grep -qxF '[[ -f ~/.zshrc ]] && source ~/.zshrc' "$ZSHENV_FILE"; then
+  echo '[[ -f ~/.zshrc ]] && source ~/.zshrc' >> "$ZSHENV_FILE"
+fi
+
+
+# -------------------------------
 # 4. Create Hydra Head Script
 # -------------------------------
 cat << 'EOF' > "$HEAD_DIR/hydra_head.sh"
