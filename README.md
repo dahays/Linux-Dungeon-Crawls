@@ -6,6 +6,8 @@
 
 Each dungeon is self-contained and installed using a single setup script. Once installed, students navigate the environment, follow clues, and complete objectives using standard Linux tools.
 
+A Kali VM will provide the most ideal environment.  While not critically malicious, running these from a local Linux machine is not advised.
+
 ---
 
 ## Getting Started
@@ -18,8 +20,6 @@ All dungeon crawls follow the same basic workflow:
 4. Enter the dungeon directory and begin
 5. Check for possible "clues" within each dungeon to help get started
 6. Run the check script to verify success
-
-*Note:  A Kali VM will provide the most ideal environment.  While not critically malicious, running these from a local Linux machine is not advised.
 
 ---
 
