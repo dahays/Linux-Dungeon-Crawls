@@ -1,64 +1,103 @@
 #!/bin/bash
-# ==============================
+# ===============================
 # The Hydra Head Hunt - Setup
-# ==============================
+# ===============================
 
-echo "[+] Installing The Hydra Head Hunt..."
+set -e
 
-# --- Ensure /etc/profile.d exists and persist Hydra Key ---
-sudo mkdir -p /etc/profile.d
-echo 'export HYDRA_KEY="many_heads"' | sudo tee /etc/profile.d/hydra_key.sh >/dev/null
-sudo chmod 644 /etc/profile.d/hydra_key.sh
+echo "[*] Setting up The Hydra Head Hunt..."
 
-# --- Auto-source so current terminal sees it ---
-if [[ -f /etc/profile.d/hydra_key.sh ]]; then
-    source /etc/profile.d/hydra_key.sh
-fi
+# -------------------------------
+# 1. Create dungeon directory
+# -------------------------------
+mkdir -p "$HOME/hydra_lair"
+cd "$HOME/hydra_lair"
 
-# --- Create dungeon structure ---
-mkdir -p ~/hydra_head/{bin,clues,lair}
+# -------------------------------
+# 2. Create Hydra PATH hijack
+# -------------------------------
+mkdir -p "$HOME/.hydra_bin"
 
-# --- Hydra background process ---
-cat << 'EOF' > ~/hydra_head/bin/hydra_head.sh
+cat << 'EOF' > "$HOME/.hydra_bin/ls"
 #!/bin/bash
-while true; do
-    echo "The Hydra stirs... cut one head and two more grow."
-    sleep 30
-done
-EOF
-chmod +x ~/hydra_head/bin/hydra_head.sh
 
-# Start Hydra process in background
-nohup ~/hydra_head/bin/hydra_head.sh >/dev/null 2>&1 &
-
-# --- Clues ---
-echo "CLUE 1: This beast is bound to your environment." > ~/hydra_head/clues/start_here.txt
-echo "CLUE 2: Seek the Hydra's name among exported variables." > ~/hydra_head/clues/hydra_hint.txt
-
-# --- Verification script ---
-cat << 'EOF' > ~/hydra_head/lair/check_hydra.sh
-#!/bin/bash
-# Hydra verification script
-
-# Source key if not already present
-if [[ -z "$HYDRA_KEY" ]]; then
-    if [[ -f /etc/profile.d/hydra_key.sh ]]; then
-        source /etc/profile.d/hydra_key.sh
-    fi
-fi
-
+# Hydra watches only if the key exists
 if [[ "$HYDRA_KEY" == "many_heads" ]]; then
-    echo "🐍 Hydra defeated! The key is correct."
-else
-    echo "❌ Hydra still lives. The key is missing or incorrect."
+    echo "⚠️ The Hydra watches every move..."
+fi
+
+# Execute the real ls
+/bin/ls "$@"
+EOF
+
+chmod +x "$HOME/.hydra_bin/ls"
+
+# -------------------------------
+# 3. Persist PATH modification
+# -------------------------------
+if ! grep -q "hydra_bin" "$HOME/.bashrc"; then
+    cat << 'EOF' >> "$HOME/.bashrc"
+
+# --- Hydra PATH Injection ---
+if [[ -d "$HOME/.hydra_bin" ]]; then
+    export PATH="$HOME/.hydra_bin:$PATH"
 fi
 EOF
-chmod +x ~/hydra_head/lair/check_hydra.sh
-
-echo
-echo "✅ Hydra Head Hunt installed."
-echo "➡ Open a new terminal OR run: source /etc/profile.d/hydra_key.sh"
-echo "➡ Begin in: ~/hydra_head"
-if [[ -f ~/.bashrc ]]; then
-    source ~/.bashrc
 fi
+
+# Apply immediately for this shell
+export PATH="$HOME/.hydra_bin:$PATH"
+
+# -------------------------------
+# 4. Create Hydra environment file
+# -------------------------------
+cat << 'EOF' > "$HOME/.hydra_env"
+export HYDRA_KEY="many_heads"
+EOF
+
+# Load it now
+source "$HOME/.hydra_env"
+
+# Ensure it loads in future shells
+if ! grep -q "hydra_env" "$HOME/.bashrc"; then
+    echo 'source "$HOME/.hydra_env"' >> "$HOME/.bashrc"
+fi
+
+# -------------------------------
+# 5. Create victory check script
+# -------------------------------
+cat << 'EOF' > "$HOME/hydra_lair/check_hydra.sh"
+#!/bin/bash
+
+echo "=== Hydra Verification ==="
+
+if [[ "$HYDRA_KEY" != "many_heads" ]]; then
+    echo "❌ HYDRA_KEY is missing or incorrect"
+    exit 1
+fi
+
+if [[ "$(which ls)" != "$HOME/.hydra_bin/ls" ]]; then
+    echo "❌ Hydra ls is not active"
+    exit 1
+fi
+
+echo "✅ HYDRA_KEY detected"
+echo "✅ Hydra is watching ls"
+echo "🏆 Hydra Head Hunt completed!"
+EOF
+
+chmod +x "$HOME/hydra_lair/check_hydra.sh"
+
+# -------------------------------
+# 6. Final message
+# -------------------------------
+echo
+echo "🐍 The Hydra stirs..."
+echo "Open a NEW terminal, then run:"
+echo "  cd ~/hydra_lair"
+echo "  ls"
+echo
+echo "When finished, verify with:"
+echo "  ./check_hydra.sh"
+echo
+echo "[*] Setup complete."
