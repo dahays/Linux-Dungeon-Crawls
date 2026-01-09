@@ -1,6 +1,4 @@
 
-## 2️⃣ `hydra_head.md`
-
 # 🐍 Hydra Head Hunt
 
 ## Overview
