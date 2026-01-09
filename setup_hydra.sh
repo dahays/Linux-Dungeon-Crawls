@@ -184,10 +184,13 @@ IMPORTANT:
 Close this terminal and open a NEW one.
 
 To begin the hunt:
+  FINAL SETUP STEP:
+  exec zsh (one time only):
+
   cd ~/hydra_lair
   ls
 
 To verify final victory:
-  check_hydra.sh
+  /hydra_lair/bin/check_hydra.sh
 
 EOF
