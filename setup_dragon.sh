@@ -59,3 +59,6 @@ echo
 echo "✅ Dragon Cron installed."
 echo "➡ Open a new terminal OR run: source /etc/profile.d/dragon_key.sh"
 echo "➡ Begin in: ~/dragon_cron"
+if [[ -f ~/.bashrc ]]; then
+    source ~/.bashrc
+fi

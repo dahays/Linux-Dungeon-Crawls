@@ -59,3 +59,6 @@ echo
 echo "✅ Ghost Watch installed."
 echo "➡ Open a new terminal OR run: source /etc/profile.d/ghost_key.sh"
 echo "➡ Begin in: ~/ghost_watch"
+if [[ -f ~/.bashrc ]]; then
+    source ~/.bashrc
+fi

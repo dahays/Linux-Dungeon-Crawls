@@ -59,3 +59,6 @@ echo
 echo "✅ Hydra Head Hunt installed."
 echo "➡ Open a new terminal OR run: source /etc/profile.d/hydra_key.sh"
 echo "➡ Begin in: ~/hydra_head"
+if [[ -f ~/.bashrc ]]; then
+    source ~/.bashrc
+fi
