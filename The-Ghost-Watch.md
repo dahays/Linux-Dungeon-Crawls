@@ -1,9 +1,5 @@
-
----
-
 ## 3️⃣ `ghost_watch.md`
 
-```markdown
 # 👻 Ghost Watch
 
 ## Overview
@@ -22,6 +18,12 @@ An advanced Linux challenge. Students must investigate a “ghost process” tha
 
 1. Open your Linux terminal.
 2. Download the setup script:
+3. Navigate to the directory and begin!
 
 ```bash
 wget -O setup_ghost.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/setup_ghost.sh
+
+./setup_ghost.sh
+
+cd ghost_watch
+```
