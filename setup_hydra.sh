@@ -134,21 +134,6 @@ ls() {
 EOF
 
 # -------------------------------
-# 3.5 Ensure Hydra loads last on Kali zsh
-# -------------------------------
-ZSH_HYDRA_CONF="/etc/zsh/zshrc.d/99-hydra.conf"
-
-cat << EOF > "$ZSH_HYDRA_CONF"
-# Hydra dungeon (forced final load)
-
-if [[ -f "$STUDENT_HOME/.zshrc" ]]; then
-  source "$STUDENT_HOME/.zshrc"
-fi
-EOF
-
-
-
-# -------------------------------
 # 4. Create Hydra Head Script
 # -------------------------------
 cat << 'EOF' > "$HEAD_DIR/hydra_head.sh"
