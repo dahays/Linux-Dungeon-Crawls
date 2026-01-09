@@ -134,13 +134,18 @@ ls() {
 EOF
 
 # -------------------------------
-# 3.5 Ensure Kali always loads student zshrc
+# 3.5 Ensure Hydra loads last on Kali zsh
 # -------------------------------
-ZSHENV_FILE="/etc/zsh/zshenv"
+ZSH_HYDRA_CONF="/etc/zsh/zshrc.d/99-hydra.conf"
 
-if ! grep -qxF '[[ -f ~/.zshrc ]] && source ~/.zshrc' "$ZSHENV_FILE"; then
-  echo '[[ -f ~/.zshrc ]] && source ~/.zshrc' >> "$ZSHENV_FILE"
+cat << EOF > "$ZSH_HYDRA_CONF"
+# Hydra dungeon (forced final load)
+
+if [[ -f "$STUDENT_HOME/.zshrc" ]]; then
+  source "$STUDENT_HOME/.zshrc"
 fi
+EOF
+
 
 
 # -------------------------------
