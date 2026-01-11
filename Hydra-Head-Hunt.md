@@ -24,7 +24,7 @@ A mid-level Linux challenge. Students must discover multiple hidden “Hydra” 
 ```bash
 wget -O setup_hydra.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/setup_hydra.sh
 
-chmod +x setup_hydra.md
+chmod +x setup_hydra.sh
 
 sudo ./setup_hydra.sh
 
