@@ -28,9 +28,9 @@ chmod +x setup_hydra.md
 
 sudo ./setup_hydra.sh
 
-cd hydra_head
+cd hydra_lair
 ```
 6. Confirm success
 ```bash
-./check_hydra.sh
+./hydra_lair/bin/check_hydra.sh
 ```
