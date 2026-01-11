@@ -28,6 +28,8 @@ chmod +x setup_hydra.sh
 
 sudo ./setup_hydra.sh
 
+exec zsh
+
 cd hydra_lair
 ```
 6. Confirm success
