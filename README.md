@@ -39,6 +39,8 @@ wget -O setup_hydra.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Cr
 chmod +x setup_hydra.sh
 
 sudo ./setup_hydra.sh
+
+exec zsh
 ```
 ### 👻 The Ghost Watch (Level 3)
 
