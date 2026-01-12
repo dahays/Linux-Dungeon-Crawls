@@ -1,5 +1,6 @@
-#👻🕯️ Ghost Watch II: The Necromancer
-Overview
+# 👻🕯️ Ghost Watch II: The Necromancer
+
+## Overview
 
 An advanced Linux dungeon crawl.
 
@@ -8,7 +9,7 @@ In this challenge, students face a necromancer process that continuously resurre
 
 This dungeon teaches the critical difference between symptom and source.
 
-Skills Practiced
+**Skills Practiced**
 
 Process discovery (ps, pgrep)
 
@@ -20,7 +21,7 @@ Signals and termination (kill, kill -SIGTERM, kill -SIGKILL)
 
 Verification and system state reasoning
 
-Setup Instructions
+## Setup Instructions
 
 Open a terminal.
 
