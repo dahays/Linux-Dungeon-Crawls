@@ -1,4 +1,4 @@
-👻 Ghost Watch
+# 👻 Ghost Watch
 
 ## Overview
 An advanced Linux dungeon challenge.  
