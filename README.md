@@ -39,7 +39,15 @@ An advanced Linux investigation challenge centered on identifying and stopping a
 **Crawl Instructions:**  
 [The-Ghost-Watch.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/The-Ghost-Watch.md#-ghost-watch)
 
-### 🐉 The Dragon’s Cron (Level 4)
+### 👻🕯️  Ghost Watch II: The Necromancer
+An advanced Linux dungeon crawl.
+
+A simple ghost is never truly gone.
+In this challenge, you face a necromancer process that continuously resurrects a ghost child. Killing the ghost alone is futile. The sins of the parent...
+**Crawl Instructions:**
+[Ghost-Watch-II-Necromancer.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/Ghost-Watch-II-Necromancer.md)
+
+### 🐉 The Dragon’s Cron (Level 5)
 
 A powerful dragon stalks the system, awakening every minute without fail. Killing symptoms will not stop it. To restore peace, you must uncover how the dragon persists and remove it at the source.
 
