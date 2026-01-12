@@ -21,7 +21,7 @@ All dungeon crawls follow the same basic workflow:
 5. Check for possible "clues" within each dungeon to help get started
 6. Run the check script to verify success
 
-Be aware of our surroundings, there could always be hidden artifacts to aid you in your quest.
+Be aware of our surroundings, there may be hidden artifacts to aid you in your quest.
 
 ---
 
