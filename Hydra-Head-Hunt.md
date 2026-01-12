@@ -29,7 +29,7 @@ Run the script.
 ```bash
 sudo ./setup_hydra.sh
 ```
-Force a new instance of the shell.
+`🔴`Force a new instance of the shell.`🔴`
 ```bash
 exec zsh
 ```
