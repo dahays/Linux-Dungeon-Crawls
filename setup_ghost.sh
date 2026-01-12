@@ -1,3 +1,15 @@
+
+---
+
+## ✅ Fixed `setup_ghost.sh` (Hydra-consistent, minimal changes)
+
+**Key fixes applied:**
+- Correctly installs into the invoking student’s home directory
+- Safe under `sudo`
+- No reliance on `$HOME` resolving to `/root`
+- No shell reload requirements
+
+```bash
 #!/bin/bash
 # ======================================
 # The Ghost Watch - Setup Script
@@ -5,61 +17,95 @@
 # ======================================
 
 set -e
+set -o pipefail
 
-echo "[*] Setting up The Ghost Watch..."
+echo "👻 Initializing Ghost Watch dungeon..."
+
+# -------------------------------
+# 0. Require sudo, capture student
+# -------------------------------
+if [[ "$EUID" -ne 0 ]]; then
+  echo "🚫 This installer must be run with sudo."
+  exit 1
+fi
+
+if [[ -z "$SUDO_USER" || "$SUDO_USER" == "root" ]]; then
+  echo "🚫 Cannot determine invoking user."
+  exit 1
+fi
+
+STUDENT_USER="$SUDO_USER"
+STUDENT_HOME="$(getent passwd "$STUDENT_USER" | cut -d: -f6)"
+
+echo "🎯 Deploying Ghost Watch for user: $STUDENT_USER"
+echo "🏠 Target home directory: $STUDENT_HOME"
 
 # -------------------------------
 # 1. Create dungeon directory
 # -------------------------------
-mkdir -p "$HOME/ghost_watch"
-cd "$HOME/ghost_watch"
+DUNGEON_DIR="$STUDENT_HOME/ghost_watch"
+
+mkdir -p "$DUNGEON_DIR"
+chown -R "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR"
+cd "$DUNGEON_DIR"
 
 # -------------------------------
 # 2. Create persistent ghost script
 # -------------------------------
-cat << 'EOF' > "$HOME/ghost_watch/ghost_watch.sh"
+cat << 'EOF' > "$DUNGEON_DIR/ghost_watch.sh"
 #!/bin/bash
-# Ghost process just sleeps in background
+# Ghost process endlessly sleeps
 while true; do
     sleep 3600
 done
 EOF
 
-chmod +x "$HOME/ghost_watch/ghost_watch.sh"
+chmod +x "$DUNGEON_DIR/ghost_watch.sh"
+chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/ghost_watch.sh"
 
 # -------------------------------
-# 3. Launch ghost process
+# 3. Launch ghost as student
 # -------------------------------
-nohup "$HOME/ghost_watch/ghost_watch.sh" >/dev/null 2>&1 &
+sudo -u "$STUDENT_USER" nohup "$DUNGEON_DIR/ghost_watch.sh" >/dev/null 2>&1 &
 
 # -------------------------------
 # 4. Create verification script
 # -------------------------------
-cat << 'EOF' > "$HOME/ghost_watch/check_ghost.sh"
+cat << 'EOF' > "$DUNGEON_DIR/check_ghost.sh"
 #!/bin/bash
-echo "=== Ghost Verification ==="
 
-# Check for any ghost_watch.sh process
-if pgrep -f ghost_watch.sh > /dev/null; then
-    echo "❌ Ghost process still running. Kill it to complete the challenge."
+echo "🔎 Verifying Ghost Watch completion..."
+echo
+
+if pgrep -f ghost_watch.sh >/dev/null; then
+    echo "❌ The ghost still lingers."
+    echo "   Silence it completely to finish the dungeon."
     exit 1
 fi
 
-echo "✅ Ghost process terminated"
-echo "🏆 Ghost Watch completed!"
+echo "👻 The system is quiet."
+echo "🏆 GHOST WATCH COMPLETE"
+exit 0
 EOF
 
-chmod +x "$HOME/ghost_watch/check_ghost.sh"
+chmod +x "$DUNGEON_DIR/check_ghost.sh"
+chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/check_ghost.sh"
 
 # -------------------------------
 # 5. Final instructions
 # -------------------------------
-echo
-echo "👻 The ghost process is running in the background."
-echo
-echo "To complete the challenge:"
-echo "  1. Discover the ghost process with 'ps', 'pgrep', or 'top'"
-echo "  2. Kill it using 'kill <PID>'"
-echo "  3. Verify with './check_ghost.sh'"
-echo
-echo "[*] Setup complete."
+cat << EOF
+
+👻 GHOST WATCH READY
+
+✔ Installed for user: $STUDENT_USER
+✔ Dungeon located at: ~/ghost_watch
+✔ Ghost process is active
+
+To begin:
+  cd ~/ghost_watch
+
+To verify victory:
+  ./check_ghost.sh
+
+EOF
