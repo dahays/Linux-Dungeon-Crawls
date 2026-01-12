@@ -1,12 +1,18 @@
-# 👻 Ghost Watch
+👻 Ghost Watch
 
 ## Overview
-An advanced Linux challenge. Students must investigate a “ghost process” that respawns, identify its parent, terminate it correctly, and confirm the system is silent.
+An advanced Linux dungeon challenge.  
+Students must investigate a “ghost process” that respawns, identify its parent, terminate it correctly, and confirm the system is silent.
 
-**Skills Practiced**
-- Network listening (`ss`, `netstat`)
-- Process hierarchy (`ps`, `pstree`)
-- Signals (`kill -SIGTERM`)
+This dungeon focuses on **process inspection, hierarchy, and signals**, not environment tricks.
+
+---
+
+## Skills Practiced
+
+- Process discovery (`ps`, `pgrep`, `top`)
+- Process hierarchy (`ps -f`, `pstree`)
+- Signals (`kill`, `kill -SIGTERM`)
 - Script execution
 - System verification
 
@@ -14,22 +20,30 @@ An advanced Linux challenge. Students must investigate a “ghost process” tha
 
 ## Setup Instructions
 
-1. Open a terminal.
-2. Download the setup script:
-3. Make it executable.
-4. Run the script.
-5. Enter the dungeon directory to begin!
+Open a terminal.
 
+Download the setup script:
 ```bash
 wget -O setup_ghost.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/setup_ghost.sh
-
+```
+Make it executable.
+```bash
 chmod +x setup_ghost.sh
+```
 
+Run the installer script.
+```bash
 sudo ./setup_ghost.sh
+```
+Enter the dungeon directory to begin!
 
+```bash
 cd ghost_watch
 ```
-6. Check success
+
+Check success
+
+A true victory leaves the system silent.
 ```bash
 ./check_ghost.sh
 ```
