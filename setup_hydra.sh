@@ -121,7 +121,7 @@ chown "$STUDENT_USER:$STUDENT_USER" "$CHECK_SCRIPT"
 MANUSCRIPT="$HYDRA_DIR/.strange_manuscript"
 
 cat << 'EOF' > "$MANUSCRIPT"
-The parchment is old. The ink has faded.
+You notice an old faded parchment tucked away in the lair. It reads:
 
 "Many who face the Hydra strike at its heads.
 Fools. Heads grow back."
@@ -131,6 +131,12 @@ but in whispers passed from shell to shell."
 
 "What you type is not always what you run.
 What you run is not always what you trust."
+
+"The which command answers your call,
+Only one lives where the hydra keeps its truths, not its tricks."
+
+"The Hydra wins not by strength,
+but by standing earlier in the path."
 
 "When the lair forgets the Hydra's name,
 only then does the silence last."
