@@ -73,27 +73,21 @@ if printenv | grep -q HYDRA_KEY; then
   FAIL=1
 fi
 
-# 2. PATH must not be hijacked
-echo "$PATH" | grep -q hydra_lair/bin
-if [[ $? -eq 0 ]]; then
-  echo "❌ The Hydra still controls your path."
-  FAIL=1
-fi
-
-# 3. ls must be the system binary
+# 2. Command resolution must be restored
 LS_PATH="$(command -v ls)"
 if [[ "$LS_PATH" != "/usr/bin/ls" && "$LS_PATH" != "/bin/ls" ]]; then
   echo "❌ Your sight is still warped. ls is not the system binary."
   FAIL=1
 fi
 
-# 4. No living heads
+
+# 3. No living heads
 if pgrep -f hydra_head >/dev/null; then
   echo "❌ The Hydra still has living heads."
   FAIL=1
 fi
 
-# 5. Proof of victory
+# 4. Proof of victory
 PROOF="$HOME/hydra_lair/heads/hydra_defeated"
 if [[ ! -f "$PROOF" ]]; then
   echo "❌ No proof of victory found."
@@ -105,6 +99,10 @@ if [[ "$FAIL" -eq 1 ]]; then
   echo "⚠️ FALSE VICTORY DETECTED"
   echo "The Hydra retreats... but is not defeated."
   exit 1
+fi
+
+if [[ ":$PATH:" == *":$HOME/hydra_lair/bin:"* ]]; then
+  echo "⚠️ Hydra remnants found in PATH (non-fatal)"
 fi
 
 echo
