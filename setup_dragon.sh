@@ -1,71 +1,116 @@
 #!/bin/bash
 # ======================================
-# The Dragon Cron - Setup Script
-# Teaches cron jobs and persistence
+# The Dragon's Cron - Setup Script
+# Teaches cron persistence and investigation
 # ======================================
 
 set -e
+set -o pipefail
 
-echo "[*] Setting up The Dragon Cron..."
+echo "🐉 Awakening The Dragon's Cron..."
+
+# -------------------------------
+# 0. Require sudo, capture student
+# -------------------------------
+if [[ "$EUID" -ne 0 ]]; then
+  echo "🚫 This installer must be run with sudo."
+  exit 1
+fi
+
+if [[ -z "$SUDO_USER" || "$SUDO_USER" == "root" ]]; then
+  echo "🚫 Cannot determine invoking user."
+  exit 1
+fi
+
+STUDENT_USER="$SUDO_USER"
+STUDENT_HOME="$(getent passwd "$STUDENT_USER" | cut -d: -f6)"
+
+echo "🎯 Deploying for user: $STUDENT_USER"
+echo "🏠 Target home: $STUDENT_HOME"
 
 # -------------------------------
 # 1. Create dragon lair directory
 # -------------------------------
-mkdir -p "$HOME/dragon_lair"
-cd "$HOME/dragon_lair"
+DUNGEON_DIR="$STUDENT_HOME/dragon_cron"
+
+mkdir -p "$DUNGEON_DIR"
+chown -R "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR"
+cd "$DUNGEON_DIR"
 
 # -------------------------------
-# 2. Create cron job script
+# 2. Create dragon cron script
 # -------------------------------
-cat << 'EOF' > "$HOME/dragon_lair/dragon_cron.sh"
+cat << 'EOF' > "$DUNGEON_DIR/dragon_cron.sh"
 #!/bin/bash
-# Writes timestamp to log.txt
-mkdir -p "$HOME/dragon_lair"
-echo "Dragon Cron active: $(date)" >> "$HOME/dragon_lair/log.txt"
+echo "🐉 Dragon stirs at $(date)" >> "$HOME/dragon_cron/dragon.log"
 EOF
 
-chmod +x "$HOME/dragon_lair/dragon_cron.sh"
+chmod +x "$DUNGEON_DIR/dragon_cron.sh"
+chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/dragon_cron.sh"
 
 # -------------------------------
-# 3. Install cron job
+# 3. Install cron job (student-owned)
 # -------------------------------
-# Run every minute (for testing purposes)
-(crontab -l 2>/dev/null; echo "* * * * * $HOME/dragon_lair/dragon_cron.sh") | crontab -
+sudo -u "$STUDENT_USER" crontab -l 2>/dev/null | \
+  grep -v dragon_cron.sh | \
+  sudo -u "$STUDENT_USER" crontab -
+
+sudo -u "$STUDENT_USER" bash -c \
+  "(crontab -l 2>/dev/null; echo '* * * * * \$HOME/dragon_cron/dragon_cron.sh') | crontab -"
 
 # -------------------------------
 # 4. Create verification script
 # -------------------------------
-cat << 'EOF' > "$HOME/dragon_lair/check_dragon.sh"
+cat << 'EOF' > "$DUNGEON_DIR/check_dragon.sh"
 #!/bin/bash
-echo "=== Dragon Cron Verification ==="
 
-LOG="$HOME/dragon_lair/log.txt"
+echo "🔎 Inspecting the lair..."
+echo
 
-if [[ ! -f "$LOG" ]]; then
-    echo "❌ Dragon log not found. Wait a minute for cron to run or check cron setup."
-    exit 1
+LOG="$HOME/dragon_cron/dragon.log"
+
+if crontab -l 2>/dev/null | grep -q dragon_cron.sh; then
+  echo "❌ The dragon's ritual still exists."
+  exit 1
 fi
 
-if ! grep -q "Dragon Cron active" "$LOG"; then
-    echo "❌ Dragon cron job has not run yet. Wait a minute."
-    exit 1
+if [[ -f "$LOG" ]]; then
+  echo "❌ The dragon still leaves scorch marks."
+  exit 1
 fi
 
-echo "✅ Dragon cron job executed successfully"
-echo "🏆 Dragon Cron completed!"
+echo "🐉 The lair is silent."
+echo
+echo "✔ Persistence removed"
+echo "✔ No cron rituals remain"
+echo
+echo "🏆 DRAGON CRON COMPLETE"
+exit 0
 EOF
 
-chmod +x "$HOME/dragon_lair/check_dragon.sh"
+chmod +x "$DUNGEON_DIR/check_dragon.sh"
+chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/check_dragon.sh"
 
 # -------------------------------
 # 5. Final instructions
 # -------------------------------
-echo
-echo "🐉 The Dragon Cron writes a log every minute."
-echo
-echo "To complete the challenge:"
-echo "  1. Wait 1–2 minutes for cron to execute"
-echo "  2. Check the log: 'cat ~/dragon_lair/log.txt'"
-echo "  3. Verify with './check_dragon.sh'"
-echo
-echo "[*] Setup complete."
+cat << EOF
+
+🐉 THE DRAGON'S CRON IS ACTIVE
+
+✔ Installed for user: $STUDENT_USER
+✔ Dungeon location: ~/dragon_cron
+✔ Cron job executes every minute
+
+Hints:
+- Killing processes will not help
+- Cron does not care about shells
+- Look where time itself is scheduled
+
+To begin:
+  cd ~/dragon_cron
+
+To verify victory:
+  ./check_dragon.sh
+
+EOF
