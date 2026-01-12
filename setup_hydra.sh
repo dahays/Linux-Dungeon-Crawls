@@ -9,7 +9,6 @@ echo "🐍 Initializing Hydra dungeon (one-time setup)..."
 # -------------------------------
 if [[ "$EUID" -ne 0 ]]; then
   echo "🚫 This installer must be run with sudo."
-  echo "   Example: sudo ./setup_hydra.sh"
   exit 1
 fi
 
@@ -25,7 +24,7 @@ echo "🎯 Deploying Hydra for user: $STUDENT_USER"
 echo "🏠 Target home directory: $STUDENT_HOME"
 
 # -------------------------------
-# 1. Create Hydra Lair (user-owned)
+# 1. Create Hydra Lair
 # -------------------------------
 HYDRA_DIR="$STUDENT_HOME/hydra_lair"
 BIN_DIR="$HYDRA_DIR/bin"
@@ -51,7 +50,7 @@ chmod +x "$BIN_DIR/ls"
 chown "$STUDENT_USER:$STUDENT_USER" "$BIN_DIR/ls"
 
 # -------------------------------
-# 2.5 Create Hydra Completion Check Script
+# 2.5 Create Completion Check Script (UPDATED)
 # -------------------------------
 CHECK_SCRIPT="$BIN_DIR/check_hydra.sh"
 
@@ -61,41 +60,84 @@ cat << 'EOF' > "$CHECK_SCRIPT"
 echo "🔎 Verifying dungeon completion..."
 echo
 
-if [[ "$HYDRA_KEY" != "many_heads" ]]; then
-  echo "❌ The Hydra still hides its true name."
-  exit 1
+FAIL=0
+
+# 1. Environment must be clean
+if printenv | grep -q HYDRA_KEY; then
+  echo "❌ The Hydra still whispers through the environment."
+  FAIL=1
 fi
 
-if [[ "$PWD" != "$HOME/hydra_lair"* ]]; then
-  echo "❌ You are not within the Hydra lair."
-  exit 1
+# 2. PATH must not be hijacked
+echo "$PATH" | grep -q hydra_lair/bin
+if [[ $? -eq 0 ]]; then
+  echo "❌ The Hydra still controls your path."
+  FAIL=1
 fi
 
+# 3. ls must be the system binary
+LS_PATH="$(command -v ls)"
+if [[ "$LS_PATH" != "/usr/bin/ls" && "$LS_PATH" != "/bin/ls" ]]; then
+  echo "❌ Your sight is still warped. ls is not the system binary."
+  FAIL=1
+fi
+
+# 4. No living heads
 if pgrep -f hydra_head >/dev/null; then
   echo "❌ The Hydra still has living heads."
-  exit 1
+  FAIL=1
 fi
 
-PROOF_FILE="$HOME/hydra_lair/heads/hydra_defeated"
-
-if [[ ! -f "$PROOF_FILE" ]]; then
+# 5. Proof of victory
+PROOF="$HOME/hydra_lair/heads/hydra_defeated"
+if [[ ! -f "$PROOF" ]]; then
   echo "❌ No proof of victory found."
+  FAIL=1
+fi
+
+if [[ "$FAIL" -eq 1 ]]; then
+  echo
+  echo "⚠️ FALSE VICTORY DETECTED"
+  echo "The Hydra retreats... but is not defeated."
   exit 1
 fi
 
-echo "🐉 THE HYDRA HAS FALLEN"
 echo
-echo "✔ Environment understood"
+echo "🐉 THE HYDRA HAS FALLEN"
+echo "✔ Environment repaired"
+echo "✔ Trust restored"
 echo "✔ Heads destroyed"
-echo "✔ Proof secured"
 echo
 echo "🏆 CONGRATULATIONS"
-echo "You have completed the Hydra dungeon."
 exit 0
 EOF
 
 chmod +x "$CHECK_SCRIPT"
 chown "$STUDENT_USER:$STUDENT_USER" "$CHECK_SCRIPT"
+
+# -------------------------------
+# 2.6 Create Hidden Lore / Hint File
+# -------------------------------
+MANUSCRIPT="$HYDRA_DIR/.strange_manuscript"
+
+cat << 'EOF' > "$MANUSCRIPT"
+The parchment is old. The ink has faded.
+
+"Many who face the Hydra strike at its heads.
+Fools. Heads grow back."
+
+"The beast does not live in muscle or bone,
+but in whispers passed from shell to shell."
+
+"What you type is not always what you run.
+What you run is not always what you trust."
+
+"When the lair forgets the Hydra's name,
+only then does the silence last."
+EOF
+
+chown "$STUDENT_USER:$STUDENT_USER" "$MANUSCRIPT"
+chmod 600 "$MANUSCRIPT"
 
 # -------------------------------
 # 3. Persist environment for Kali (zsh)
@@ -105,7 +147,6 @@ STUDENT_ZSHRC="$STUDENT_HOME/.zshrc"
 touch "$STUDENT_ZSHRC"
 chown "$STUDENT_USER:$STUDENT_USER" "$STUDENT_ZSHRC"
 
-# Clean old Hydra entries (idempotent)
 sed -i '/hydra_lair\/bin/d' "$STUDENT_ZSHRC"
 sed -i '/HYDRA_KEY/d' "$STUDENT_ZSHRC"
 sed -i '/Hydra dungeon/d' "$STUDENT_ZSHRC"
@@ -120,6 +161,10 @@ unalias ls 2>/dev/null
 
 typeset -U path
 path=("$HOME/hydra_lair/bin" $path)
+
+ls() {
+  "$HOME/hydra_lair/bin/ls" "$@"
+}
 # --------------------
 EOF
 
@@ -135,14 +180,14 @@ chmod +x "$HEAD_DIR/hydra_head.sh"
 chown "$STUDENT_USER:$STUDENT_USER" "$HEAD_DIR/hydra_head.sh"
 
 # -------------------------------
-# 5. Spawn Hydra Heads as student
+# 5. Spawn Hydra Heads
 # -------------------------------
 for i in 1 2 3; do
   sudo -u "$STUDENT_USER" nohup "$HEAD_DIR/hydra_head.sh" >/dev/null 2>&1 &
 done
 
 # -------------------------------
-# 6. Final Message (Student-Facing)
+# 6. Final Message
 # -------------------------------
 cat << EOF
 
@@ -150,33 +195,18 @@ cat << EOF
 
 ✔ Installed for user: $STUDENT_USER
 ✔ Hydra lair created at: ~/hydra_lair
-✔ Environment configured in ~/.zshrc
+✔ Dungeon integrity checks updated
+✔ Strange manuscript discovered
 ✔ Hydra heads are running
-✔ Completion check installed
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📌 IMPORTANT (ONE-TIME STEP)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+IMPORTANT (one-time):
+  exec zsh
 
-Because Kali loads zsh before this installer runs,
-you must refresh your shell ONCE:
+To begin the hunt:
+  cd ~/hydra_lair
+  ls
 
-    exec zsh
-
-After that, everything works automatically
-in all future terminals.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎮 BEGIN THE DUNGEON
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-    cd ~/hydra_lair
-    ls
-
-To verify final victory later:
-
-    ~/hydra_lair/bin/check_hydra.sh
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+To verify final victory:
+  check_hydra.sh
 
 EOF
