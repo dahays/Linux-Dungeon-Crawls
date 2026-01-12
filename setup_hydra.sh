@@ -40,7 +40,12 @@ cat << 'EOF' > "$BIN_DIR/ls"
 #!/bin/bash
 
 if [[ "$PWD" == "$HOME/hydra_lair"* ]] && [[ "$HYDRA_KEY" == "many_heads" ]]; then
-  echo "⚠️ The Hydra watches every move..."
+  RED="\033[0;31m"
+  GREEN="\033[0;32m"
+  RESET="\033[0m"
+
+  echo -e "${RED}❌ The Hydra still controls your path.${RESET}"
+
 fi
 
 /bin/ls "$@"
@@ -122,6 +127,9 @@ MANUSCRIPT="$HYDRA_DIR/.strange_manuscript"
 
 cat << 'EOF' > "$MANUSCRIPT"
 You notice an old faded parchment tucked away in the lair. It reads:
+
+“The Hydra's words are stained the color of old blood.
+Truth does not need to shout.”
 
 "Some evils do not die when slain,
 but linger in what is remembered."
