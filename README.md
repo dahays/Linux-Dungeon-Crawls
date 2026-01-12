@@ -32,16 +32,6 @@ A multi-process Linux challenge focused on identifying and defeating hidden and 
 **Crawl Instructions:**  
 [The-Hydra-Head-Hunt.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/Hydra-Head-Hunt.md#-hydra-head-hunt)
 
-**Install Script:**
-```bash
-wget -O setup_hydra.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/setup_hydra.sh
-
-chmod +x setup_hydra.sh
-
-sudo ./setup_hydra.sh
-
-exec zsh
-```
 ### 👻 The Ghost Watch (Level 3)
 
 An advanced Linux investigation challenge centered on identifying and stopping a persistent “ghost” process that respawns until the true source is discovered.
@@ -49,14 +39,6 @@ An advanced Linux investigation challenge centered on identifying and stopping a
 **Crawl Instructions:**  
 [The-Ghost-Watch.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/The-Ghost-Watch.md#-ghost-watch)
 
-**Install Script:**
-```bash
-wget -O setup_ghost.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/setup_ghost.sh
-
-chmod +x setup_ghost.sh
-
-sudo ./setup_ghost.sh
-```
 ### 🐉 The Dragon’s Cron (Level 4)
 
 A powerful dragon stalks the system, awakening every minute without fail. Killing symptoms will not stop it. To restore peace, you must uncover how the dragon persists and remove it at the source.
@@ -66,10 +48,3 @@ This dungeon emphasizes investigation over brute force.
 **Crawl Instructions:**  
 [The-Dragon-Cron.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/The-Dragon-Cron.md#-the-dragons-cron)
 
-**Install Script:**
-```bash
-wget -O setup_ghost.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/setup_dragon.sh
-
-chmod +x setup_dragon.sh
-
-sudo ./setup_dragon.sh
