@@ -133,6 +133,7 @@ To begin:
 To verify victory:
   ./check_ghost.sh
 
-Hint: Some secrets hide in plain sight. Not all treasures are in the open.
+Scratched into the wall you see an odd message:
+"Some secrets hide in plain sight. Not all treasures are in the open."
 
 EOF

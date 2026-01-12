@@ -277,4 +277,7 @@ To begin the hunt:
 To verify final victory:
   check_hydra.sh
 
+You notice a used charcoal writing stick on the floor.
+Perhaps it once revealed clues to your quest.
+
 EOF
