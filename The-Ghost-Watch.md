@@ -31,5 +31,5 @@ cd ghost_watch
 ```
 6. Check success
 ```bash
-./check_hydra.sh
+./check_ghost.sh
 ```
