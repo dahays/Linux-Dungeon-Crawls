@@ -1,7 +1,7 @@
 #!/bin/bash
 # ======================================
-# The Ghost Watch - Setup Script
-# Teaches process monitoring, management, and hidden discovery
+# Ghost Watch - Level 3
+# Teaches process inspection, identity, and signals
 # ======================================
 
 set -e
@@ -29,7 +29,7 @@ echo "🎯 Deploying Ghost Watch for user: $STUDENT_USER"
 echo "🏠 Target home directory: $STUDENT_HOME"
 
 # -------------------------------
-# 1. Create dungeon directory
+# 1. Create dungeon
 # -------------------------------
 DUNGEON_DIR="$STUDENT_HOME/ghost_watch"
 mkdir -p "$DUNGEON_DIR"
@@ -37,26 +37,31 @@ chown -R "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR"
 cd "$DUNGEON_DIR"
 
 # -------------------------------
-# 2. Create persistent ghost script
+# 2. Create ghost script (signal-resistant)
 # -------------------------------
-cat << 'EOF' > "$DUNGEON_DIR/ghost_watch.sh"
+cat << 'EOF' > "$DUNGEON_DIR/ghost_core.sh"
 #!/bin/bash
-# Ghost process endlessly sleeps
+
+# Ignore polite termination
+trap '' SIGTERM
+
 while true; do
   sleep 3600
 done
 EOF
 
-chmod +x "$DUNGEON_DIR/ghost_watch.sh"
-chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/ghost_watch.sh"
+chmod +x "$DUNGEON_DIR/ghost_core.sh"
+chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/ghost_core.sh"
 
 # -------------------------------
-# 3. Launch ghost as student
+# 3. Launch ghost with false identity
 # -------------------------------
-sudo -u "$STUDENT_USER" nohup "$DUNGEON_DIR/ghost_watch.sh" >/dev/null 2>&1 &
+sudo -u "$STUDENT_USER" nohup bash -c \
+  'exec -a wandering_spirit ~/ghost_watch/ghost_core.sh' \
+  >/dev/null 2>&1 &
 
 # -------------------------------
-# 4. Create verification script
+# 4. Verification script
 # -------------------------------
 cat << 'EOF' > "$DUNGEON_DIR/check_ghost.sh"
 #!/bin/bash
@@ -64,13 +69,32 @@ cat << 'EOF' > "$DUNGEON_DIR/check_ghost.sh"
 echo "🔎 Verifying Ghost Watch completion..."
 echo
 
-if pgrep -f ghost_watch.sh >/dev/null; then
-  echo "❌ The ghost still lingers."
-  echo "   Silence it completely to finish the dungeon."
+FAIL=0
+
+# Ghost must be fully gone
+if pgrep -f wandering_spirit >/dev/null; then
+  echo "❌ A spirit still wanders the system."
+  FAIL=1
+fi
+
+# Ensure no orphaned core remains
+if pgrep -f ghost_core.sh >/dev/null; then
+  echo "❌ The ghost's heart still beats."
+  FAIL=1
+fi
+
+if [[ "$FAIL" -eq 1 ]]; then
+  echo
+  echo "⚠️ THE LAIR IS NOT QUIET"
+  echo "Look deeper. Names deceive."
   exit 1
 fi
 
-echo "👻 The system is quiet."
+echo
+echo "👻 The lair is silent."
+echo "✔ Process truth uncovered"
+echo "✔ Signals understood"
+echo
 echo "🏆 GHOST WATCH COMPLETE"
 exit 0
 EOF
@@ -79,7 +103,7 @@ chmod +x "$DUNGEON_DIR/check_ghost.sh"
 chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/check_ghost.sh"
 
 # -------------------------------
-# 5. Create hidden chest with strange_manuscript
+# 5. Hidden chest with hints
 # -------------------------------
 HIDDEN_DIR="$DUNGEON_DIR/.chest"
 HIDDEN_FILE="$HIDDEN_DIR/.strange_manuscript"
@@ -88,28 +112,22 @@ mkdir -p "$HIDDEN_DIR"
 chown "$STUDENT_USER:$STUDENT_USER" "$HIDDEN_DIR"
 
 cat << 'EOF' > "$HIDDEN_FILE"
-You find a worn, dust-covered scroll hidden in the shadows of the lair. It whispers:
+You uncover a thin, brittle page sealed away from sight:
 
-"Not all watchers are seen. Some linger silently in the background.
-Seek them where the ps command shines its light."
+"Some spirits wear borrowed names.
+Read not only what runs, but how it runs."
 
-"A ghost leaves no footprints in plain view.
-Sometimes the path is only revealed by pgrep and careful observation."
+"A polite request is sometimes ignored.
+There are louder ways to speak."
 
-"Kill the unseen gently; let pkill or kill answer your call.
-Only one command ends what the eye cannot follow."
+"What you kill is not always what you see.
+Look at the full command, not the mask."
 
-"Files may hide in plain sight, yet a leading dot conceals their presence.
-What is hidden is not always absent."
+"Processes have parents.
+Orphans tell stories."
 
-"Verification waits at the edge of the lair.
-Run your scripts, read their signs, and the silence will speak."
-
-"The ghost may sleep, but it listens to your keystrokes.
-A nohup or & might have set it free."
-
-"Check your home, check your tools, check the state of what is running.
-Only when the ghost is gone does the dungeon acknowledge your victory."
+"When the lair is truly quiet,
+no name, true or false, will answer your call."
 EOF
 
 chmod 600 "$HIDDEN_FILE"
@@ -124,8 +142,7 @@ cat << EOF
 
 ✔ Installed for user: $STUDENT_USER
 ✔ Dungeon located at: ~/ghost_watch
-✔ Ghost process is active
-✔ Hidden chest containing a strange manuscript created
+✔ A wandering spirit roams unseen
 
 To begin:
   cd ~/ghost_watch
@@ -133,7 +150,8 @@ To begin:
 To verify victory:
   ./check_ghost.sh
 
-Scratched into the wall you see an odd message:
-"Some secrets hide in plain sight. Not all treasures are in the open."
+Some names lie.
+Some signals whisper.
+Only silence tells the truth.
 
 EOF
