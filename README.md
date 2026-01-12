@@ -39,7 +39,7 @@ An advanced Linux investigation challenge centered on identifying and stopping a
 **Crawl Instructions:**  
 [The-Ghost-Watch.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/The-Ghost-Watch.md#-ghost-watch)
 
-### 👻🕯️  Ghost Watch II: The Necromancer
+### 👻🕯️  Ghost Watch II: The Necromancer (Level 4)
 An advanced Linux dungeon crawl.
 
 A simple ghost is never truly gone.
