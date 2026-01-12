@@ -44,7 +44,7 @@ if [[ "$PWD" == "$HOME/hydra_lair"* ]] && [[ "$HYDRA_KEY" == "many_heads" ]]; th
   GREEN="\033[0;32m"
   RESET="\033[0m"
 
-  echo -e "${RED}❌ The Hydra still controls your path.${RESET}"
+  echo -e "${RED}⚠️ The Hydra watches every move...${RESET}"
 
 fi
 
