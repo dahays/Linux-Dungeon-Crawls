@@ -123,6 +123,9 @@ MANUSCRIPT="$HYDRA_DIR/.strange_manuscript"
 cat << 'EOF' > "$MANUSCRIPT"
 You notice an old faded parchment tucked away in the lair. It reads:
 
+"Some evils do not die when slain,
+but linger in what is remembered."
+
 "Many who face the Hydra strike at its heads.
 Fools. Heads grow back."
 
@@ -140,7 +143,60 @@ but by standing earlier in the path."
 
 "When the lair forgets the Hydra's name,
 only then does the silence last."
+
+"When sight itself lies,
+only a hidden rite can cleanse the lair."
 EOF
+
+# -------------------------------
+# 2.75 Create hidden Rite of Clarity (one-time environment fix)
+# -------------------------------
+RITE_SCRIPT="$HYDRA_DIR/.rite_of_clarity"
+
+cat << 'EOF' > "$RITE_SCRIPT"
+#!/bin/bash
+
+ZSHRC="$HOME/.zshrc"
+
+echo
+echo "🕯️ The Rite of Clarity Begins..."
+echo
+echo "Ancient words are spoken. The shadows recoil."
+echo
+
+# Remove persistent Hydra influence
+sed -i '/Hydra dungeon/,+12d' "$ZSHRC"
+
+# Clean current shell
+unalias ls 2>/dev/null
+unset -f ls 2>/dev/null
+unset HYDRA_KEY
+
+export PATH=/usr/bin:/bin
+
+# Mark victory if not already marked
+PROOF="$HOME/hydra_lair/heads/hydra_defeated"
+touch "$PROOF"
+
+# Seal the rite
+chmod -x "$0"
+
+echo
+echo "✨ Your vision clears."
+echo "✨ The lair is bathed in clean light."
+echo
+echo "The Hydra’s influence is severed permanently."
+echo
+echo "Face the truth one final time:"
+echo "  exec zsh"
+echo "  check_hydra.sh"
+echo
+
+EOF
+
+chmod +x "$RITE_SCRIPT"
+chown "$STUDENT_USER:$STUDENT_USER" "$RITE_SCRIPT"
+
 
 chown "$STUDENT_USER:$STUDENT_USER" "$MANUSCRIPT"
 chmod 600 "$MANUSCRIPT"
