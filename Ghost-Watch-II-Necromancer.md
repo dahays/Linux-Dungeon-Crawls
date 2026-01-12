@@ -11,11 +11,11 @@ This dungeon teaches the critical difference between symptom and source.
 
 **Skills Practiced**
 
--Process discovery (ps, pgrep)
--Process trees (pstree, ps -f --forest)
--Parent/child relationships (PPID)
--Signals and termination (kill, kill -SIGTERM, kill -SIGKILL)
--Verification and system state reasoning
+- Process discovery (ps, pgrep)
+- Process trees (pstree, ps -f --forest)
+- Parent/child relationships (PPID)
+- Signals and termination (kill, kill -SIGTERM, kill -SIGKILL)
+- Verification and system state reasoning
 
 ## Setup Instructions
 
