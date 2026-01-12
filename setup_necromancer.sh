@@ -2,12 +2,13 @@
 # ======================================
 # Ghost Watch II: The Necromancer
 # Teaches parent-child process control
+# + hidden encrypted forensic hints
 # ======================================
 
 set -e
 set -o pipefail
 
-echo "🕯️ Initializing Ghost Watch II: The Necromancer..."
+echo "🧟 Initializing Ghost Watch II: The Necromancer..."
 
 # -------------------------------
 # 0. Require sudo, capture student
@@ -101,7 +102,38 @@ chmod +x "$DUNGEON_DIR/check_necromancer.sh"
 chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/check_necromancer.sh"
 
 # -------------------------------
-# 6. Final instructions
+# 6. Create hidden encrypted hint
+# -------------------------------
+HINT_DIR="$DUNGEON_DIR/.ritual"
+mkdir -p "$HINT_DIR"
+chown "$STUDENT_USER:$STUDENT_USER" "$HINT_DIR"
+chmod 700 "$HINT_DIR"
+
+cat << 'EOF' > /tmp/necromancer_hint.txt
+The dead do not rise alone.
+
+Killing the walker quiets nothing.
+The chanter breathes elsewhere.
+
+Seek the voice that waits,
+not the echo that obeys.
+
+Parents remember their children.
+EOF
+
+gpg --batch --yes \
+  --passphrase "ritual" \
+  --symmetric \
+  --cipher-algo AES256 \
+  -o "$HINT_DIR/.whisper.gpg" \
+  /tmp/necromancer_hint.txt
+
+rm /tmp/necromancer_hint.txt
+chown "$STUDENT_USER:$STUDENT_USER" "$HINT_DIR/.whisper.gpg"
+chmod 600 "$HINT_DIR/.whisper.gpg"
+
+# -------------------------------
+# 7. Final instructions
 # -------------------------------
 cat << EOF
 

@@ -2,6 +2,7 @@
 # ======================================
 # The Dragon's Cron - Setup Script
 # Teaches cron persistence and investigation
+# + hidden forensic archive hints
 # ======================================
 
 set -e
@@ -92,7 +93,32 @@ chmod +x "$DUNGEON_DIR/check_dragon.sh"
 chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/check_dragon.sh"
 
 # -------------------------------
-# 5. Final instructions
+# 5. Create hidden disguised hint
+# -------------------------------
+HINT_DIR="$DUNGEON_DIR/.ashes"
+mkdir -p "$HINT_DIR"
+chown "$STUDENT_USER:$STUDENT_USER" "$HINT_DIR"
+chmod 700 "$HINT_DIR"
+
+cat << 'EOF' > /tmp/dragon_hint.txt
+The dragon does not sleep.
+
+It wakes when time itself speaks.
+Steel cannot strike it mid-breath.
+
+If the fire returns on the minute,
+seek where minutes are sworn.
+EOF
+
+zip -q /tmp/embers.zip /tmp/dragon_hint.txt
+mv /tmp/embers.zip "$HINT_DIR/embers.dat"
+rm /tmp/dragon_hint.txt
+
+chown "$STUDENT_USER:$STUDENT_USER" "$HINT_DIR/embers.dat"
+chmod 600 "$HINT_DIR/embers.dat"
+
+# -------------------------------
+# 6. Final instructions
 # -------------------------------
 cat << EOF
 
