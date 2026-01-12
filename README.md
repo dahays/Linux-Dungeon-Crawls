@@ -29,15 +29,13 @@ All dungeon crawls follow the same basic workflow:
 
 A multi-process Linux challenge focused on identifying and defeating hidden and persistent processes, environment variables, and command hijacking.
 
-**Crawl Instructions:**  
-[The-Hydra-Head-Hunt.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/Hydra-Head-Hunt.md#-hydra-head-hunt)
+**Crawl Instructions:** [The-Hydra-Head-Hunt.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/Hydra-Head-Hunt.md#-hydra-head-hunt)
 
 ### 👻 The Ghost Watch (Level 3)
 
 An advanced Linux investigation challenge centered on identifying and stopping a persistent “ghost” process that respawns until the true source is discovered.
 
-**Crawl Instructions:**  
-[The-Ghost-Watch.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/The-Ghost-Watch.md#-ghost-watch)
+**Crawl Instructions:** [The-Ghost-Watch.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/The-Ghost-Watch.md#-ghost-watch)
 
 ### 👻🕯️  Ghost Watch II: The Necromancer (Level 4)
 An advanced Linux dungeon crawl.
@@ -45,8 +43,7 @@ An advanced Linux dungeon crawl.
 A simple ghost is never truly gone.
 In this challenge, you face a necromancer process that continuously resurrects a ghost child. Killing the ghost alone is futile. The sins of the parent...
 
-**Crawl Instructions:**
-[Ghost-Watch-II-Necromancer.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/Ghost-Watch-II-Necromancer.md)
+**Crawl Instructions:** [Ghost-Watch-II-Necromancer.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/Ghost-Watch-II-Necromancer.md)
 
 ### 🐉 The Dragon’s Cron (Level 5)
 
@@ -54,6 +51,5 @@ A powerful dragon stalks the system, awakening every minute without fail. Killin
 
 This dungeon emphasizes investigation over brute force.
 
-**Crawl Instructions:**  
-[The-Dragon-Cron.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/The-Dragon-Cron.md#-the-dragons-cron)
+**Crawl Instructions:** [The-Dragon-Cron.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/The-Dragon-Cron.md#-the-dragons-cron)
 
