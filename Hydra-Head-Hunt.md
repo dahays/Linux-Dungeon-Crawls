@@ -15,24 +15,29 @@ A mid-level Linux challenge. Students must discover multiple hidden “Hydra” 
 
 ## Setup Instructions
 
-1. Open a terminal.
-2. Download the setup script:
-3. Make it executable.
-4. Run the script.
-5. Enter the dungeon directory to begin!
+Open a terminal.
 
+Download the setup script:
 ```bash
 wget -O setup_hydra.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/setup_hydra.sh
-
+```
+Make the script executable.
+```bash
 chmod +x setup_hydra.sh
-
+```
+Run the script.
+```bash
 sudo ./setup_hydra.sh
-
+```
+Force a new instance of the shell.
+```bash
 exec zsh
-
+```
+Enter the lair.
+```bash
 cd hydra_lair
 ```
-6. Confirm success
+Confirm success.
 ```bash
 ./hydra_lair/bin/check_hydra.sh
 ```
