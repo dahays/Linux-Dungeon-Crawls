@@ -44,6 +44,7 @@ An advanced Linux dungeon crawl.
 
 A simple ghost is never truly gone.
 In this challenge, you face a necromancer process that continuously resurrects a ghost child. Killing the ghost alone is futile. The sins of the parent...
+
 **Crawl Instructions:**
 [Ghost-Watch-II-Necromancer.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/Ghost-Watch-II-Necromancer.md)
 
