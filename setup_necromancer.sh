@@ -118,8 +118,8 @@ chmod 600 "$MANUSCRIPT"
 
 # -------------------------------
 # 6. Launch necromancer as student
-# Properly detached, single PID process
-sudo -u "$STUDENT_USER" bash -c "nohup '$DUNGEON_DIR/necromancer.sh' >/dev/null 2>&1 & disown"
+# Fixed: simple detached launch after GPG
+sudo -u "$STUDENT_USER" nohup "$DUNGEON_DIR/necromancer.sh" >/dev/null 2>&1 &
 
 # -------------------------------
 # 7. Create verification script
