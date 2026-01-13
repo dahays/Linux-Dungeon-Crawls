@@ -74,7 +74,6 @@ ENCRYPTED_HINT="$DUNGEON_DIR/.necromancer_scroll.gpg"
 GNUPG_HOME="$DUNGEON_DIR/.gnupg"
 
 mkdir -p "$GNUPG_HOME"
-chown -R "$STUDENT_USER:$STUDENT_USER" "$GNUPG_HOME"
 chmod 700 "$GNUPG_HOME"
 
 cat << 'EOF' > "$PLAINTEXT_HINT"
@@ -87,13 +86,11 @@ Silence comes only when the chanter stops.
 Seek the tree, not the leaf.
 EOF
 
-sudo -u "$STUDENT_USER" \
-  GNUPGHOME="$GNUPG_HOME" \
-  gpg --batch --yes --quiet --no-tty \
+GNUPGHOME="$GNUPG_HOME" \
+gpg --batch --yes --quiet --no-tty \
   --pinentry-mode loopback \
   --passphrase "ritual" \
-  --symmetric "$PLAINTEXT_HINT" \
-  -o "$ENCRYPTED_HINT"
+  -c -o "$ENCRYPTED_HINT" "$PLAINTEXT_HINT"
 
 rm "$PLAINTEXT_HINT"
 
@@ -118,8 +115,8 @@ chmod 600 "$MANUSCRIPT"
 
 # -------------------------------
 # 6. Launch necromancer as student
-# Fixed: simple detached launch after GPG
-sudo -u "$STUDENT_USER" nohup "$DUNGEON_DIR/necromancer.sh" >/dev/null 2>&1 &
+# Fixed: fully detached under student user
+sudo -u "$STUDENT_USER" bash -c "nohup '$DUNGEON_DIR/necromancer.sh' >/dev/null 2>&1 &"
 
 # -------------------------------
 # 7. Create verification script
@@ -152,23 +149,4 @@ chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/check_necromancer.sh"
 
 # -------------------------------
 # 8. Final instructions
-# -------------------------------
-cat << EOF
-
-🕯️ GHOST WATCH II: THE NECROMANCER READY
-
-✔ Installed for user: $STUDENT_USER
-✔ Dungeon location: ~/ghost_necromancer
-✔ Necromancer process is active
-
-You sense forgotten words etched into the lair.
-Some truths hide behind silence.
-Others wait to be spoken correctly.
-
-To begin:
-  cd ~/ghost_necromancer
-
-To verify victory:
-  ./check_necromancer.sh
-
-EOF
+# ----
