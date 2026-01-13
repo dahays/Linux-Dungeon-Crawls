@@ -15,3 +15,32 @@ This dungeon emphasizes methodical process management and the interplay between 
 - Reading and decrypting encrypted files to obtain hidden clues
 - Following cryptic hints to connect process behavior to hidden rewards
 - Applying logical sequencing and patience rather than brute force
+
+## Setup Instructions
+
+Open a terminal.
+
+Download the setup script:
+```bash
+wget -O 
+```
+Make it executable.
+```bash
+chmod +x Trial-Of-Eternal-Fire.sh
+```
+
+Run the installer script.
+```bash
+sudo ./Trial-Of-Eternal-Fire.sh
+```
+Enter the dungeon directory to begin!
+
+```bash
+cd trial_eternal_fire
+```
+
+Check success
+
+A true victory leaves the system silent.
+```bash
+./check_trial.sh
