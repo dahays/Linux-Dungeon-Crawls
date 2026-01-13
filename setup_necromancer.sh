@@ -71,6 +71,11 @@ chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/necromancer.sh"
 # -------------------------------
 PLAINTEXT_HINT="$DUNGEON_DIR/.necromancer_scroll"
 ENCRYPTED_HINT="$DUNGEON_DIR/.necromancer_scroll.gpg"
+GNUPG_HOME="$DUNGEON_DIR/.gnupg"
+
+mkdir -p "$GNUPG_HOME"
+chown -R "$STUDENT_USER:$STUDENT_USER" "$GNUPG_HOME"
+chmod 700 "$GNUPG_HOME"
 
 cat << 'EOF' > "$PLAINTEXT_HINT"
 The ghost is not the source.
@@ -82,9 +87,13 @@ Silence comes only when the chanter stops.
 Seek the tree, not the leaf.
 EOF
 
-gpg --batch --yes --quiet --no-tty --pinentry-mode loopback \
-  --passphrase "ritual" -c "$PLAINTEXT_HINT" -o "$ENCRYPTED_HINT" \
-  >/dev/null 2>&1
+sudo -u "$STUDENT_USER" \
+  GNUPGHOME="$GNUPG_HOME" \
+  gpg --batch --yes --quiet --no-tty \
+  --pinentry-mode loopback \
+  --passphrase "ritual" \
+  --symmetric "$PLAINTEXT_HINT" \
+  -o "$ENCRYPTED_HINT"
 
 rm "$PLAINTEXT_HINT"
 
@@ -92,7 +101,7 @@ chown "$STUDENT_USER:$STUDENT_USER" "$ENCRYPTED_HINT"
 chmod 600 "$ENCRYPTED_HINT"
 
 # -------------------------------
-# 5. Create strange manuscript (passphrase riddle)
+# 5. Create strange manuscript
 # -------------------------------
 MANUSCRIPT="$DUNGEON_DIR/.strange_manuscript"
 
