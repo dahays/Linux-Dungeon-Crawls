@@ -74,6 +74,7 @@ ENCRYPTED_HINT="$DUNGEON_DIR/.necromancer_scroll.gpg"
 GNUPG_HOME="$DUNGEON_DIR/.gnupg"
 
 mkdir -p "$GNUPG_HOME"
+chown -R "$STUDENT_USER:$STUDENT_USER" "$GNUPG_HOME"
 chmod 700 "$GNUPG_HOME"
 
 cat << 'EOF' > "$PLAINTEXT_HINT"
@@ -86,11 +87,13 @@ Silence comes only when the chanter stops.
 Seek the tree, not the leaf.
 EOF
 
-GNUPGHOME="$GNUPG_HOME" \
-gpg --batch --yes --quiet --no-tty \
+sudo -u "$STUDENT_USER" \
+  GNUPGHOME="$GNUPG_HOME" \
+  gpg --batch --yes --quiet --no-tty \
   --pinentry-mode loopback \
   --passphrase "ritual" \
-  -c -o "$ENCRYPTED_HINT" "$PLAINTEXT_HINT"
+  --symmetric "$PLAINTEXT_HINT" \
+  -o "$ENCRYPTED_HINT"
 
 rm "$PLAINTEXT_HINT"
 
@@ -115,8 +118,8 @@ chmod 600 "$MANUSCRIPT"
 
 # -------------------------------
 # 6. Launch necromancer as student
-# -------------------------------
-sudo -u "$STUDENT_USER" nohup "$DUNGEON_DIR/necromancer.sh" >/dev/null 2>&1 &
+# Properly detached, single PID process
+sudo -u "$STUDENT_USER" bash -c "nohup '$DUNGEON_DIR/necromancer.sh' >/dev/null 2>&1 & disown"
 
 # -------------------------------
 # 7. Create verification script
