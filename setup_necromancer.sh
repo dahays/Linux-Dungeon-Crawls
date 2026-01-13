@@ -87,7 +87,7 @@ Silence comes only when the chanter stops.
 Seek the tree, not the leaf.
 EOF
 
-sudo -u "$STUDENT_USER" \
+sudo -u "$STUDENT_USER" env \
   GNUPGHOME="$GNUPG_HOME" \
   gpg --batch --yes --quiet --no-tty \
   --pinentry-mode loopback \
