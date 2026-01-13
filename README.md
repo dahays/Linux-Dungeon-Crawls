@@ -55,7 +55,7 @@ This dungeon emphasizes investigation over brute force.
 
 **Crawl Instructions:** [The-Dragon-Cron.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/The-Dragon-Cron.md#-the-dragons-cron)
 
-
+🐍→👻→🧟→🐉
 **Commands to help you on your quest**
 | Command | Description |
 |---------|-------------|
