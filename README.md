@@ -59,7 +59,7 @@ This dungeon emphasizes investigation over brute force.
 
 Master the Trial of Eternal Fire by defeating your enemies in the correct order.  Only by defeating them in order will you find the Flamebound Treasure Chest.
 
-**Crawl Instructions:** [Trial-Of-Eternal-Fire.md]
+**Crawl Instructions:** [Trial-Of-Eternal-Fire.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/Trial-Of-Eternal-Fire.md#-trial-of-eternal-fire)
 
 # 🛡️ Commands to Help on Your Quests
 
