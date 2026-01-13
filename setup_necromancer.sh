@@ -149,4 +149,23 @@ chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/check_necromancer.sh"
 
 # -------------------------------
 # 8. Final instructions
-# ----
+# -------------------------------
+cat << EOF
+
+🧟 GHOST WATCH II: THE NECROMANCER READY
+
+✔ Installed for user: $STUDENT_USER
+✔ Dungeon location: ~/ghost_necromancer
+✔ Necromancer process is active
+
+You sense forgotten words etched into the lair.
+Some truths hide behind silence.
+Others wait to be spoken correctly.
+
+To begin:
+  cd ~/ghost_necromancer
+
+To verify victory:
+  ./check_necromancer.sh
+
+EOF
