@@ -69,8 +69,8 @@ chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/necromancer.sh"
 # -------------------------------
 # 4. Create encrypted hint (unchanged content)
 # -------------------------------
-PLAINTEXT_HINT="$DUNGEON_DIR/.necromancer_hint.txt"
-ENCRYPTED_HINT="$DUNGEON_DIR/.necromancer_hint.gpg"
+PLAINTEXT_HINT="$DUNGEON_DIR/.necromancer_scroll.txt"
+ENCRYPTED_HINT="$DUNGEON_DIR/.necromancer_scroll.gpg"
 
 cat << 'EOF' > "$PLAINTEXT_HINT"
 The ghost is not the source.
