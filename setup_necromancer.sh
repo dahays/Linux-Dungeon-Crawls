@@ -2,13 +2,12 @@
 # ======================================
 # Ghost Watch II: The Necromancer
 # Teaches parent-child process control
-# + hidden encrypted forensic hints
 # ======================================
 
 set -e
 set -o pipefail
 
-echo "🧟 Initializing Ghost Watch II: The Necromancer..."
+echo "🕯️ Initializing Ghost Watch II: The Necromancer..."
 
 # -------------------------------
 # 0. Require sudo, capture student
@@ -68,12 +67,50 @@ chmod +x "$DUNGEON_DIR/necromancer.sh"
 chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/necromancer.sh"
 
 # -------------------------------
-# 4. Launch necromancer as student
+# 4. Create encrypted hint (unchanged content)
+# -------------------------------
+PLAINTEXT_HINT="$DUNGEON_DIR/.necromancer_hint.txt"
+ENCRYPTED_HINT="$DUNGEON_DIR/.necromancer_hint.gpg"
+
+cat << 'EOF' > "$PLAINTEXT_HINT"
+The ghost is not the source.
+Watch what breathes life into it.
+
+Processes are born of parents.
+Silence comes only when the chanter stops.
+
+Seek the tree, not the leaf.
+EOF
+
+gpg --batch --yes --passphrase "ritual" -c "$PLAINTEXT_HINT"
+rm "$PLAINTEXT_HINT"
+
+chown "$STUDENT_USER:$STUDENT_USER" "$ENCRYPTED_HINT"
+chmod 600 "$ENCRYPTED_HINT"
+
+# -------------------------------
+# 5. Create strange manuscript (passphrase riddle)
+# -------------------------------
+MANUSCRIPT="$DUNGEON_DIR/.strange_manuscript"
+
+cat << 'EOF' > "$MANUSCRIPT"
+there once was a watcher so Rare
+who lingered unseen in the aIr
+to seek out the True path
+avoid what is Unclean
+perform Acts that endure Long
+EOF
+
+chown "$STUDENT_USER:$STUDENT_USER" "$MANUSCRIPT"
+chmod 600 "$MANUSCRIPT"
+
+# -------------------------------
+# 6. Launch necromancer as student
 # -------------------------------
 sudo -u "$STUDENT_USER" nohup "$DUNGEON_DIR/necromancer.sh" >/dev/null 2>&1 &
 
 # -------------------------------
-# 5. Create verification script
+# 7. Create verification script
 # -------------------------------
 cat << 'EOF' > "$DUNGEON_DIR/check_necromancer.sh"
 #!/bin/bash
@@ -102,38 +139,7 @@ chmod +x "$DUNGEON_DIR/check_necromancer.sh"
 chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/check_necromancer.sh"
 
 # -------------------------------
-# 6. Create hidden encrypted hint
-# -------------------------------
-HINT_DIR="$DUNGEON_DIR/.ritual"
-mkdir -p "$HINT_DIR"
-chown "$STUDENT_USER:$STUDENT_USER" "$HINT_DIR"
-chmod 700 "$HINT_DIR"
-
-cat << 'EOF' > /tmp/necromancer_hint.txt
-The dead do not rise alone.
-
-Killing the walker quiets nothing.
-The chanter breathes elsewhere.
-
-Seek the voice that waits,
-not the echo that obeys.
-
-Parents remember their children.
-EOF
-
-gpg --batch --yes \
-  --passphrase "ritual" \
-  --symmetric \
-  --cipher-algo AES256 \
-  -o "$HINT_DIR/.whisper.gpg" \
-  /tmp/necromancer_hint.txt
-
-rm /tmp/necromancer_hint.txt
-chown "$STUDENT_USER:$STUDENT_USER" "$HINT_DIR/.whisper.gpg"
-chmod 600 "$HINT_DIR/.whisper.gpg"
-
-# -------------------------------
-# 7. Final instructions
+# 8. Final instructions
 # -------------------------------
 cat << EOF
 
@@ -143,10 +149,9 @@ cat << EOF
 ✔ Dungeon location: ~/ghost_necromancer
 ✔ Necromancer process is active
 
-Remember:
-- Killing the ghost is not enough
-- Trace the parent
-- End the ritual at its source
+You sense forgotten words etched into the lair.
+Some truths hide behind silence.
+Others wait to be spoken correctly.
 
 To begin:
   cd ~/ghost_necromancer
