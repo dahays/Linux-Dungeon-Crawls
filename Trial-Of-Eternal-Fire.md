@@ -7,11 +7,11 @@ This dungeon emphasizes methodical process management and the interplay between 
 
 **Skills Practiced**
 
--Identifying and managing background processes with ps, pgrep, and kill
--Understanding parent-child process relationships and respawn behavior
--Recognizing processes that ignore polite termination signals
--Safely stopping multiple concurrent processes in the correct order
--Inspecting and disabling cron jobs for persistent tasks
--Reading and decrypting encrypted files to obtain hidden clues
--Following cryptic hints to connect process behavior to hidden rewards
--Applying logical sequencing and patience rather than brute force
+- Identifying and managing background processes with ps, pgrep, and kill
+- Understanding parent-child process relationships and respawn behavior
+- Recognizing processes that ignore polite termination signals
+- Safely stopping multiple concurrent processes in the correct order
+- Inspecting and disabling cron jobs for persistent tasks
+- Reading and decrypting encrypted files to obtain hidden clues
+- Following cryptic hints to connect process behavior to hidden rewards
+- Applying logical sequencing and patience rather than brute force
