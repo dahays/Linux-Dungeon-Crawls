@@ -82,3 +82,25 @@ chmod +x "$LD_DIR/check_ldpreload.sh"
 chown "$STUDENT_USER:$STUDENT_USER" "$LD_DIR/check_ldpreload.sh"
 
 echo "👻 Shadow of the Wraith ready with multi-layered hint at $HINT_DIR/wraith_hint.zip"
+
+# -------------------------------
+# 8. Final instructions
+# -------------------------------
+cat << EOF
+
+🌑 SHADOW OF THE WRAITH READY
+
+✔ Installed for user: $STUDENT_USER
+✔ Dungeon located at: ~/shadow_wraith
+✔ The system speaks with borrowed voices
+
+To begin:
+  cd ~/shadow_wraith
+
+To verify victory:
+  ./check_wraith.sh
+
+The output lies.
+The tools comply.
+Truth emerges only
+when the world is stripped bare.

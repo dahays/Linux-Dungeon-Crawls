@@ -131,15 +131,22 @@ chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/check_systemd.sh"
 # -------------------------------
 cat << EOF
 
-🔥 FIREWARDEN’S CHANT READY
+🔥 FIREWARDEN'S CHANT READY
 
-Hint hidden in multiple layers:
-~/.firewarden_service/.hints/fire_hint.tgz
+✔ Installed for user: $STUDENT_USER
+✔ Dungeon located at: ~/firewarden_chant
+✔ Familiar words carry altered meaning
 
 To begin:
-  cd ~/firewarden_service
+  cd ~/firewarden_chant
 
 To verify victory:
-  ./check_systemd.sh
+  ./check_firewarden.sh
+
+What you invoke
+is not always what answers.
+Listen to the shape of commands,
+not their names.
+
 
 EOF

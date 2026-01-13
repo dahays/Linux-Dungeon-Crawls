@@ -104,4 +104,24 @@ EOF
 chmod +x "$DRAGON_DIR/check_autostart.sh"
 chown "$STUDENT_USER:$STUDENT_USER" "$DRAGON_DIR/check_autostart.sh"
 
-echo "🐉 Dragon's Awakening ready with cryptic double-archived hint at $HINT_DIR/dragon_hint.tgz"
+# -------------------------------
+# 4. Final instructions
+# -------------------------------
+
+cat << EOF
+🐲 DRAGON'S AWAKENING READY
+
+✔ Installed for user: $STUDENT_USER
+✔ Dungeon located at: ~/dragons_awakening
+✔ The beast waits beyond observation
+
+To begin:
+  cd ~/dragons_awakening
+
+To verify victory:
+  ./check_awakening.sh
+
+There is nothing to kill.
+Nothing to see.
+The mark is left
+only when time turns.

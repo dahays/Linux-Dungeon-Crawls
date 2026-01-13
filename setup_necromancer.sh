@@ -67,7 +67,7 @@ chmod +x "$DUNGEON_DIR/necromancer.sh"
 chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/necromancer.sh"
 
 # -------------------------------
-# 4. Create encrypted hint (unchanged content)
+# 4. Create encrypted hint
 # -------------------------------
 PLAINTEXT_HINT="$DUNGEON_DIR/.necromancer_scroll"
 ENCRYPTED_HINT="$DUNGEON_DIR/.necromancer_scroll.gpg"
@@ -82,8 +82,9 @@ Silence comes only when the chanter stops.
 Seek the tree, not the leaf.
 EOF
 
-gpg --batch --yes --pinentry-mode loopback --passphrase "ritual" \
-    -c "$PLAINTEXT_HINT" -o "$ENCRYPTED_HINT"
+gpg --batch --yes --quiet --no-tty --pinentry-mode loopback \
+  --passphrase "ritual" -c "$PLAINTEXT_HINT" -o "$ENCRYPTED_HINT" \
+  >/dev/null 2>&1
 
 rm "$PLAINTEXT_HINT"
 
@@ -131,4 +132,34 @@ if pgrep -f ghost.sh >/dev/null; then
 fi
 
 echo "🕯️ The ritual circle is broken."
+echo "👻 The dead remain dead."
 echo
+echo "🏆 GHOST WATCH II COMPLETE"
+exit 0
+EOF
+
+chmod +x "$DUNGEON_DIR/check_necromancer.sh"
+chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/check_necromancer.sh"
+
+# -------------------------------
+# 8. Final instructions
+# -------------------------------
+cat << EOF
+
+🕯️ GHOST WATCH II: THE NECROMANCER READY
+
+✔ Installed for user: $STUDENT_USER
+✔ Dungeon location: ~/ghost_necromancer
+✔ Necromancer process is active
+
+You sense forgotten words etched into the lair.
+Some truths hide behind silence.
+Others wait to be spoken correctly.
+
+To begin:
+  cd ~/ghost_necromancer
+
+To verify victory:
+  ./check_necromancer.sh
+
+EOF
