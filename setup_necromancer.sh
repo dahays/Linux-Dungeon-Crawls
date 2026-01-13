@@ -74,7 +74,6 @@ ENCRYPTED_HINT="$DUNGEON_DIR/.necromancer_scroll.gpg"
 GNUPG_HOME="$DUNGEON_DIR/.gnupg"
 
 mkdir -p "$GNUPG_HOME"
-chown -R "$STUDENT_USER:$STUDENT_USER" "$GNUPG_HOME"
 chmod 700 "$GNUPG_HOME"
 
 cat << 'EOF' > "$PLAINTEXT_HINT"
@@ -87,13 +86,11 @@ Silence comes only when the chanter stops.
 Seek the tree, not the leaf.
 EOF
 
-sudo -u "$STUDENT_USER" env \
-  GNUPGHOME="$GNUPG_HOME" \
-  gpg --batch --yes --quiet --no-tty \
+GNUPGHOME="$GNUPG_HOME" \
+gpg --batch --yes --quiet --no-tty \
   --pinentry-mode loopback \
   --passphrase "ritual" \
-  --symmetric "$PLAINTEXT_HINT" \
-  -o "$ENCRYPTED_HINT"
+  -c -o "$ENCRYPTED_HINT" "$PLAINTEXT_HINT"
 
 rm "$PLAINTEXT_HINT"
 
