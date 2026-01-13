@@ -7,9 +7,9 @@ This dungeon emphasizes runtime analysis and dynamic code manipulation rather th
 
 **Skills Practiced**
 
--Inspecting environment variables such as LD_PRELOAD
--Recognizing command shadowing and runtime interception
--Safely restoring normal command behavior without affecting the shell
--Extracting, decrypting, and interpreting cryptic, multi-layered hints
--Applying investigative and problem-solving skills to detect subtle persistence mechanisms
--Understanding advanced Linux attack and defense techniques in a controlled environment
+- Inspecting environment variables such as LD_PRELOAD
+- Recognizing command shadowing and runtime interception
+- Safely restoring normal command behavior without affecting the shell
+- Extracting, decrypting, and interpreting cryptic, multi-layered hints
+- Applying investigative and problem-solving skills to detect subtle persistence mechanisms
+- Understanding advanced Linux attack and defense techniques in a controlled environment
