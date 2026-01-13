@@ -55,3 +55,37 @@ This dungeon emphasizes investigation over brute force.
 
 **Crawl Instructions:** [The-Dragon-Cron.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/The-Dragon-Cron.md#-the-dragons-cron)
 
+
+**Commands to help you on your quest**
+| Command | Description |
+|---------|-------------|
+| ls | List files and directories |
+| which | Locate a command in your PATH |
+| type | Show what a command actually is |
+| command -v | Print the true executable location |
+| echo $PATH | Show directories searched for commands |
+| printenv | List environment variables |
+| alias | Show shell aliases |
+| unalias | Remove a shell alias |
+| declare -f | List shell functions |
+| env | View or modify environment variables |
+| cat ~/.zshrc | Display shell configuration |
+| less ~/.zshrc | Browse shell configuration |
+| grep | Search for related lines |
+| unset | Remove a variable from the environment |
+| exec zsh | Reload shell to clear wrappers |
+| ps aux | List all running processes |
+| pgrep | Find process IDs by name |
+| top | Interactive process viewer |
+| htop | Alternative interactive process viewer |
+| kill <PID> | Terminate a process |
+| kill -9 <PID> | Force terminate a process |
+| ps -ef | Full-format process listing |
+| pstree | Display processes in a tree |
+| ps -o pid,ppid,cmd | Show parent-child relationships |
+| pkill -f | Terminate processes by pattern |
+| cat | Read file contents |
+| file | Inspect the type of file |
+| tail | View recent text entries |
+| tail -f | Monitor text entries in real time |
+| crontab | View user cron jobs |
