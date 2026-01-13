@@ -7,9 +7,9 @@ This dungeon emphasizes understanding modern Linux service management and user-l
 
 **Skills Practiced**
 
--Inspecting user-level systemd units with systemctl --user
--Understanding service configuration files and the role of [Service] directives
--Safely stopping and disabling services to break persistence
--Using forensic-style analysis to trace the source of automatic respawns
--Extracting and decrypting multi-layered hints from archives
--Developing structured problem-solving for persistent threats
+- Inspecting user-level systemd units with systemctl --user
+- Understanding service configuration files and the role of [Service] directives
+- Safely stopping and disabling services to break persistence
+- Using forensic-style analysis to trace the source of automatic respawns
+- Extracting and decrypting multi-layered hints from archives
+- Developing structured problem-solving for persistent threats
