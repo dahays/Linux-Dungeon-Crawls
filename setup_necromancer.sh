@@ -82,8 +82,9 @@ Silence comes only when the chanter stops.
 Seek the tree, not the leaf.
 EOF
 
-# Fix: specify output filename
-gpg --batch --yes --passphrase "ritual" -c "$PLAINTEXT_HINT" -o "$ENCRYPTED_HINT"
+gpg --batch --yes --pinentry-mode loopback --passphrase "ritual" \
+    -c "$PLAINTEXT_HINT" -o "$ENCRYPTED_HINT"
+
 rm "$PLAINTEXT_HINT"
 
 chown "$STUDENT_USER:$STUDENT_USER" "$ENCRYPTED_HINT"
@@ -130,34 +131,4 @@ if pgrep -f ghost.sh >/dev/null; then
 fi
 
 echo "🕯️ The ritual circle is broken."
-echo "👻 The dead remain dead."
 echo
-echo "🏆 GHOST WATCH II COMPLETE"
-exit 0
-EOF
-
-chmod +x "$DUNGEON_DIR/check_necromancer.sh"
-chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/check_necromancer.sh"
-
-# -------------------------------
-# 8. Final instructions
-# -------------------------------
-cat << EOF
-
-🕯️ GHOST WATCH II: THE NECROMANCER READY
-
-✔ Installed for user: $STUDENT_USER
-✔ Dungeon location: ~/ghost_necromancer
-✔ Necromancer process is active
-
-You sense forgotten words etched into the lair.
-Some truths hide behind silence.
-Others wait to be spoken correctly.
-
-To begin:
-  cd ~/ghost_necromancer
-
-To verify victory:
-  ./check_necromancer.sh
-
-EOF
