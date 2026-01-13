@@ -82,7 +82,8 @@ Silence comes only when the chanter stops.
 Seek the tree, not the leaf.
 EOF
 
-gpg --batch --yes --passphrase "ritual" -c "$PLAINTEXT_HINT"
+# Fix: specify output filename
+gpg --batch --yes --passphrase "ritual" -c "$PLAINTEXT_HINT" -o "$ENCRYPTED_HINT"
 rm "$PLAINTEXT_HINT"
 
 chown "$STUDENT_USER:$STUDENT_USER" "$ENCRYPTED_HINT"
