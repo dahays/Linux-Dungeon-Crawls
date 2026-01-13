@@ -61,8 +61,8 @@ Master the Trial of Eternal Fire by defeating your enemies in the correct order.
 
 **Crawl Instructions:** [Trial-Of-Eternal-Fire.md]
 
-🐍→👻→🧟→🐉
-**Commands to help you on your quest**
+# 🛡️ Commands to Help on Your Quests
+
 | Command | Description |
 |---------|-------------|
 | ls | List files and directories |
@@ -95,3 +95,18 @@ Master the Trial of Eternal Fire by defeating your enemies in the correct order.
 | tail | View recent text entries |
 | tail -f | Monitor text entries in real time |
 | crontab | View user cron jobs |
+| systemctl --user | List user-level systemd services |
+| systemctl --user status <service> | Show status of a user service |
+| systemctl --user stop <service> | Stop a running user service |
+| systemctl --user disable <service> | Disable a user service |
+| journalctl --user | View logs for user services |
+| ls ~/.config/autostart | List autostart desktop entries |
+| cat ~/.config/autostart/*.desktop | Inspect autostart scripts |
+| readelf -d <file> | Inspect dynamic dependencies of binaries |
+| ldd <file> | List linked libraries for a binary |
+| strace <command> | Trace system calls made by a process |
+| lsof -p <PID> | List open files by a process |
+| env | Print or modify environment variables (useful for LD_PRELOAD) |
+| unset LD_PRELOAD | Remove library preloading |
+| echo $LD_PRELOAD | Show current LD_PRELOAD value |
+
