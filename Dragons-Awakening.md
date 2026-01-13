@@ -7,9 +7,9 @@ This dungeon emphasizes persistence through user environment mechanisms rather t
 
 **Skills Practiced**
 
--Investigating user autostart directories (~/.config/autostart) and .desktop files
--Understanding the lifecycle of GUI session startup scripts
--Removing hidden persistence entries safely
--Combining file inspection with multi-layered archival hints
--Applying forensic reasoning to trace recurring threats
--Reinforcing the principle that not all threats are visible at runtime
+- Investigating user autostart directories (~/.config/autostart) and .desktop files
+- Understanding the lifecycle of GUI session startup scripts
+- Removing hidden persistence entries safely
+- Combining file inspection with multi-layered archival hints
+- Applying forensic reasoning to trace recurring threats
+- Reinforcing the principle that not all threats are visible at runtime
