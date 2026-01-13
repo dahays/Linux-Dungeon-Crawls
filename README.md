@@ -55,6 +55,12 @@ This dungeon emphasizes investigation over brute force.
 
 **Crawl Instructions:** [The-Dragon-Cron.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/The-Dragon-Cron.md#-the-dragons-cron)
 
+### The Trial of Eternal Fire
+
+Master the Trial of Eternal Fire by defeating your enemies in the correct order.  Only by defeating them in order will you find the Flamebound Treasure Chest.
+
+**Crawl Instructions:** [Trial-Of-Eternal-Fire.md]
+
 🐍→👻→🧟→🐉
 **Commands to help you on your quest**
 | Command | Description |
