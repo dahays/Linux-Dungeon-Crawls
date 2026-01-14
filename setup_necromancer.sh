@@ -223,8 +223,8 @@ chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/necromancer.sh"
 # -------------------------------
 # 4. Create encrypted hint
 # -------------------------------
-PLAINTEXT_HINT="$DUNGEON_DIR/.necromancer_scroll"
-ENCRYPTED_HINT="$DUNGEON_DIR/.necromancer_scroll.gpg"
+PLAINTEXT_HINT="$DUNGEON_DIR/.strange_scroll"
+ENCRYPTED_HINT="$DUNGEON_DIR/.necromancer_scroll"
 GNUPG_HOME="$DUNGEON_DIR/.gnupg"
 
 mkdir -p "$GNUPG_HOME"

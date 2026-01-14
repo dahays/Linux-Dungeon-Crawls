@@ -100,7 +100,9 @@ mkdir -p "$HINT_DIR"
 chown "$STUDENT_USER:$STUDENT_USER" "$HINT_DIR"
 chmod 700 "$HINT_DIR"
 
-cat << 'EOF' > /tmp/dragon_hint.txt
+mkdir -p /tmp/tome
+
+cat << 'EOF' > /tmp/tome/dragon_hint.txt
 The dragon does not sleep.
 
 It wakes when time itself speaks.
@@ -110,12 +112,17 @@ If the fire returns on the minute,
 seek where minutes are sworn.
 EOF
 
-zip -q /tmp/embers.zip /tmp/dragon_hint.txt
+(
+  cd /tmp
+  zip -q embers.zip tome/dragon_hint.txt
+)
+
 mv /tmp/embers.zip "$HINT_DIR/embers.dat"
-rm /tmp/dragon_hint.txt
+rm -rf /tmp/tome
 
 chown "$STUDENT_USER:$STUDENT_USER" "$HINT_DIR/embers.dat"
 chmod 600 "$HINT_DIR/embers.dat"
+
 
 # -------------------------------
 # 6. Final instructions
