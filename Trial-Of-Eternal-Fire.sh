@@ -116,21 +116,41 @@ sudo -u "$STUDENT_USER" crontab -l 2>/dev/null | grep -v inferno_cron.sh | sudo 
 sudo -u "$STUDENT_USER" bash -c "(crontab -l 2>/dev/null; echo '* * * * * \$HOME/trial_eternal_fire/inferno/inferno_cron.sh') | crontab -"
 
 # -------------------------------
-# 6. Flamebound Treasure (encrypted file)
+# 6. Flamebound Treasure Hint (double archive)
 # -------------------------------
-TREASURE_DIR="$DUNGEON_DIR/treasure"
-TREASURE_PLAINTEXT="$TREASURE_DIR/treasure.txt"
-TREASURE_GPG="$TREASURE_DIR/.treasure.gpg"
+HINT_DIR="$DUNGEON_DIR/.embers"
+mkdir -p "$HINT_DIR"
+chown "$STUDENT_USER:$STUDENT_USER" "$HINT_DIR"
+chmod 700 "$HINT_DIR"
 
-cat << 'EOF' > "$TREASURE_PLAINTEXT"
-🏆 CONGRATULATIONS, HERO OF FIRE!
-You have mastered the Trial of Eternal Fire.
-Your courage, insight, and Linux prowess are unmatched.
+# First, create the plaintext hint
+PLAINTEXT_HINT="$DUNGEON_DIR/flamebound_hint.txt"
+cat << 'EOF' > "$PLAINTEXT_HINT"
+Shadows flicker where the Flamewarden dances,
+Low wraiths wander where courage falters,
+A Pyromancer stirs those who linger too long,
+The Inferno blazes on the march of minutes,
+Only when all trials yield will the Flamebound key cool,
+Follow your hearts and exclaim, "GLORY"!
 EOF
 
-gpg --batch --yes --passphrase "GLORY" -c -o "$TREASURE_GPG" "$TREASURE_PLAINTEXT"
-chmod 000 "$TREASURE_GPG"
-rm "$TREASURE_PLAINTEXT"
+chown "$STUDENT_USER:$STUDENT_USER" "$PLAINTEXT_HINT"
+chmod 600 "$PLAINTEXT_HINT"
+
+# First archive: zip into main dungeon directory
+cd "$DUNGEON_DIR"
+zip -q flamebound_hint.zip flamebound_hint.txt
+rm "$PLAINTEXT_HINT"
+
+# Second archive: tar the zip into hidden thematic directory
+cd "$HINT_DIR"
+tar -cf .flamebound_archive.tar -C "$DUNGEON_DIR" flamebound_hint.zip
+rm "$DUNGEON_DIR/flamebound_hint.zip"
+
+# Set ownership and permissions
+chown "$STUDENT_USER:$STUDENT_USER" .flamebound_archive.tar
+chmod 600 .flamebound_archive.tar
+
 
 # Create disarm script
 cat << 'EOF' > "$TREASURE_DIR/disarm_treasure.sh"
