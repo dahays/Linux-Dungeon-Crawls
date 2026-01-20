@@ -39,5 +39,5 @@ cd hydra_lair
 ```
 Confirm success.
 ```bash
-./bin/check_hydra.sh
+./hydra_lair/bin/check_hydra.sh
 ```
