@@ -103,6 +103,8 @@ chmod 700 "$HINT_DIR"
 mkdir -p /tmp/tome
 
 cat << 'EOF' > /tmp/tome/dragon_hint.txt
+You uncover a thin, brittle page sealed away from sight:
+
 The dragon does not sleep.
 
 It wakes when time itself speaks.

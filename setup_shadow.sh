@@ -45,27 +45,30 @@ chown "$STUDENT_USER:$STUDENT_USER" "$RC_FILE"
 HINT_DIR="$LD_DIR/.hints"
 mkdir -p "$HINT_DIR"
 
-MANUSCRIPT="$HINT_DIR/wraith_riddle.txt"
+MANUSCRIPT="$HINT_DIR/strange_manuscript"
 cat << 'EOF' > "$MANUSCRIPT"
+You notice an old faded parchment tucked away in the lair. It reads:
+
 What you see is not real
 Trace the shadows to their source
 Preload the truth from the library
 Decrypted layers reveal the knowledge
 EOF
 
-# GPG encrypt
-gpg --batch --yes --passphrase "WRAITH" -c "$MANUSCRIPT"
+# GPG encrypt (no extension)
+gpg --batch --yes --passphrase "WRAITH" -c -o "$HINT_DIR/ember_core" "$MANUSCRIPT"
 
-# First archive
-tar -czf "$HINT_DIR/wraith_hint.tar.gz" -C "$HINT_DIR" wraith_riddle.txt.gpg
+# First archive: tar (no extension)
+tar -czf "$HINT_DIR/ashen_shell" -C "$HINT_DIR" ember_core
 
-# Second archive
-zip -q "$HINT_DIR/wraith_hint.zip" "$HINT_DIR/wraith_hint.tar.gz"
+# Second archive: zip (no extension)
+zip -q "$HINT_DIR/faded_relic" "$HINT_DIR/ashen_shell"
 
-rm "$MANUSCRIPT" "$HINT_DIR/wraith_hint.tar.gz" "$HINT_DIR/wraith_riddle.txt.gpg"
+# Cleanup
+rm "$MANUSCRIPT" "$HINT_DIR/ashen_shell" "$HINT_DIR/ember_core"
 
-chown "$STUDENT_USER:$STUDENT_USER" "$HINT_DIR/wraith_hint.zip"
-chmod 600 "$HINT_DIR/wraith_hint.zip"
+chown "$STUDENT_USER:$STUDENT_USER" "$HINT_DIR/faded_relic"
+chmod 600 "$HINT_DIR/faded_relic"
 
 # -------------------------------
 # Verification
@@ -80,8 +83,6 @@ echo "🏆 LEVEL 8 COMPLETE"
 EOF
 chmod +x "$LD_DIR/check_ldpreload.sh"
 chown "$STUDENT_USER:$STUDENT_USER" "$LD_DIR/check_ldpreload.sh"
-
-echo "👻 Shadow of the Wraith ready with multi-layered hint at $HINT_DIR/wraith_hint.zip"
 
 # -------------------------------
 # 8. Final instructions

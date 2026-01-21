@@ -103,6 +103,8 @@ chmod 600 "$ENCRYPTED_HINT"
 MANUSCRIPT="$DUNGEON_DIR/.strange_manuscript"
 
 cat << 'EOF' > "$MANUSCRIPT"
+You notice an old faded parchment tucked away in the lair. It reads:
+
 there once was a watcher so Rare
 who lingered unseen in the aIr
 to seek out the True path
