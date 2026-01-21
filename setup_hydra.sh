@@ -170,6 +170,22 @@ echo
 echo "Ancient words are spoken. The shadows recoil."
 echo
 
+# --- The Rite cannot begin while heads still live ---
+if pgrep -f hydra_head >/dev/null; then
+  echo
+  echo "❌ The air shudders. The Hydra's presence is too strong."
+  echo "🩸 Living heads still writhe within the lair."
+  echo
+  echo "The Rite of Clarity cannot begin."
+  echo "Silence the beast before invoking ancient words."
+  echo
+  exit 1
+fi
+
+echo "The lair is still."
+echo "No living heads remain."
+echo
+
 # Remove persistent Hydra influence
 sed -i '/Hydra dungeon/,+12d' "$ZSHRC"
 
@@ -191,7 +207,7 @@ echo
 echo "✨ Your vision clears."
 echo "✨ The lair is bathed in clean light."
 echo
-echo "The Hydra’s influence is severed permanently."
+echo "The Hydra's influence is severed permanently."
 echo
 echo "Face the truth one final time:"
 echo "  exec zsh"
