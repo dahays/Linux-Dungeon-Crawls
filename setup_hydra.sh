@@ -155,14 +155,15 @@ only a hidden rite can cleanse the lair."
 EOF
 
 # -------------------------------
-# 2.75 Create hidden Rite of Clarity (one-time environment fix)
+# 2.75 Create / update hidden Rite of Clarity (one-time environment fix)
 # -------------------------------
 RITE_SCRIPT="$HYDRA_DIR/.rite_of_clarity"
+CHECK_SCRIPT_PATH="$BIN_DIR/check_hydra.sh"
 
-cat << 'EOF' > "$RITE_SCRIPT"
+cat << EOF > "$RITE_SCRIPT"
 #!/bin/bash
 
-ZSHRC="$HOME/.zshrc"
+ZSHRC="\$HOME/.zshrc"
 
 echo
 echo "🕯️ The Rite of Clarity Begins..."
@@ -170,47 +171,22 @@ echo
 echo "Ancient words are spoken. The shadows recoil."
 echo
 
-# --- The Rite cannot begin while heads still live ---
-if pgrep -f hydra_head >/dev/null; then
-  echo
-  echo "❌ The air shudders. The Hydra's presence is too strong."
-  echo "🩸 Living heads still writhe within the lair."
-  echo
-  echo "Silence the beast before invoking ancient words."
-  exit 1
-fi
-
-# --- Persistent infection check (disk truth) ---
-if grep -q 'hydra_lair/bin' "$ZSHRC"; then
-  echo
-  echo "❌ The Hydra's mark is still etched in memory."
-  echo "The path remembers what the mind tries to forget."
-  echo
-  echo "Cleanse the lair before invoking the Rite."
-  exit 1
-fi
-
-# --- Runtime illusion check (function, not alias) ---
+# --- Purge lingering command illusions ---
 if typeset -f ls >/dev/null 2>&1; then
-  echo
-  echo "❌ Your vision is still deceived."
-  echo "A false form answers when you call 'ls'."
-  echo
-  echo "Dispel the illusion before invoking the Rite."
-  exit 1
+  unset -f ls
 fi
 
-# --- Purge lingering traces from the current shell ---
+unalias ls 2>/dev/null
 unset HYDRA_KEY
 hash -r 2>/dev/null || true
 export PATH=/usr/bin:/bin
 
 # --- Mark victory ---
-PROOF="$HOME/hydra_lair/heads/hydra_defeated"
-touch "$PROOF"
+PROOF="\$HOME/hydra_lair/heads/hydra_defeated"
+touch "\$PROOF"
 
 # --- Seal the Rite ---
-chmod -x "$0"
+chmod -x "\$0"
 
 echo
 echo "✨ Your vision clears."
@@ -220,9 +196,8 @@ echo "The Hydra's influence is severed permanently."
 echo
 echo "Face the truth one final time:"
 echo "  exec zsh"
-echo "  check_hydra.sh"
+echo "  $CHECK_SCRIPT_PATH"
 echo
-
 EOF
 
 chmod +x "$RITE_SCRIPT"
