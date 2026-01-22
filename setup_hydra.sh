@@ -176,39 +176,25 @@ if pgrep -f hydra_head >/dev/null; then
   echo "❌ The air shudders. The Hydra's presence is too strong."
   echo "🩸 Living heads still writhe within the lair."
   echo
-  echo "The Rite of Clarity cannot begin."
   echo "Silence the beast before invoking ancient words."
   exit 1
 fi
 
-# --- Sight must already be true ---
-LS_PATH="$(command -v ls)"
-if [[ "$LS_PATH" != "/usr/bin/ls" && "$LS_PATH" != "/bin/ls" ]]; then
+# --- The Hydra must no longer persist in the shell ---
+if grep -q 'hydra_lair/bin' "$ZSHRC"; then
   echo
-  echo "❌ Your vision is still deceived."
-  echo "What answers when you call 'ls' is not the true form."
+  echo "❌ The Hydra's mark is still etched in the shell."
+  echo "The path remembers what the mind tries to forget."
   echo
-  echo "Dispel the illusion before invoking the Rite."
+  echo "Cleanse the lair before invoking the Rite."
   exit 1
 fi
 
-# --- The path must no longer favor the Hydra ---
-if [[ ":$PATH:" == *":$HOME/hydra_lair/bin:"* ]]; then
-  echo
-  echo "❌ The path still winds through the Hydra's lair."
-  echo "Even truth spoken here would echo back twisted."
-  echo
-  echo "Straighten the path before invoking the Rite."
-  exit 1
-fi
-
-# --- Remove persistent Hydra influence ---
-sed -i '/Hydra dungeon/,+12d' "$ZSHRC"
-
-# --- Clean current shell ---
+# --- Purge lingering illusions from the current shell ---
 unalias ls 2>/dev/null
 unset -f ls 2>/dev/null
 unset HYDRA_KEY
+hash -r 2>/dev/null || true
 
 export PATH=/usr/bin:/bin
 
@@ -216,7 +202,7 @@ export PATH=/usr/bin:/bin
 PROOF="$HOME/hydra_lair/heads/hydra_defeated"
 touch "$PROOF"
 
-# --- Seal the rite ---
+# --- Seal the Rite ---
 chmod -x "$0"
 
 echo
