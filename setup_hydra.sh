@@ -180,22 +180,29 @@ if pgrep -f hydra_head >/dev/null; then
   exit 1
 fi
 
-# --- The Hydra must no longer persist in the shell ---
+# --- Persistent infection check (disk truth) ---
 if grep -q 'hydra_lair/bin' "$ZSHRC"; then
   echo
-  echo "❌ The Hydra's mark is still etched in the shell."
+  echo "❌ The Hydra's mark is still etched in memory."
   echo "The path remembers what the mind tries to forget."
   echo
   echo "Cleanse the lair before invoking the Rite."
   exit 1
 fi
 
-# --- Purge lingering illusions from the current shell ---
-unalias ls 2>/dev/null
-unset -f ls 2>/dev/null
+# --- Runtime illusion check (function, not alias) ---
+if typeset -f ls >/dev/null 2>&1; then
+  echo
+  echo "❌ Your vision is still deceived."
+  echo "A false form answers when you call 'ls'."
+  echo
+  echo "Dispel the illusion before invoking the Rite."
+  exit 1
+fi
+
+# --- Purge lingering traces from the current shell ---
 unset HYDRA_KEY
 hash -r 2>/dev/null || true
-
 export PATH=/usr/bin:/bin
 
 # --- Mark victory ---
