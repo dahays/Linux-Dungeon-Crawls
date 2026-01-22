@@ -178,29 +178,45 @@ if pgrep -f hydra_head >/dev/null; then
   echo
   echo "The Rite of Clarity cannot begin."
   echo "Silence the beast before invoking ancient words."
-  echo
   exit 1
 fi
 
-echo "The lair is still."
-echo "No living heads remain."
-echo
+# --- Sight must already be true ---
+LS_PATH="$(command -v ls)"
+if [[ "$LS_PATH" != "/usr/bin/ls" && "$LS_PATH" != "/bin/ls" ]]; then
+  echo
+  echo "❌ Your vision is still deceived."
+  echo "What answers when you call 'ls' is not the true form."
+  echo
+  echo "Dispel the illusion before invoking the Rite."
+  exit 1
+fi
 
-# Remove persistent Hydra influence
+# --- The path must no longer favor the Hydra ---
+if [[ ":$PATH:" == *":$HOME/hydra_lair/bin:"* ]]; then
+  echo
+  echo "❌ The path still winds through the Hydra's lair."
+  echo "Even truth spoken here would echo back twisted."
+  echo
+  echo "Straighten the path before invoking the Rite."
+  exit 1
+fi
+
+# --- Remove persistent Hydra influence ---
 sed -i '/Hydra dungeon/,+12d' "$ZSHRC"
 
-# Clean current shell
+# --- Clean current shell ---
 unalias ls 2>/dev/null
 unset -f ls 2>/dev/null
 unset HYDRA_KEY
 
 export PATH=/usr/bin:/bin
 
-# Mark victory if not already marked
+# --- Mark victory ---
 PROOF="$HOME/hydra_lair/heads/hydra_defeated"
 touch "$PROOF"
 
-# Seal the rite
+# --- Seal the rite ---
 chmod -x "$0"
 
 echo
@@ -218,10 +234,6 @@ EOF
 
 chmod +x "$RITE_SCRIPT"
 chown "$STUDENT_USER:$STUDENT_USER" "$RITE_SCRIPT"
-
-
-chown "$STUDENT_USER:$STUDENT_USER" "$MANUSCRIPT"
-chmod 600 "$MANUSCRIPT"
 
 # -------------------------------
 # 3. Persist environment for Kali (zsh)
