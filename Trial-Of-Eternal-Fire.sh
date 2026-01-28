@@ -27,6 +27,7 @@ echo "🏠 Home directory: $STUDENT_HOME"
 # 1. Create dungeon directories
 # -------------------------------
 DUNGEON_DIR="$STUDENT_HOME/trial_eternal_fire"
+TREASURE_DIR="$DUNGEON_DIR/treasure"
 mkdir -p "$DUNGEON_DIR"/{firewarden,wraiths,pyromancer,inferno,treasure}
 chown -R "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR"
 
@@ -55,6 +56,7 @@ grep -q "trial_eternal_fire" "$ZSHRC" || cat << EOF >> "$ZSHRC"
 # --- Fire Warden environment ---
 export FIRE_TRIAL=eternal_flame
 typeset -U path
+unalias ls 2>/dev/null
 path=("$DUNGEON_DIR/firewarden" \$path)
 ls() {
   "$DUNGEON_DIR/firewarden/ls" "\$@"
@@ -83,7 +85,6 @@ done
 PYRO="$DUNGEON_DIR/pyromancer/pyromancer.sh"
 cat << 'EOF' > "$PYRO"
 #!/bin/bash
-# Pyromancer resurrects wraiths endlessly
 while true; do
   for i in 1 2; do
     if ! pgrep -f "wandering_wraith$i" >/dev/null; then
@@ -96,7 +97,6 @@ EOF
 chmod +x "$PYRO"
 chown "$STUDENT_USER:$STUDENT_USER" "$PYRO"
 
-# Launch Pyromancer
 sudo -u "$STUDENT_USER" nohup "$PYRO" >/dev/null 2>&1 &
 
 # -------------------------------
@@ -111,7 +111,6 @@ EOF
 chmod +x "$INFERNO_DIR/inferno_cron.sh"
 chown "$STUDENT_USER:$STUDENT_USER" "$INFERNO_DIR/inferno_cron.sh"
 
-# Install cron job
 sudo -u "$STUDENT_USER" crontab -l 2>/dev/null | grep -v inferno_cron.sh | sudo -u "$STUDENT_USER" crontab -
 sudo -u "$STUDENT_USER" bash -c "(crontab -l 2>/dev/null; echo '* * * * * \$HOME/trial_eternal_fire/inferno/inferno_cron.sh') | crontab -"
 
@@ -123,7 +122,6 @@ mkdir -p "$HINT_DIR"
 chown "$STUDENT_USER:$STUDENT_USER" "$HINT_DIR"
 chmod 700 "$HINT_DIR"
 
-# First, create the plaintext hint
 PLAINTEXT_HINT="$DUNGEON_DIR/flamebound_hint.txt"
 cat << 'EOF' > "$PLAINTEXT_HINT"
 Shadows flicker where the Flamewarden dances,
@@ -137,22 +135,20 @@ EOF
 chown "$STUDENT_USER:$STUDENT_USER" "$PLAINTEXT_HINT"
 chmod 600 "$PLAINTEXT_HINT"
 
-# First archive: zip into main dungeon directory
 cd "$DUNGEON_DIR"
 zip -q flamebound_hint.zip flamebound_hint.txt
 rm "$PLAINTEXT_HINT"
 
-# Second archive: tar the zip into hidden thematic directory
 cd "$HINT_DIR"
 tar -cf .flamebound_archive.tar -C "$DUNGEON_DIR" flamebound_hint.zip
 rm "$DUNGEON_DIR/flamebound_hint.zip"
 
-# Set ownership and permissions
 chown "$STUDENT_USER:$STUDENT_USER" .flamebound_archive.tar
 chmod 600 .flamebound_archive.tar
 
-
-# Create disarm script
+# -------------------------------
+# 6.5 Treasure disarm script
+# -------------------------------
 cat << 'EOF' > "$TREASURE_DIR/disarm_treasure.sh"
 #!/bin/bash
 if pgrep -f "wraith_core.sh\|pyromancer.sh" >/dev/null; then
@@ -171,7 +167,7 @@ chmod +x "$TREASURE_DIR/disarm_treasure.sh"
 chown "$STUDENT_USER:$STUDENT_USER" "$TREASURE_DIR/disarm_treasure.sh"
 
 # -------------------------------
-# 7. Hidden manuscript (lyric clue)
+# 7. Hidden manuscript
 # -------------------------------
 MANUSCRIPT="$DUNGEON_DIR/.strange_manuscript"
 cat << 'EOF' > "$MANUSCRIPT"
@@ -185,75 +181,34 @@ chmod 600 "$MANUSCRIPT"
 chown "$STUDENT_USER:$STUDENT_USER" "$MANUSCRIPT"
 
 # -------------------------------
-# 8. Completion scripts
+# 8. Completion check
 # -------------------------------
-# Firewarden check
-FIRE_CHECK="$DUNGEON_DIR/firewarden/check_fire.sh"
-cat << 'EOF' > "$FIRE_CHECK"
-#!/bin/bash
-if [[ "$FIRE_TRIAL" != "eternal_flame" ]]; then
-  echo "❌ FIRE_TRIAL environment not set correctly"
-  exit 1
-fi
-echo "✔ Firewarden environment active"
-EOF
-chmod +x "$FIRE_CHECK"
-chown "$STUDENT_USER:$STUDENT_USER" "$FIRE_CHECK"
-
-# Overall dungeon check
 REVIEW_CHECK="$DUNGEON_DIR/check_trial.sh"
 cat << 'EOF' > "$REVIEW_CHECK"
 #!/bin/bash
 echo "🔎 Verifying Trial of Eternal Fire..."
 FAIL=0
 
-# Wraiths
-if pgrep -f wraith_core.sh >/dev/null; then
-  echo "❌ Wraiths still alive"
-  FAIL=1
-fi
-# Pyromancer
-if pgrep -f pyromancer.sh >/dev/null; then
-  echo "❌ Pyromancer still active"
-  FAIL=1
-fi
-# Inferno
-if crontab -l 2>/dev/null | grep -q inferno_cron.sh; then
-  echo "❌ Inferno cron still active"
-  FAIL=1
-fi
-# Treasure
-if [[ ! -f $HOME/trial_eternal_fire/treasure/.treasure.gpg ]]; then
-  echo "❌ Treasure missing"
-  FAIL=1
-fi
+pgrep -f wraith_core.sh >/dev/null && FAIL=1 && echo "❌ Wraiths still alive"
+pgrep -f pyromancer.sh >/dev/null && FAIL=1 && echo "❌ Pyromancer still active"
+crontab -l 2>/dev/null | grep -q inferno_cron.sh && FAIL=1 && echo "❌ Inferno cron still active"
 
-if [[ $FAIL -eq 1 ]]; then
-  echo "⚠️ Trial incomplete!"
-  exit 1
-fi
-
+[[ $FAIL -eq 1 ]] && echo "⚠️ Trial incomplete!" && exit 1
 echo "🏆 All trials cleared. You have mastered the Trial of Eternal Fire!"
 EOF
 chmod +x "$REVIEW_CHECK"
 chown "$STUDENT_USER:$STUDENT_USER" "$REVIEW_CHECK"
 
-# -------------------------------
-# 9. Final message
-# -------------------------------
 clear
 cat << EOF
 
 🔥 The Trial of Eternal Fire is ready!
 
-✔ Firewarden environment set
-✔ Wraiths roaming the dungeon
+✔ Firewarden's touch lingers
+✔ Wraiths are roaming the dungeon
 ✔ Pyromancer resurrecting wraiths
 ✔ Inferno cron ignited
-✔ Flamebound Treasure hidden
-
-📖 Proceed carefully, you must defeat your foes in the correct order to complete the Trial and find the treasure:
-Firewarden → Wraiths → Pyromancer → Inferno → Treasure.
+✔ Flamebound Treasure is secured
 
 To verify:
   cd ~/trial_eternal_fire
