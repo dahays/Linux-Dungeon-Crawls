@@ -22,7 +22,7 @@ Open a terminal.
 
 Download the setup script:
 ```bash
-wget -O 
+wget -O Trial-Of-Eternal-Fire.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/Trial-Of-Eternal-Fire.sh
 ```
 Make it executable.
 ```bash
