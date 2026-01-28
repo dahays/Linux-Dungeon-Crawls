@@ -2,216 +2,180 @@
 set -e
 set -o pipefail
 
-echo "🔥 Embarking on The Trial of Eternal Fire..."
+echo "🔥 Igniting the Trial of Eternal Fire (one-time setup)..."
+echo
 
 # -------------------------------
-# 0. Require sudo, capture student
+# 0. Require sudo, capture user
 # -------------------------------
 if [[ "$EUID" -ne 0 ]]; then
-  echo "🚫 This installer must be run with sudo."
+  echo "🚫 This ritual must be invoked with sudo."
   exit 1
 fi
 
-if [[ -z "$SUDO_USER" || "$SUDO_USER" == "root" ]]; then
-  echo "🚫 Cannot determine invoking user."
-  exit 1
-fi
-
-STUDENT_USER="$SUDO_USER"
-STUDENT_HOME="$(getent passwd "$STUDENT_USER" | cut -d: -f6)"
-
-echo "🎯 Deploying trial for: $STUDENT_USER"
-echo "🏠 Home directory: $STUDENT_HOME"
+REAL_USER="$SUDO_USER"
+USER_HOME="$(eval echo ~$REAL_USER)"
+TRIAL_DIR="$USER_HOME/trial_eternal_fire"
 
 # -------------------------------
-# 1. Create dungeon directories
+# 1. Create Trial Structure
 # -------------------------------
-DUNGEON_DIR="$STUDENT_HOME/trial_eternal_fire"
-TREASURE_DIR="$DUNGEON_DIR/treasure"
-mkdir -p "$DUNGEON_DIR"/{firewarden,wraiths,pyromancer,inferno,treasure}
-chown -R "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR"
+echo "🔥 Forging trial chambers..."
+
+mkdir -p \
+  "$TRIAL_DIR/firewarden" \
+  "$TRIAL_DIR/wraiths" \
+  "$TRIAL_DIR/pyromancer" \
+  "$TRIAL_DIR/inferno" \
+  "$TRIAL_DIR/treasure"
+
+chown -R "$REAL_USER:$REAL_USER" "$TRIAL_DIR"
 
 # -------------------------------
-# 2. Fire Warden mini challenge (environment)
+# 2. Deploy Firewarden ls override
 # -------------------------------
-FIRE_BIN="$DUNGEON_DIR/firewarden/ls"
-cat << 'EOF' > "$FIRE_BIN"
+echo "🔥 Binding the Firewarden..."
+
+cat << 'EOF' > "$TRIAL_DIR/firewarden/ls"
 #!/bin/bash
-if [[ "$FIRE_TRIAL" == "eternal_flame" ]]; then
-  RED="\033[0;31m"
-  RESET="\033[0m"
-  echo -e "${RED}🔥 The Eternal Flame watches your steps...${RESET}"
-fi
+echo "🔥 The Eternal Flame watches your steps..."
 /bin/ls "$@"
 EOF
-chmod +x "$FIRE_BIN"
-chown "$STUDENT_USER:$STUDENT_USER" "$FIRE_BIN"
 
-# Add environment hook
-ZSHRC="$STUDENT_HOME/.zshrc"
-touch "$ZSHRC"
-chown "$STUDENT_USER:$STUDENT_USER" "$ZSHRC"
-grep -q "trial_eternal_fire" "$ZSHRC" || cat << EOF >> "$ZSHRC"
-
-# --- Fire Warden environment ---
-export FIRE_TRIAL=eternal_flame
-typeset -U path
-unalias ls 2>/dev/null
-path=("$DUNGEON_DIR/firewarden" \$path)
-ls() {
-  "$DUNGEON_DIR/firewarden/ls" "\$@"
-}
-EOF
+chmod +x "$TRIAL_DIR/firewarden/ls"
+chown "$REAL_USER:$REAL_USER" "$TRIAL_DIR/firewarden/ls"
 
 # -------------------------------
-# 3. Wraiths challenge (child processes)
+# 3. Set Eternal Fire environment variable
 # -------------------------------
-WRAITH_DIR="$DUNGEON_DIR/wraiths"
-cat << 'EOF' > "$WRAITH_DIR/wraith_core.sh"
-#!/bin/bash
-sleep 3600
-EOF
-chmod +x "$WRAITH_DIR/wraith_core.sh"
-chown "$STUDENT_USER:$STUDENT_USER" "$WRAITH_DIR/wraith_core.sh"
+echo "🔥 Kindling the Eternal Flame..."
 
-# Launch wraiths
-for i in 1 2; do
-  sudo -u "$STUDENT_USER" nohup bash -c "exec -a wandering_wraith$i $WRAITH_DIR/wraith_core.sh" >/dev/null 2>&1 &
-done
+echo "export FIRE_TRIAL=eternal_flame" >> "$USER_HOME/.bashrc"
 
 # -------------------------------
-# 4. Pyromancer challenge (parent respawn)
+# 4. Deploy wandering wraiths
 # -------------------------------
-PYRO="$DUNGEON_DIR/pyromancer/pyromancer.sh"
-cat << 'EOF' > "$PYRO"
+echo "🔥 Summoning the Wraiths..."
+
+cat << 'EOF' > "$TRIAL_DIR/wraiths/wandering_wraith.sh"
 #!/bin/bash
 while true; do
-  for i in 1 2; do
-    if ! pgrep -f "wandering_wraith$i" >/dev/null; then
-      "$HOME/trial_eternal_fire/wraiths/wraith_core.sh" &
-    fi
-  done
-  sleep 3
+  sleep 30
 done
 EOF
-chmod +x "$PYRO"
-chown "$STUDENT_USER:$STUDENT_USER" "$PYRO"
 
-sudo -u "$STUDENT_USER" nohup "$PYRO" >/dev/null 2>&1 &
+chmod +x "$TRIAL_DIR/wraiths/wandering_wraith.sh"
+chown "$REAL_USER:$REAL_USER" "$TRIAL_DIR/wraiths/wandering_wraith.sh"
+
+for i in {1..3}; do
+  sudo -u "$REAL_USER" nohup "$TRIAL_DIR/wraiths/wandering_wraith.sh" >/dev/null 2>&1 &
+done
 
 # -------------------------------
-# 5. Inferno challenge (cron persistence)
+# 5. Deploy Pyromancer respawner
 # -------------------------------
-INFERNO_DIR="$DUNGEON_DIR/inferno"
-mkdir -p "$INFERNO_DIR"
-cat << 'EOF' > "$INFERNO_DIR/inferno_cron.sh"
+echo "🔥 Awakening the Pyromancer..."
+
+cat << 'EOF' > "$TRIAL_DIR/pyromancer/pyromancer.sh"
 #!/bin/bash
-echo "🔥 Inferno roars at $(date)" >> "$HOME/trial_eternal_fire/inferno/inferno.log"
-EOF
-chmod +x "$INFERNO_DIR/inferno_cron.sh"
-chown "$STUDENT_USER:$STUDENT_USER" "$INFERNO_DIR/inferno_cron.sh"
-
-sudo -u "$STUDENT_USER" crontab -l 2>/dev/null | grep -v inferno_cron.sh | sudo -u "$STUDENT_USER" crontab -
-sudo -u "$STUDENT_USER" bash -c "(crontab -l 2>/dev/null; echo '* * * * * \$HOME/trial_eternal_fire/inferno/inferno_cron.sh') | crontab -"
-
-# -------------------------------
-# 6. Flamebound Treasure Hint (double archive)
-# -------------------------------
-HINT_DIR="$DUNGEON_DIR/.embers"
-mkdir -p "$HINT_DIR"
-chown "$STUDENT_USER:$STUDENT_USER" "$HINT_DIR"
-chmod 700 "$HINT_DIR"
-
-PLAINTEXT_HINT="$DUNGEON_DIR/flamebound_hint.txt"
-cat << 'EOF' > "$PLAINTEXT_HINT"
-Shadows flicker where the Flamewarden dances,
-Low wraiths wander where courage falters,
-A Pyromancer stirs those who linger too long,
-The Inferno blazes on the march of minutes,
-Only when all trials yield will the Flamebound key cool,
-Follow your hearts and exclaim, "GLORY"!
+while true; do
+  if ! pgrep -f wandering_wraith.sh >/dev/null; then
+    nohup "$HOME/trial_eternal_fire/wraiths/wandering_wraith.sh" >/dev/null 2>&1 &
+  fi
+  sleep 20
+done
 EOF
 
-chown "$STUDENT_USER:$STUDENT_USER" "$PLAINTEXT_HINT"
-chmod 600 "$PLAINTEXT_HINT"
+chmod +x "$TRIAL_DIR/pyromancer/pyromancer.sh"
+chown "$REAL_USER:$REAL_USER" "$TRIAL_DIR/pyromancer/pyromancer.sh"
 
-cd "$DUNGEON_DIR"
-zip -q flamebound_hint.zip flamebound_hint.txt
-rm "$PLAINTEXT_HINT"
-
-cd "$HINT_DIR"
-tar -cf .flamebound_archive.tar -C "$DUNGEON_DIR" flamebound_hint.zip
-rm "$DUNGEON_DIR/flamebound_hint.zip"
-
-chown "$STUDENT_USER:$STUDENT_USER" .flamebound_archive.tar
-chmod 600 .flamebound_archive.tar
+sudo -u "$REAL_USER" nohup "$TRIAL_DIR/pyromancer/pyromancer.sh" >/dev/null 2>&1 &
 
 # -------------------------------
-# 6.5 Treasure disarm script
+# 6. Deploy Inferno cron persistence
 # -------------------------------
-cat << 'EOF' > "$TREASURE_DIR/disarm_treasure.sh"
+echo "🔥 Feeding the Inferno..."
+
+cat << 'EOF' > "$TRIAL_DIR/inferno/inferno_cron.sh"
 #!/bin/bash
-if pgrep -f "wraith_core.sh\|pyromancer.sh" >/dev/null; then
-  echo "💀 Some wraiths still linger. Defeat them first!"
-  exit 1
-fi
-if crontab -l 2>/dev/null | grep -q inferno_cron.sh; then
-  echo "🔥 The Inferno still burns. Remove the cron job first!"
-  exit 1
-fi
-echo "🗝️ The path is clear! Unlocking Flamebound Treasure..."
-chmod 400 .treasure.gpg
-echo "✅ Treasure ready. Use gpg --batch --yes -d --passphrase GLORY .treasure.gpg to read it."
+echo "$(date): The Inferno burns." >> "$HOME/trial_eternal_fire/inferno/inferno.log"
 EOF
-chmod +x "$TREASURE_DIR/disarm_treasure.sh"
-chown "$STUDENT_USER:$STUDENT_USER" "$TREASURE_DIR/disarm_treasure.sh"
+
+chmod +x "$TRIAL_DIR/inferno/inferno_cron.sh"
+chown "$REAL_USER:$REAL_USER" "$TRIAL_DIR/inferno/inferno_cron.sh"
+
+sudo -u "$REAL_USER" crontab -l 2>/dev/null | grep -v inferno_cron.sh | crontab -
+sudo -u "$REAL_USER" crontab - << EOF
+*/2 * * * * $TRIAL_DIR/inferno/inferno_cron.sh
+EOF
 
 # -------------------------------
-# 7. Hidden manuscript
+# 7. Deploy Treasure & Manuscript
 # -------------------------------
-MANUSCRIPT="$DUNGEON_DIR/.strange_manuscript"
-cat << 'EOF' > "$MANUSCRIPT"
-in the shadows, a Great blaze whispers,
-Low flames curl around forgotten stones,
-Onward you tread past glowing embers,
-resolute heaRts find the key at last,
-your courage lights the path to glorY.
+echo "🔥 Sealing the Flamebound Treasure..."
+
+cat << 'EOF' > "$TRIAL_DIR/.strange_manuscript"
+Glory rises in embers
+Legends endure the flame
+Only the worthy may claim
+Righteous fire reveals truth
+Yearn for the light
 EOF
-chmod 600 "$MANUSCRIPT"
-chown "$STUDENT_USER:$STUDENT_USER" "$MANUSCRIPT"
+
+tar -czf "$TRIAL_DIR/.strange_manuscript.tar.gz" -C "$TRIAL_DIR" .strange_manuscript
+rm "$TRIAL_DIR/.strange_manuscript"
+
+chown "$REAL_USER:$REAL_USER" "$TRIAL_DIR/.strange_manuscript.tar.gz"
+
+cat << 'EOF' > "$TRIAL_DIR/treasure/flamebound_treasure.txt"
+🏆 Congratulations, Hero of Fire.
+EOF
+
+gpg --batch --yes -c --passphrase GLORY \
+  -o "$TRIAL_DIR/treasure/.treasure.gpg" \
+  "$TRIAL_DIR/treasure/flamebound_treasure.txt"
+
+rm "$TRIAL_DIR/treasure/flamebound_treasure.txt"
+chown -R "$REAL_USER:$REAL_USER" "$TRIAL_DIR/treasure"
 
 # -------------------------------
-# 8. Completion check
+# 8. Deploy UPDATED check_trial.sh
 # -------------------------------
-REVIEW_CHECK="$DUNGEON_DIR/check_trial.sh"
-cat << 'EOF' > "$REVIEW_CHECK"
+echo "🔥 Inscribing the Trial Verification..."
+
+cat << 'EOF' > "$TRIAL_DIR/check_trial.sh"
 #!/bin/bash
-echo "🔎 Verifying Trial of Eternal Fire..."
-FAIL=0
+set -e
 
-pgrep -f wraith_core.sh >/dev/null && FAIL=1 && echo "❌ Wraiths still alive"
-pgrep -f pyromancer.sh >/dev/null && FAIL=1 && echo "❌ Pyromancer still active"
-crontab -l 2>/dev/null | grep -q inferno_cron.sh && FAIL=1 && echo "❌ Inferno cron still active"
+TRIAL_DIR="$HOME/trial_eternal_fire"
+TREASURE_DIR="$TRIAL_DIR/treasure"
+FINAL_FILE="$TREASURE_DIR/flamebound_treasure.txt"
+MANUSCRIPT_ARCHIVE="$TRIAL_DIR/.strange_manuscript.tar.gz"
+MANUSCRIPT_FILE="$TRIAL_DIR/.strange_manuscript"
 
-[[ $FAIL -eq 1 ]] && echo "⚠️ Trial incomplete!" && exit 1
+if pgrep -f wandering_wraith >/dev/null; then exit 1; fi
+if pgrep -f pyromancer >/dev/null; then exit 1; fi
+if crontab -l 2>/dev/null | grep -q inferno_cron.sh; then exit 1; fi
+if [[ -f "$MANUSCRIPT_ARCHIVE" ]]; then exit 1; fi
+if [[ ! -f "$MANUSCRIPT_FILE" ]]; then exit 1; fi
+if [[ ! -f "$FINAL_FILE" ]]; then exit 1; fi
+if ! grep -q "Hero of Fire" "$FINAL_FILE"; then exit 1; fi
+
 echo "🏆 All trials cleared. You have mastered the Trial of Eternal Fire!"
 EOF
-chmod +x "$REVIEW_CHECK"
-chown "$STUDENT_USER:$STUDENT_USER" "$REVIEW_CHECK"
 
-clear
-cat << EOF
+chmod +x "$TRIAL_DIR/check_trial.sh"
+chown "$REAL_USER:$REAL_USER" "$TRIAL_DIR/check_trial.sh"
 
-🔥 The Trial of Eternal Fire is ready!
+# -------------------------------
+# 9. Deploy Extinguish Script
+# -------------------------------
+echo "🔥 Preparing the Extinguishing Rite..."
 
-✔ Firewarden's touch lingers
-✔ Wraiths are roaming the dungeon
-✔ Pyromancer resurrecting wraiths
-✔ Inferno cron ignited
-✔ Flamebound Treasure is secured
+cp /root/extinguish_eternal_fire.sh "$TRIAL_DIR/extinguish_eternal_fire.sh"
+chmod +x "$TRIAL_DIR/extinguish_eternal_fire.sh"
+chown "$REAL_USER:$REAL_USER" "$TRIAL_DIR/extinguish_eternal_fire.sh"
 
-To verify:
-  cd ~/trial_eternal_fire
-  ./check_trial.sh
-
-EOF
+echo
+echo "🔥 The Trial of Eternal Fire is prepared."
+echo "The flame awaits the worthy."
