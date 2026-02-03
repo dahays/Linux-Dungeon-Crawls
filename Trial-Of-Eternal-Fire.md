@@ -33,8 +33,11 @@ Run the installer script.
 ```bash
 sudo ./Trial-Of-Eternal-Fire.sh
 ```
+`🔴`Force a new instance of the shell.`🔴`
+```bash
+exec zsh
+```
 Enter the dungeon directory to begin!
-
 ```bash
 cd trial_eternal_fire
 ```
