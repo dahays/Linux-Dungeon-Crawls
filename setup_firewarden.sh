@@ -86,6 +86,8 @@ chown "$STUDENT_USER:$STUDENT_USER" "$HINT_DIR"
 # Create manuscript
 MANUSCRIPT="$HINT_DIR/strange_manuscript.txt"
 cat << 'EOF' > "$MANUSCRIPT"
+You uncover a thin, brittle page sealed away from sight:
+
 Fire whispers where silence sleeps
 Always watch the parent that breathes life
 Read the logs, trace the chant
