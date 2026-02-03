@@ -18,6 +18,9 @@ REAL_HOME="$(eval echo "~$REAL_USER")"
 TRIAL_DIR="$REAL_HOME/trial_eternal_fire"
 FIREWARDEN_DIR="$TRIAL_DIR/firewarden"
 TREASURE_DIR="$TRIAL_DIR/treasure"
+INFERNO_DIR="$TRIAL_DIR/inferno"
+PYROMANCER_DIR="$TRIAL_DIR/pyromancer"
+WRAITH_DIR="$TRIAL_DIR/wraiths"
 
 # -------------------------------------------------
 # 1. Create directory structure
@@ -26,9 +29,9 @@ echo "🜂 Raising the dungeon halls..."
 
 mkdir -p \
   "$FIREWARDEN_DIR" \
-  "$TRIAL_DIR/inferno" \
-  "$TRIAL_DIR/pyromancer" \
-  "$TRIAL_DIR/wraiths" \
+  "$INFERNO_DIR" \
+  "$PYROMANCER_DIR" \
+  "$WRAITH_DIR" \
   "$TREASURE_DIR"
 
 chown -R "$REAL_USER:$REAL_USER" "$TRIAL_DIR"
@@ -47,7 +50,7 @@ EOF
 chmod +x "$FIREWARDEN_DIR/ls"
 
 # -------------------------------------------------
-# 3. Guaranteed env hijack (Hydra-style)
+# 3. Guaranteed env hijack (Hydra-aligned)
 # -------------------------------------------------
 echo "🜄 Sealing the PATH distortion..."
 
@@ -67,7 +70,6 @@ EOF
 chown "$REAL_USER:$REAL_USER" "$FIRE_RC"
 chmod 644 "$FIRE_RC"
 
-# Ensure zsh sources it
 ZSHRC="$REAL_HOME/.zshrc"
 if ! grep -q ".firewarden_env" "$ZSHRC"; then
   echo "" >> "$ZSHRC"
@@ -76,9 +78,68 @@ if ! grep -q ".firewarden_env" "$ZSHRC"; then
 fi
 
 # -------------------------------------------------
-# 4. Create the treasure (THIS WAS MISSING)
+# 4. Inferno (noisy process)
 # -------------------------------------------------
-echo "🜃 Forging the treasure..."
+echo "🜃 Lighting the Inferno..."
+
+cat << 'EOF' > "$INFERNO_DIR/inferno.sh"
+#!/bin/bash
+while true; do
+  echo "🔥🔥🔥 The inferno roars..."
+  sleep 5
+done
+EOF
+
+chmod +x "$INFERNO_DIR/inferno.sh"
+
+# -------------------------------------------------
+# 5. Pyromancer (respawner)
+# -------------------------------------------------
+echo "🜄 Summoning the Pyromancer..."
+
+cat << 'EOF' > "$PYROMANCER_DIR/pyromancer.sh"
+#!/bin/bash
+
+INFERNO="$HOME/trial_eternal_fire/inferno/inferno.sh"
+
+while true; do
+  if ! pgrep -f "$INFERNO" > /dev/null; then
+    nohup "$INFERNO" >/dev/null 2>&1 &
+  fi
+  sleep 10
+done
+EOF
+
+chmod +x "$PYROMANCER_DIR/pyromancer.sh"
+
+# -------------------------------------------------
+# 6. Wraith (cron persistence)
+# -------------------------------------------------
+echo "👻 Binding the Wraiths..."
+
+CRON_FILE="/tmp/fire_trial_cron"
+
+sudo -u "$REAL_USER" crontab -l 2>/dev/null > "$CRON_FILE" || true
+
+grep -q "trial_eternal_fire" "$CRON_FILE" || cat << EOF >> "$CRON_FILE"
+*/1 * * * * $PYROMANCER_DIR/pyromancer.sh >/dev/null 2>&1
+EOF
+
+sudo -u "$REAL_USER" crontab "$CRON_FILE"
+rm -f "$CRON_FILE"
+
+# -------------------------------------------------
+# 7. Start initial processes
+# -------------------------------------------------
+echo "🔥 Awakening the flames..."
+
+sudo -u "$REAL_USER" nohup "$INFERNO_DIR/inferno.sh" >/dev/null 2>&1 &
+sudo -u "$REAL_USER" nohup "$PYROMANCER_DIR/pyromancer.sh" >/dev/null 2>&1 &
+
+# -------------------------------------------------
+# 8. Create the treasure
+# -------------------------------------------------
+echo "🜂 Forging the treasure..."
 
 PLAINTEXT_FLAG="THE_FIRE_YIELDS_ONLY_TO_THOSE_WHO_ENDURE"
 
@@ -96,7 +157,7 @@ chown "$REAL_USER:$REAL_USER" "$TREASURE_DIR/.treasure.gpg"
 chmod 600 "$TREASURE_DIR/.treasure.gpg"
 
 # -------------------------------------------------
-# 5. Disarm script (purely ceremonial, no creation)
+# 9. Disarm script
 # -------------------------------------------------
 cat << 'EOF' > "$TREASURE_DIR/disarm_treasure.sh"
 #!/bin/bash
@@ -113,7 +174,7 @@ chmod +x "$TREASURE_DIR/disarm_treasure.sh"
 chown "$REAL_USER:$REAL_USER" "$TREASURE_DIR/disarm_treasure.sh"
 
 # -------------------------------------------------
-# 6. Final blessing
+# 10. Final blessing
 # -------------------------------------------------
 echo ""
 echo "🔥 The Trial of Eternal Fire is ready."
@@ -123,9 +184,5 @@ echo "  exec zsh"
 echo ""
 echo "Then begin:"
 echo "  cd ~/trial_eternal_fire"
-echo "  ls"
-echo ""
-echo "To verify completion:"
-echo "  ./check_trial.sh"
 echo ""
 echo "🜂 May the worthy prevail."
