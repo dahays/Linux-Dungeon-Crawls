@@ -34,7 +34,6 @@ HINT_DIR="$TRIAL_DIR/.charred_cubby"
 # 1. Create directory structure
 # -------------------------------------------------
 echo "🜂 Raising the dungeon halls..."
-
 mkdir -p \
   "$FIREWARDEN_DIR" \
   "$INFERNO_DIR" \
@@ -49,7 +48,6 @@ chown -R "$REAL_USER:$REAL_USER" "$TRIAL_DIR"
 # 2. Firewarden ls wrapper
 # -------------------------------------------------
 echo "🜁 Binding Firewarden illusions..."
-
 cat << 'EOF' > "$FIREWARDEN_DIR/ls"
 #!/bin/bash
 echo "🔥 The Eternal Flame watches your steps..."
@@ -63,9 +61,9 @@ chown "$REAL_USER:$REAL_USER" "$FIREWARDEN_DIR/ls"
 # 3. Hydra-consistent env hijack
 # -------------------------------------------------
 echo "🜄 Sealing the PATH distortion..."
-
 ZSHRC="$REAL_HOME/.zshrc"
 
+# Remove previous residues
 sed -i '/Trial of Eternal Fire/d' "$ZSHRC"
 sed -i '/firewarden\/ls/d' "$ZSHRC"
 sed -i '/ls()/d' "$ZSHRC"
@@ -103,9 +101,7 @@ chown "$REAL_USER:$REAL_USER" "$INFERNO_DIR/inferno.sh"
 # -------------------------------------------------
 cat << 'EOF' > "$PYROMANCER_DIR/pyromancer.sh"
 #!/bin/bash
-
 INFERNO="$HOME/trial_eternal_fire/inferno/inferno.sh"
-
 while true; do
   if ! pgrep -f "$INFERNO" >/dev/null; then
     nohup "$INFERNO" >/dev/null 2>&1 &
@@ -172,13 +168,11 @@ Yield to the fire, and it will answer.
 The flame leads to treasure, fortune, and GLORY!
 EOF
 
-# Zip the encrypted manuscript
-sudo -u "$REAL_USER" \
-  zip -q "$HINT_DIR/embers.zip" "$MANUSCRIPT"
+# Zip the manuscript
+sudo -u "$REAL_USER" zip -q "$HINT_DIR/embers.zip" "$MANUSCRIPT"
 
 # Tar.gz the zip
-sudo -u "$REAL_USER" \
-  tar -czf "$HINT_DIR/charred_manuscript.tgz" -C "$HINT_DIR" embers.zip
+sudo -u "$REAL_USER" tar -czf "$HINT_DIR/charred_manuscript.tgz" -C "$HINT_DIR" embers.zip
 
 # Cleanup intermediates
 rm -f "$MANUSCRIPT" "$HINT_DIR/embers.zip"
