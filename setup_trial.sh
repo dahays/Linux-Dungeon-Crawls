@@ -2,7 +2,7 @@
 set -e
 set -o pipefail
 
-echo "🔥 Trial of Eternal Fire - Stable Build"
+echo "🔥 Trial of Eternal Fire - Stable Build 2026-2-4-REV4"
 
 # -------------------------------------------------
 # 0. Require sudo, capture invoking user
