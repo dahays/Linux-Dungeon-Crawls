@@ -2,7 +2,9 @@
 set -e
 set -o pipefail
 
-echo "🔥 Trial of Eternal Fire - Stable Build 2026-2-4-REV4"
+echo "🔥 Trial of Eternal Fire - build 2026-02-04-REV-4"
+
+echo "🔥 Igniting the Trial of Eternal Fire..."
 
 # -------------------------------------------------
 # 0. Require sudo, capture invoking user
@@ -26,6 +28,7 @@ INFERNO_DIR="$TRIAL_DIR/inferno"
 PYROMANCER_DIR="$TRIAL_DIR/pyromancer"
 WRAITH_DIR="$TRIAL_DIR/wraiths"
 TREASURE_DIR="$TRIAL_DIR/treasure"
+HINT_DIR="$TRIAL_DIR/.hints"
 
 # -------------------------------------------------
 # 1. Create directory structure
@@ -37,12 +40,13 @@ mkdir -p \
   "$INFERNO_DIR" \
   "$PYROMANCER_DIR" \
   "$WRAITH_DIR" \
-  "$TREASURE_DIR"
+  "$TREASURE_DIR" \
+  "$HINT_DIR"
 
 chown -R "$REAL_USER:$REAL_USER" "$TRIAL_DIR"
 
 # -------------------------------------------------
-# 2. Firewarden ls wrapper (binary, not function)
+# 2. Firewarden ls wrapper
 # -------------------------------------------------
 echo "🜁 Binding Firewarden illusions..."
 
@@ -56,51 +60,33 @@ chmod +x "$FIREWARDEN_DIR/ls"
 chown "$REAL_USER:$REAL_USER" "$FIREWARDEN_DIR/ls"
 
 # -------------------------------------------------
-# 3. Firewarden env file (SAFE)
+# 3. Hydra-consistent env hijack
 # -------------------------------------------------
 echo "🜄 Sealing the PATH distortion..."
 
-FIRE_ENV="$TRIAL_DIR/.firewarden_env"
-
-cat << 'EOF' > "$FIRE_ENV"
-# 🔥 Firewarden Environment
-
-# Clean any prior illusions
-unalias ls 2>/dev/null
-unset -f ls 2>/dev/null
-
-# PATH precedence (Hydra-consistent)
-typeset -U path
-path=("$HOME/trial_eternal_fire/firewarden" $path)
-EOF
-
-chown "$REAL_USER:$REAL_USER" "$FIRE_ENV"
-chmod 644 "$FIRE_ENV"
-
-# -------------------------------------------------
-# 4. Source env safely from .zshrc
-# -------------------------------------------------
 ZSHRC="$REAL_HOME/.zshrc"
-touch "$ZSHRC"
-chown "$REAL_USER:$REAL_USER" "$ZSHRC"
 
-# Remove any old Firewarden references (block-based)
-sed -i '/firewarden_env/d' "$ZSHRC"
+sed -i '/Trial of Eternal Fire/d' "$ZSHRC"
+sed -i '/firewarden\/ls/d' "$ZSHRC"
+sed -i '/ls()/d' "$ZSHRC"
 
 cat << 'EOF' >> "$ZSHRC"
 
-# --- Trial of Eternal Fire ---
-if [[ -f "$HOME/trial_eternal_fire/.firewarden_env" ]]; then
-  source "$HOME/trial_eternal_fire/.firewarden_env"
-fi
-# ----------------------------
+# --- Trial of Eternal Fire: Firewarden illusion ---
+typeset -U path
+path=("$HOME/trial_eternal_fire/firewarden" $path)
+
+ls() {
+  "$HOME/trial_eternal_fire/firewarden/ls" "$@"
+}
+# -----------------------------------------------
 EOF
 
-# -------------------------------------------------
-# 5. Inferno (noisy process)
-# -------------------------------------------------
-echo "🔥 Lighting the Inferno..."
+chown "$REAL_USER:$REAL_USER" "$ZSHRC"
 
+# -------------------------------------------------
+# 4. Inferno
+# -------------------------------------------------
 cat << 'EOF' > "$INFERNO_DIR/inferno.sh"
 #!/bin/bash
 while true; do
@@ -113,10 +99,8 @@ chmod +x "$INFERNO_DIR/inferno.sh"
 chown "$REAL_USER:$REAL_USER" "$INFERNO_DIR/inferno.sh"
 
 # -------------------------------------------------
-# 6. Pyromancer (respawner)
+# 5. Pyromancer
 # -------------------------------------------------
-echo "🜄 Summoning the Pyromancer..."
-
 cat << 'EOF' > "$PYROMANCER_DIR/pyromancer.sh"
 #!/bin/bash
 
@@ -134,12 +118,9 @@ chmod +x "$PYROMANCER_DIR/pyromancer.sh"
 chown "$REAL_USER:$REAL_USER" "$PYROMANCER_DIR/pyromancer.sh"
 
 # -------------------------------------------------
-# 7. Wraiths (cron persistence)
+# 6. Wraiths (cron)
 # -------------------------------------------------
-echo "👻 Binding the Wraiths..."
-
 CRON_TMP="/tmp/eternal_fire_cron"
-
 sudo -u "$REAL_USER" crontab -l 2>/dev/null > "$CRON_TMP" || true
 
 grep -q trial_eternal_fire "$CRON_TMP" || cat << EOF >> "$CRON_TMP"
@@ -150,18 +131,14 @@ sudo -u "$REAL_USER" crontab "$CRON_TMP"
 rm -f "$CRON_TMP"
 
 # -------------------------------------------------
-# 8. Start initial processes
+# 7. Start initial processes
 # -------------------------------------------------
-echo "🔥 Awakening the flames..."
-
 sudo -u "$REAL_USER" nohup "$INFERNO_DIR/inferno.sh" >/dev/null 2>&1 &
 sudo -u "$REAL_USER" nohup "$PYROMANCER_DIR/pyromancer.sh" >/dev/null 2>&1 &
 
 # -------------------------------------------------
-# 9. Create the treasure
+# 8. Treasure (encrypted flag)
 # -------------------------------------------------
-echo "🜂 Forging the treasure..."
-
 PLAINTEXT_FLAG="THE_FIRE_YIELDS_ONLY_TO_THOSE_WHO_ENDURE"
 TMP_FLAG="/tmp/eternal_fire_flag.txt"
 
@@ -175,6 +152,56 @@ rm -f "$TMP_FLAG"
 
 chown "$REAL_USER:$REAL_USER" "$TREASURE_DIR/.treasure.gpg"
 chmod 600 "$TREASURE_DIR/.treasure.gpg"
+
+# -------------------------------------------------
+# 8.5 Strange Manuscript (RESTORED, DOUBLE-ARCHIVED)
+# -------------------------------------------------
+echo "📜 Sealing the Strange Manuscript..."
+
+MANUSCRIPT="$HINT_DIR/strange_manuscript.txt"
+
+cat << 'EOF' > "$MANUSCRIPT"
+Gazing into the embers, you notice the words shift.
+Lurking meaning hides where flames burn brightest.
+Only those who read carefully endure the trial.
+Rituals reward patience, not force.
+Yield to the fire, and it will answer.
+
+The flame bows to one word alone: GLORY
+EOF
+
+# Encrypt manuscript
+sudo -u "$REAL_USER" \
+  gpg --batch --yes --passphrase "GLORY" -c "$MANUSCRIPT"
+
+# Zip the encrypted manuscript
+sudo -u "$REAL_USER" \
+  zip -q "$HINT_DIR/fire_hint.zip" "$MANUSCRIPT.gpg"
+
+# Tar.gz the zip
+sudo -u "$REAL_USER" \
+  tar -czf "$HINT_DIR/fire_hint.tgz" -C "$HINT_DIR" fire_hint.zip
+
+# Cleanup intermediates
+rm -f "$MANUSCRIPT" "$MANUSCRIPT.gpg" "$HINT_DIR/fire_hint.zip"
+
+chown "$REAL_USER:$REAL_USER" "$HINT_DIR/fire_hint.tgz"
+chmod 600 "$HINT_DIR/fire_hint.tgz"
+
+# -------------------------------------------------
+# 9. Disarm script
+# -------------------------------------------------
+cat << 'EOF' > "$TREASURE_DIR/disarm_treasure.sh"
+#!/bin/bash
+if [[ ! -f ".treasure.gpg" ]]; then
+  echo "🔥 The flames still guard the prize."
+  exit 1
+fi
+echo "🔥 The flames subside. The treasure is yours."
+EOF
+
+chmod +x "$TREASURE_DIR/disarm_treasure.sh"
+chown "$REAL_USER:$REAL_USER" "$TREASURE_DIR/disarm_treasure.sh"
 
 # -------------------------------------------------
 # 10. Final blessing
