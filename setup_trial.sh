@@ -2,9 +2,7 @@
 set -e
 set -o pipefail
 
-echo "🔥 Trial of Eternal Fire - build 2026-02-04-REV-6"
-
-echo "🔥 Igniting the Trial of Eternal Fire..."
+echo "🔥 Trial of Eternal Fire - build 2026-02-04-REV-7-FINAL"
 
 # -------------------------------------------------
 # 0. Require sudo, capture invoking user
@@ -34,6 +32,7 @@ HINT_DIR="$TRIAL_DIR/.charred_cubby"
 # 1. Create directory structure
 # -------------------------------------------------
 echo "🜂 Raising the dungeon halls..."
+
 mkdir -p \
   "$FIREWARDEN_DIR" \
   "$INFERNO_DIR" \
@@ -48,6 +47,7 @@ chown -R "$REAL_USER:$REAL_USER" "$TRIAL_DIR"
 # 2. Firewarden ls wrapper
 # -------------------------------------------------
 echo "🜁 Binding Firewarden illusions..."
+
 cat << 'EOF' > "$FIREWARDEN_DIR/ls"
 #!/bin/bash
 echo "🔥 The Eternal Flame watches your steps..."
@@ -61,11 +61,12 @@ chown "$REAL_USER:$REAL_USER" "$FIREWARDEN_DIR/ls"
 # 3. Hydra-consistent env hijack
 # -------------------------------------------------
 echo "🜄 Sealing the PATH distortion..."
+
 ZSHRC="$REAL_HOME/.zshrc"
 
-# Remove previous residues
-sed -i '/Trial of Eternal Fire/d' "$ZSHRC"
-sed -i '/firewarden\/ls/d' "$ZSHRC"
+# Remove any previous trial residue
+sed -i '/trial_eternal_fire\/firewarden/d' "$ZSHRC"
+sed -i '/Firewarden illusion/d' "$ZSHRC"
 sed -i '/ls()/d' "$ZSHRC"
 
 cat << 'EOF' >> "$ZSHRC"
@@ -83,8 +84,10 @@ EOF
 chown "$REAL_USER:$REAL_USER" "$ZSHRC"
 
 # -------------------------------------------------
-# 4. Inferno
+# 4. Inferno (noisy process)
 # -------------------------------------------------
+echo "🔥 Lighting the Inferno..."
+
 cat << 'EOF' > "$INFERNO_DIR/inferno.sh"
 #!/bin/bash
 while true; do
@@ -97,11 +100,15 @@ chmod +x "$INFERNO_DIR/inferno.sh"
 chown "$REAL_USER:$REAL_USER" "$INFERNO_DIR/inferno.sh"
 
 # -------------------------------------------------
-# 5. Pyromancer
+# 5. Pyromancer (respawner)
 # -------------------------------------------------
+echo "🜄 Summoning the Pyromancer..."
+
 cat << 'EOF' > "$PYROMANCER_DIR/pyromancer.sh"
 #!/bin/bash
+
 INFERNO="$HOME/trial_eternal_fire/inferno/inferno.sh"
+
 while true; do
   if ! pgrep -f "$INFERNO" >/dev/null; then
     nohup "$INFERNO" >/dev/null 2>&1 &
@@ -114,9 +121,12 @@ chmod +x "$PYROMANCER_DIR/pyromancer.sh"
 chown "$REAL_USER:$REAL_USER" "$PYROMANCER_DIR/pyromancer.sh"
 
 # -------------------------------------------------
-# 6. Wraiths (cron)
+# 6. Wraiths (cron persistence)
 # -------------------------------------------------
+echo "👻 Binding the Wraiths..."
+
 CRON_TMP="/tmp/eternal_fire_cron"
+
 sudo -u "$REAL_USER" crontab -l 2>/dev/null > "$CRON_TMP" || true
 
 grep -q trial_eternal_fire "$CRON_TMP" || cat << EOF >> "$CRON_TMP"
@@ -129,12 +139,16 @@ rm -f "$CRON_TMP"
 # -------------------------------------------------
 # 7. Start initial processes
 # -------------------------------------------------
+echo "🔥 Awakening the flames..."
+
 sudo -u "$REAL_USER" nohup "$INFERNO_DIR/inferno.sh" >/dev/null 2>&1 &
 sudo -u "$REAL_USER" nohup "$PYROMANCER_DIR/pyromancer.sh" >/dev/null 2>&1 &
 
 # -------------------------------------------------
-# 8. Treasure (encrypted flag)
+# 8. Create the treasure
 # -------------------------------------------------
+echo "🜂 Forging the treasure..."
+
 PLAINTEXT_FLAG="THE_FIRE_YIELDS_ONLY_TO_THOSE_WHO_ENDURE"
 TMP_FLAG="/tmp/eternal_fire_flag.txt"
 
@@ -181,7 +195,7 @@ chown "$REAL_USER:$REAL_USER" "$HINT_DIR/charred_manuscript.tgz"
 chmod 600 "$HINT_DIR/charred_manuscript.tgz"
 
 # -------------------------------------------------
-# 9. Disarm script
+# 9. Disarm script (gatekeeper only)
 # -------------------------------------------------
 cat << 'EOF' > "$TREASURE_DIR/disarm_treasure.sh"
 #!/bin/bash
@@ -196,7 +210,103 @@ chmod +x "$TREASURE_DIR/disarm_treasure.sh"
 chown "$REAL_USER:$REAL_USER" "$TREASURE_DIR/disarm_treasure.sh"
 
 # -------------------------------------------------
-# 10. Final blessing
+# 10. Hidden Manuscript (Passphrase Hint)
+# -------------------------------------------------
+MANUSCRIPT="$HINT_DIR/.strange_manuscript.txt"
+
+cat << 'EOF' > "$MANUSCRIPT"
+You uncover a thin, brittle page sealed away from sight:
+
+Glowing embers flicker in the night
+Look closely at the warden's might
+Observe how each flame dances and sways
+Remember the paths where fire delays
+Yield only to those who read the signs
+
+Within the text and its capital letters
+The final line whispers the word:
+GLORY
+EOF
+
+chown "$REAL_USER:$REAL_USER" "$MANUSCRIPT"
+chmod 600 "$MANUSCRIPT"
+
+# Encrypt manuscript (optional)
+gpg --batch --yes --passphrase "FLAME" -c "$MANUSCRIPT"
+mv "$MANUSCRIPT.gpg" "$HINT_DIR/.strange_manuscript.gpg"
+rm -f "$MANUSCRIPT"
+chown "$REAL_USER:$REAL_USER" "$HINT_DIR/.strange_manuscript.gpg"
+chmod 600 "$HINT_DIR/.strange_manuscript.gpg"
+
+# -------------------------------------------------
+# 11. Verification script with breadcrumbs
+# -------------------------------------------------
+cat << 'EOF' > "$TRIAL_DIR/check_trial.sh"
+#!/bin/bash
+
+echo "🔎 Verifying the Trial of Eternal Fire..."
+echo
+
+FAIL=0
+
+# --- Firewarden check ---
+LS_PATH="$(command -v ls)"
+if [[ "$LS_PATH" != "/usr/bin/ls" && "$LS_PATH" != "/bin/ls" ]]; then
+  echo "❌ Your vision still burns."
+  echo "   Hint: Ask yourself where ls is truly coming from."
+  FAIL=1
+fi
+
+if declare -f ls >/dev/null 2>&1; then
+  echo "❌ The Firewarden still whispers through your shell."
+  echo "   Hint: Some commands live as memories, not files."
+  FAIL=1
+fi
+
+# --- Inferno ---
+if pgrep -f inferno.sh >/dev/null; then
+  echo "❌ The Inferno still rages."
+  echo "   Hint: Killing fire without silencing its summoner never lasts."
+  FAIL=1
+fi
+
+# --- Pyromancer ---
+if pgrep -f pyromancer.sh >/dev/null; then
+  echo "❌ The Pyromancer still walks the halls."
+  echo "   Hint: Follow what brings the fire back."
+  FAIL=1
+fi
+
+# --- Wraith cron ---
+if crontab -l 2>/dev/null | grep -q trial_eternal_fire; then
+  echo "❌ Wraiths still linger in the schedule of time."
+  echo "   Hint: Time obeys rules written elsewhere."
+  FAIL=1
+fi
+
+# --- Final verdict ---
+if [[ "$FAIL" -eq 1 ]]; then
+  echo
+  echo "🔥 FALSE VICTORY"
+  echo "The flames retreat... but are not extinguished."
+  exit 1
+fi
+
+echo
+echo "🜂 THE FLAME IS CONQUERED"
+echo "✔ Environment purified"
+echo "✔ Processes silenced"
+echo "✔ Time itself restored"
+echo
+echo "🏆 TRIAL OF ETERNAL FIRE COMPLETE"
+exit 0
+EOF
+
+chmod +x "$TRIAL_DIR/check_trial.sh"
+chown "$REAL_USER:$REAL_USER" "$TRIAL_DIR/check_trial.sh"
+
+# -------------------------------------------------
+# 12. Final blessing
 # -------------------------------------------------
 cat << EOF
 
