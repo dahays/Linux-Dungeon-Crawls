@@ -22,16 +22,16 @@ Open a terminal.
 
 Download the setup script:
 ```bash
-wget -O Trial-Of-Eternal-Fire.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/Trial-Of-Eternal-Fire.sh
+wget -O setup_trial.sh https://raw.githubusercontent.com/dahays/Linux-Dungeon-Crawls/main/setup_trial.sh
 ```
 Make it executable.
 ```bash
-chmod +x Trial-Of-Eternal-Fire.sh
+chmod +x setup_trial.sh
 ```
 
 Run the installer script.
 ```bash
-sudo ./Trial-Of-Eternal-Fire.sh
+sudo ./setup_trial.sh
 ```
 `🔴`Force a new instance of the shell.`🔴`
 ```bash
