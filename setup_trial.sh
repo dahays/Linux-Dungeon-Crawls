@@ -195,9 +195,8 @@ Observe how each flame dances and sways
 Remember the paths where fire delays
 Yield only to those who read the signs
 
-Within the text and its capital letters
-The final line whispers the word:
-GLORY
+Your prize awaits, but only if you
+follow the path of fortune and Glory.
 EOF
 
 chown "$REAL_USER:$REAL_USER" "$MANUSCRIPT"
@@ -212,7 +211,74 @@ chown "$REAL_USER:$REAL_USER" "$HINT_DIR/charred_manuscript.tgz"
 chmod 600 "$HINT_DIR/charred_manuscript.tgz"
 
 # -------------------------------------------------
-# 11. Final blessing
+# 11. Verification script with breadcrumbs
+# -------------------------------------------------
+cat << 'EOF' > "$TRIAL_DIR/check_trial.sh"
+#!/bin/bash
+
+echo "🔎 Verifying the Trial of Eternal Fire..."
+echo
+
+FAIL=0
+
+# --- Firewarden check ---
+LS_PATH="$(command -v ls)"
+if [[ "$LS_PATH" != "/usr/bin/ls" && "$LS_PATH" != "/bin/ls" ]]; then
+  echo "❌ Your vision still burns."
+  echo "   Hint: Ask yourself where ls is truly coming from."
+  FAIL=1
+fi
+
+if declare -f ls >/dev/null 2>&1; then
+  echo "❌ The Firewarden still whispers through your shell."
+  echo "   Hint: Some commands live as memories, not files."
+  FAIL=1
+fi
+
+# --- Inferno ---
+if pgrep -f inferno.sh >/dev/null; then
+  echo "❌ The Inferno still rages."
+  echo "   Hint: Killing fire without silencing its summoner never lasts."
+  FAIL=1
+fi
+
+# --- Pyromancer ---
+if pgrep -f pyromancer.sh >/dev/null; then
+  echo "❌ The Pyromancer still walks the halls."
+  echo "   Hint: Follow what brings the fire back."
+  FAIL=1
+fi
+
+# --- Wraith cron ---
+if crontab -l 2>/dev/null | grep -q inferno_cron.sh; then
+  echo "❌ Wraiths still linger in the schedule of time."
+  echo "   Hint: Time obeys rules written elsewhere."
+  FAIL=1
+fi
+
+# --- Final verdict ---
+if [[ "$FAIL" -eq 1 ]]; then
+  echo
+  echo "🔥 FALSE VICTORY"
+  echo "The flames retreat... but are not extinguished."
+  exit 1
+fi
+
+echo
+echo "🜂 THE FLAME IS CONQUERED"
+echo "✔ Environment purified"
+echo "✔ Processes silenced"
+echo "✔ Time itself restored"
+echo
+echo "🏆 TRIAL OF ETERNAL FIRE COMPLETE"
+exit 0
+EOF
+
+chmod +x "$TRIAL_DIR/check_trial.sh"
+chown "$REAL_USER:$REAL_USER" "$TRIAL_DIR/check_trial.sh"
+
+# -------------------------------------------------
+# 12. Final blessing
 # -------------------------------------------------
 cat << EOF
 
