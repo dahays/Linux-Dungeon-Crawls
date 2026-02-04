@@ -2,7 +2,7 @@
 set -e
 set -o pipefail
 
-echo "🔥 Trial of Eternal Fire - Firewarden working REV8"
+echo "🔥 Trial of Eternal Fire - Final-REV8"
 
 # -------------------------------------------------
 # 0. Require sudo, capture invoking user
