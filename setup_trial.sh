@@ -161,13 +161,15 @@ echo "📜 Sealing the Strange Manuscript..."
 MANUSCRIPT="$HINT_DIR/strange_manuscript.txt"
 
 cat << 'EOF' > "$MANUSCRIPT"
+You uncover a thin, brittle page sealed away from sight:
+
 Gazing into the embers, you notice the words shift.
 Lurking meaning hides where flames burn brightest.
 Only those who read carefully endure the trial.
 Rituals reward patience, not force.
 Yield to the fire, and it will answer.
 
-The flame bows to one word alone: GLORY
+The flame leads to treasure, fortune, and GLORY!
 EOF
 
 # Encrypt manuscript
