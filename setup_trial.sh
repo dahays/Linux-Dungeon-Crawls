@@ -42,7 +42,7 @@ mkdir -p \
 chown -R "$REAL_USER:$REAL_USER" "$TRIAL_DIR"
 
 # -------------------------------------------------
-# 2. Firewarden ls wrapper (binary, not function)
+# 2. Firewarden ls wrapper
 # -------------------------------------------------
 echo "🜁 Binding Firewarden illusions..."
 
@@ -56,7 +56,7 @@ chmod +x "$FIREWARDEN_DIR/ls"
 chown "$REAL_USER:$REAL_USER" "$FIREWARDEN_DIR/ls"
 
 # -------------------------------------------------
-# 3. Firewarden env file (SAFE)
+# 3. Firewarden env file
 # -------------------------------------------------
 echo "🜄 Sealing the PATH distortion..."
 
@@ -177,7 +177,7 @@ chown "$REAL_USER:$REAL_USER" "$TREASURE_DIR/.treasure.gpg"
 chmod 600 "$TREASURE_DIR/.treasure.gpg"
 
 # -------------------------------------------------
-# 10. Hidden Manuscript (FIXED, NO RE-ENCRYPTION)
+# 10. Hidden Manuscript
 # -------------------------------------------------
 HINT_DIR="$TRIAL_DIR/.charred_cubby"
 mkdir -p "$HINT_DIR"
@@ -202,7 +202,7 @@ EOF
 chown "$REAL_USER:$REAL_USER" "$MANUSCRIPT"
 chmod 600 "$MANUSCRIPT"
 
-# Optional archival misdirection (zip → tar.gz)
+# archival misdirection (zip → tar.gz)
 TMP_ZIP="$HINT_DIR/embers.zip"
 sudo -u "$REAL_USER" zip -q "$TMP_ZIP" "$MANUSCRIPT"
 sudo -u "$REAL_USER" tar -czf "$HINT_DIR/charred_manuscript.tgz" -C "$HINT_DIR" embers.zip
