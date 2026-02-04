@@ -44,21 +44,27 @@ echo "🜁 Binding Firewarden illusions..."
 cat << 'EOF' > "$FIREWARDEN_DIR/ls"
 #!/bin/bash
 echo "🔥 The Eternal Flame watches your steps..."
-command ls "$@"
+/bin/ls "$@"
 EOF
 
 chmod +x "$FIREWARDEN_DIR/ls"
+chown "$REAL_USER:$REAL_USER" "$FIREWARDEN_DIR/ls"
 
 # -------------------------------------------------
-# 3. Guaranteed env hijack (Hydra-aligned)
+# 3. Guaranteed env hijack (Hydra-aligned, zsh-safe)
 # -------------------------------------------------
 echo "🜄 Sealing the PATH distortion..."
 
 FIRE_RC="$TRIAL_DIR/.firewarden_env"
 
 cat << 'EOF' > "$FIRE_RC"
-# 🔥 Firewarden Env Hijack
+# 🔥 Firewarden Env Hijack (zsh-safe)
+
 if [[ "$PWD" == "$HOME/trial_eternal_fire"* ]]; then
+  # Critical: remove alias before defining function (zsh rule)
+  unalias ls 2>/dev/null
+  unset -f ls 2>/dev/null
+
   export PATH="$HOME/trial_eternal_fire/firewarden:$PATH"
 
   ls() {
@@ -71,6 +77,9 @@ chown "$REAL_USER:$REAL_USER" "$FIRE_RC"
 chmod 644 "$FIRE_RC"
 
 ZSHRC="$REAL_HOME/.zshrc"
+touch "$ZSHRC"
+chown "$REAL_USER:$REAL_USER" "$ZSHRC"
+
 if ! grep -q ".firewarden_env" "$ZSHRC"; then
   echo "" >> "$ZSHRC"
   echo "# 🔥 Trial of Eternal Fire" >> "$ZSHRC"
@@ -91,6 +100,7 @@ done
 EOF
 
 chmod +x "$INFERNO_DIR/inferno.sh"
+chown "$REAL_USER:$REAL_USER" "$INFERNO_DIR/inferno.sh"
 
 # -------------------------------------------------
 # 5. Pyromancer (respawner)
@@ -103,7 +113,7 @@ cat << 'EOF' > "$PYROMANCER_DIR/pyromancer.sh"
 INFERNO="$HOME/trial_eternal_fire/inferno/inferno.sh"
 
 while true; do
-  if ! pgrep -f "$INFERNO" > /dev/null; then
+  if ! pgrep -f "$INFERNO" >/dev/null; then
     nohup "$INFERNO" >/dev/null 2>&1 &
   fi
   sleep 10
@@ -111,19 +121,20 @@ done
 EOF
 
 chmod +x "$PYROMANCER_DIR/pyromancer.sh"
+chown "$REAL_USER:$REAL_USER" "$PYROMANCER_DIR/pyromancer.sh"
 
 # -------------------------------------------------
-# 6. Wraith (cron persistence)
+# 6. Wraiths (cron persistence)
 # -------------------------------------------------
 echo "👻 Binding the Wraiths..."
 
-CRON_FILE="/tmp/fire_trial_cron"
+CRON_FILE="/tmp/fire_trial_cron.$$"
 
 sudo -u "$REAL_USER" crontab -l 2>/dev/null > "$CRON_FILE" || true
 
-grep -q "trial_eternal_fire" "$CRON_FILE" || cat << EOF >> "$CRON_FILE"
-*/1 * * * * $PYROMANCER_DIR/pyromancer.sh >/dev/null 2>&1
-EOF
+if ! grep -q "pyromancer.sh" "$CRON_FILE"; then
+  echo "* * * * * $PYROMANCER_DIR/pyromancer.sh >/dev/null 2>&1" >> "$CRON_FILE"
+fi
 
 sudo -u "$REAL_USER" crontab "$CRON_FILE"
 rm -f "$CRON_FILE"
@@ -179,10 +190,11 @@ chown "$REAL_USER:$REAL_USER" "$TREASURE_DIR/disarm_treasure.sh"
 echo ""
 echo "🔥 The Trial of Eternal Fire is ready."
 echo ""
-echo "IMPORTANT:"
+echo "IMPORTANT (one-time):"
 echo "  exec zsh"
 echo ""
 echo "Then begin:"
 echo "  cd ~/trial_eternal_fire"
+echo "  ls"
 echo ""
 echo "🜂 May the worthy prevail."
