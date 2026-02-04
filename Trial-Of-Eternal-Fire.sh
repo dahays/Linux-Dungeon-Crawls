@@ -55,6 +55,8 @@ chown "$REAL_USER:$REAL_USER" "$FIREWARDEN_DIR/ls"
 # -------------------------------------------------
 echo "🜄 Sealing the PATH distortion..."
 
+setopt noaliases
+
 FIRE_RC="$TRIAL_DIR/.firewarden_env"
 
 cat << 'EOF' > "$FIRE_RC"
