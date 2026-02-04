@@ -2,6 +2,8 @@
 set -e
 set -o pipefail
 
+echo "🔥 Trial of Eternal Fire - build 2026-02-04-REV-3"
+
 echo "🔥 Igniting the Trial of Eternal Fire..."
 
 # -------------------------------------------------
