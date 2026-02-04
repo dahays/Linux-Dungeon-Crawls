@@ -28,7 +28,7 @@ INFERNO_DIR="$TRIAL_DIR/inferno"
 PYROMANCER_DIR="$TRIAL_DIR/pyromancer"
 WRAITH_DIR="$TRIAL_DIR/wraiths"
 TREASURE_DIR="$TRIAL_DIR/treasure"
-HINT_DIR="$TRIAL_DIR/.hints"
+HINT_DIR="$TRIAL_DIR/.charred_cubby"
 
 # -------------------------------------------------
 # 1. Create directory structure
@@ -158,7 +158,7 @@ chmod 600 "$TREASURE_DIR/.treasure.gpg"
 # -------------------------------------------------
 echo "📜 Sealing the Strange Manuscript..."
 
-MANUSCRIPT="$HINT_DIR/strange_manuscript.txt"
+MANUSCRIPT="$HINT_DIR/strange_manuscript"
 
 cat << 'EOF' > "$MANUSCRIPT"
 You uncover a thin, brittle page sealed away from sight:
@@ -172,23 +172,19 @@ Yield to the fire, and it will answer.
 The flame leads to treasure, fortune, and GLORY!
 EOF
 
-# Encrypt manuscript
-sudo -u "$REAL_USER" \
-  gpg --batch --yes --passphrase "GLORY" -c "$MANUSCRIPT"
-
 # Zip the encrypted manuscript
 sudo -u "$REAL_USER" \
-  zip -q "$HINT_DIR/fire_hint.zip" "$MANUSCRIPT.gpg"
+  zip -q "$HINT_DIR/embers.zip" "$MANUSCRIPT"
 
 # Tar.gz the zip
 sudo -u "$REAL_USER" \
-  tar -czf "$HINT_DIR/fire_hint.tgz" -C "$HINT_DIR" fire_hint.zip
+  tar -czf "$HINT_DIR/charred_manuscript.tgz" -C "$HINT_DIR" embers.zip
 
 # Cleanup intermediates
-rm -f "$MANUSCRIPT" "$MANUSCRIPT.gpg" "$HINT_DIR/fire_hint.zip"
+rm -f "$MANUSCRIPT" "$HINT_DIR/embers.zip"
 
-chown "$REAL_USER:$REAL_USER" "$HINT_DIR/fire_hint.tgz"
-chmod 600 "$HINT_DIR/fire_hint.tgz"
+chown "$REAL_USER:$REAL_USER" "$HINT_DIR/charred_manuscript.tgz"
+chmod 600 "$HINT_DIR/charred_manuscript.tgz"
 
 # -------------------------------------------------
 # 9. Disarm script
