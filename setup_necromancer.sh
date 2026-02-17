@@ -103,11 +103,13 @@ chmod 600 "$ENCRYPTED_HINT"
 MANUSCRIPT="$DUNGEON_DIR/.strange_manuscript"
 
 cat << 'EOF' > "$MANUSCRIPT"
-there once was a watcher so Rare
-who lingered unseen in the aIr
-to seek out the True path
-avoid what is Unclean
-perform Acts that endure Long
+R estless watchers linger in the air,
+I nvisible currents coil with care.
+T ruth is seldom loud or bright,
+U nder ash it waits from sight.
+A ttend the source, not just the sign,
+L et silence teach the sacred rite.
+
 EOF
 
 chown "$STUDENT_USER:$STUDENT_USER" "$MANUSCRIPT"
