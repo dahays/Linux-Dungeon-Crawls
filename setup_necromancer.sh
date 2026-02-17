@@ -77,13 +77,21 @@ mkdir -p "$GNUPG_HOME"
 chmod 700 "$GNUPG_HOME"
 
 cat << 'EOF' > "$PLAINTEXT_HINT"
-The ghost is not the source.
-Watch what breathes life into it.
+The ghost is but a risen corpse.
+That does not rise by its own will.
 
-Processes are born of parents.
-Silence comes only when the chanter stops.
+Somewhere, a necromancer chants,
+breathing foul life into still flesh.
 
-Seek the tree, not the leaf.
+Slay not the shambling dead alone,
+for it will rise again at its master's call.
+
+Find the summoner behind the veil.
+Sever the voice that binds the spirit.
+
+Strike the hand that weaves the ritual,
+and the dead shall trouble you no more.
+
 EOF
 
 GNUPGHOME="$GNUPG_HOME" \
