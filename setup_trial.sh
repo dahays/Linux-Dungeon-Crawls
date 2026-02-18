@@ -2,7 +2,7 @@
 set -e
 set -o pipefail
 
-echo "🔥 Trial of Eternal Fire - Final-REV8"
+echo "🔥 Trial of Eternal Fire REV9.FINAL"
 
 # -------------------------------------------------
 # 0. Require sudo, capture invoking user
@@ -250,7 +250,7 @@ if pgrep -f pyromancer.sh >/dev/null; then
 fi
 
 # --- Wraith cron ---
-if crontab -l 2>/dev/null | grep -q inferno_cron.sh; then
+if crontab -l 2>/dev/null | grep -q pyromancer.sh; then
   echo "❌ Wraiths still linger in the schedule of time."
   echo "   Hint: Time obeys rules written elsewhere."
   FAIL=1

@@ -8,7 +8,7 @@
 set -e
 set -o pipefail
 
-echo "🐉 Awakening The Dragon's Cron..."
+echo "🐉 Awakening The Dragon's Cron REV9.FINAL"
 
 # -------------------------------
 # 0. Require sudo, capture student

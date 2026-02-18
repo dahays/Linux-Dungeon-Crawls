@@ -7,7 +7,7 @@
 set -e
 set -o pipefail
 
-echo "🕯️ Initializing Ghost Watch II: The Necromancer REV9.1"
+echo "🕯️ Initializing Ghost Watch II: The Necromancer REV9.FINAL"
 
 # -------------------------------
 # 0. Require sudo, capture student

@@ -7,7 +7,7 @@
 set -e
 set -o pipefail
 
-echo "👻 Initializing Ghost Watch dungeon..."
+echo "👻 Initializing The Ghost Watch REV9.FINAL"
 
 # -------------------------------
 # 0. Require sudo, capture student

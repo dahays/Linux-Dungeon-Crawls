@@ -2,7 +2,7 @@
 set -e
 set -o pipefail
 
-echo "🐍 Initializing Hydra dungeon (one-time setup)..."
+echo "🐍 Initializing Hydra Head Hunt REV9.FINAL"
 
 # -------------------------------
 # 0. Require sudo, capture real user
