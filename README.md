@@ -71,6 +71,7 @@ Master the Trial of Eternal Fire by defeating your enemies in the correct order.
 
 | Command | Description |
 |---------|-------------|
+| nano | Command line text editor |
 | ls | List files and directories |
 | which | Locate a command in your PATH |
 | type | Show what a command actually is |
