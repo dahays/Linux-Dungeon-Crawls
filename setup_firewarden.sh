@@ -92,6 +92,8 @@ chmod 644 "$SERVICE_FILE"
 # 5. Enable and start the service
 # -------------------------------------------------
 echo "🔥 Binding the chant into the system..."
+sudo -u "$STUDENT_USER" touch "$STUDENT_HOME/.hushlogin"
+
 
 runuser -l "$STUDENT_USER" -c "XDG_RUNTIME_DIR=/run/user/$USER_UID systemctl --user daemon-reload"
 runuser -l "$STUDENT_USER" -c "XDG_RUNTIME_DIR=/run/user/$USER_UID systemctl --user enable firewarden-chant.service"
