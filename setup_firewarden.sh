@@ -110,7 +110,7 @@ MANUSCRIPT="$HINT_DIR/strange_manuscript.txt"
 cat << 'EOF' > "$MANUSCRIPT"
 You uncover a thin, brittle page sealed away from sight:
 
-Fire whispers where silence sleeps
+Find the journal control where silence sleeps
 Lingering watch, the parent that breathes life
 Analyze the logs, trace the chant
 Monitor the systemd circle to claim insight
