@@ -3,12 +3,13 @@
 # Ghost Watch III: The Firewarden’s Chant
 # Level 6 Linux Dungeon Crawl
 # systemd user persistence + layered archives
+# REV9.BETA
 # ======================================
 
 set -e
 set -o pipefail
 
-echo "🔥 Summoning the Firewarden's Chant REV3.0"
+echo "🔥 Summoning the Firewarden's Chant REV9.BETA"
 
 # -------------------------------------------------
 # 0. Require sudo, capture invoking user
@@ -86,7 +87,7 @@ sudo -u "$STUDENT_USER" systemctl --user start firewarden-chant.service
 # -------------------------------------------------
 # 5. Multi-Layer Hint (no extensions)
 # -------------------------------------------------
-HINT_DIR="$DUNGEON_DIR/.hints"
+HINT_DIR="$DUNGEON_DIR/.locked_chest"
 mkdir -p "$HINT_DIR"
 chown "$STUDENT_USER:$STUDENT_USER" "$HINT_DIR"
 chmod 700 "$HINT_DIR"
@@ -135,9 +136,9 @@ LAYER2="$HINT_DIR/layer_two"
 sudo -u "$STUDENT_USER" tar -czf "$LAYER2" -C "$HINT_DIR" layer_three
 rm -f "$LAYER3"
 
-# Layer 1 (zip but no extension)
+# Layer 1 (zip but no extension, junk paths)
 FINAL_ARCHIVE="$HINT_DIR/forgotten_scroll"
-sudo -u "$STUDENT_USER" zip -q "$FINAL_ARCHIVE" "$LAYER2"
+sudo -u "$STUDENT_USER" zip -j -q "$FINAL_ARCHIVE" "$LAYER2"
 rm -f "$LAYER2"
 
 chown "$STUDENT_USER:$STUDENT_USER" "$FINAL_ARCHIVE"
@@ -179,13 +180,12 @@ if pgrep -f firewarden.sh >/dev/null; then
 fi
 
 # Manuscript restored?
-MANUSCRIPT="$HOME/firewarden_chant/.hints/strange_manuscript"
+MANUSCRIPT="$HOME/firewarden_chant/.locked_chest/strange_manuscript"
 
 if [[ ! -f "$MANUSCRIPT" ]]; then
   echo "❌ The Strange Manuscript has not been restored."
   FAIL=1
 else
-  # Validate expected content
   if ! grep -q "Seek the summoner" "$MANUSCRIPT"; then
     echo "❌ Manuscript content invalid or improperly decoded."
     FAIL=1
