@@ -9,7 +9,7 @@
 set -e
 set -o pipefail
 
-echo "🔥 Summoning the Firewarden's Chant REV9.1.BETA"
+echo "🔥 Summoning the Firewarden's Chant REV9.2.BETA"
 
 # -------------------------------------------------
 # 0. Require sudo, capture invoking user
