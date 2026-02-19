@@ -3,7 +3,7 @@
 # Ghost Watch III: The Firewarden’s Chant
 # Level 6 Linux Dungeon Crawl
 # systemd user persistence + layered archives
-# REV9.1.BETA
+# REV9.3.BETA
 # ======================================
 
 set -e
@@ -81,6 +81,11 @@ EOF
 chown "$STUDENT_USER:$STUDENT_USER" "$SERVICE_FILE"
 chmod 644 "$SERVICE_FILE"
 
+# DBUS-safe systemctl commands using login shell
+sudo -u "$STUDENT_USER" --login systemctl --user daemon-reload
+sudo -u "$STUDENT_USER" --login systemctl --user enable firewarden-chant.service
+sudo -u "$STUDENT_USER" --login systemctl --user start firewarden-chant.service
+
 # -------------------------------------------------
 # 5. Multi-Layer Hint (no extensions)
 # -------------------------------------------------
@@ -133,7 +138,7 @@ LAYER2="$HINT_DIR/layer_two"
 sudo -u "$STUDENT_USER" tar -czf "$LAYER2" -C "$HINT_DIR" layer_three
 rm -f "$LAYER3"
 
-# Layer 1 (zip but no extension)
+# Layer 1 (zip but no extension) — fixed
 FINAL_ARCHIVE="$HINT_DIR/forgotten_scroll"
 cd "$HINT_DIR"
 sudo -u "$STUDENT_USER" zip -q forgotten_scroll layer_two
@@ -141,7 +146,6 @@ rm -f layer_two
 
 chown "$STUDENT_USER:$STUDENT_USER" "$FINAL_ARCHIVE"
 chmod 600 "$FINAL_ARCHIVE"
-
 
 # -------------------------------------------------
 # 6. Verification Script
