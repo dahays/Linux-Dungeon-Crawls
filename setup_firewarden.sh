@@ -3,13 +3,13 @@
 # Ghost Watch III: The Firewarden’s Chant
 # Level 6 Linux Dungeon Crawl
 # systemd user persistence + layered archives
-# REV9.3.BETA
+# REV9.4.BETA
 # ======================================
 
 set -e
 set -o pipefail
 
-echo "🔥 Summoning the Firewarden's Chant REV9.4.BETA"
+echo "🔥 Summoning the Firewarden's Chant REV9.4.1.BETA"
 
 # -------------------------------------------------
 # 0. Require sudo, capture invoking user
@@ -31,7 +31,7 @@ STUDENT_HOME="$(getent passwd "$STUDENT_USER" | cut -d: -f6)"
 echo "🎯 Bound to adventurer: $STUDENT_USER"
 
 # -------------------------------------------------
-# 1. Enable lingering (root is fine)
+# 1. Enable lingering
 # -------------------------------------------------
 loginctl enable-linger "$STUDENT_USER"
 
@@ -58,7 +58,7 @@ chmod +x "$DUNGEON_DIR/firewarden.sh"
 chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/firewarden.sh"
 
 # -------------------------------------------------
-# 4. systemd user service
+# 4. systemd user service (DBUS-safe)
 # -------------------------------------------------
 USER_SYSTEMD_DIR="$STUDENT_HOME/.config/systemd/user"
 mkdir -p "$USER_SYSTEMD_DIR"
@@ -81,10 +81,10 @@ EOF
 chown "$STUDENT_USER:$STUDENT_USER" "$SERVICE_FILE"
 chmod 644 "$SERVICE_FILE"
 
-# DBUS-safe systemctl commands using login shell
-sudo -u "$STUDENT_USER" --login systemctl --user daemon-reload
-sudo -u "$STUDENT_USER" --login systemctl --user enable firewarden-chant.service
-sudo -u "$STUDENT_USER" --login systemctl --user start firewarden-chant.service
+# DBUS-safe systemctl commands using proper environment
+sudo -u "$STUDENT_USER" env XDG_RUNTIME_DIR=/run/user/$STUDENT_UID systemctl --user daemon-reload
+sudo -u "$STUDENT_USER" env XDG_RUNTIME_DIR=/run/user/$STUDENT_UID systemctl --user enable firewarden-chant.service
+sudo -u "$STUDENT_USER" env XDG_RUNTIME_DIR=/run/user/$STUDENT_UID systemctl --user start firewarden-chant.service
 
 # -------------------------------------------------
 # 5. Multi-Layer Hint (no extensions)
@@ -138,12 +138,13 @@ LAYER2="$HINT_DIR/layer_two"
 sudo -u "$STUDENT_USER" tar -czf "$LAYER2" -C "$HINT_DIR" layer_three
 rm -f "$LAYER3"
 
-# Layer 1 (zip but no extension) — fixed
-FINAL_ARCHIVE="$HINT_DIR/forgotten_scroll"
+# Layer 1 (zip but no extension)
+FINAL_ARCHIVE="$HINT_DIR/forgotten_scroll.zip"
 cd "$HINT_DIR"
 sudo -u "$STUDENT_USER" zip -q forgotten_scroll layer_two
 rm -f layer_two
 
+# ✅ Correct chown/chmod for actual file
 chown "$STUDENT_USER:$STUDENT_USER" "$FINAL_ARCHIVE"
 chmod 600 "$FINAL_ARCHIVE"
 
