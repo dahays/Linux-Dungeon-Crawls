@@ -25,12 +25,13 @@ if [[ -z "$SUDO_USER" || "$SUDO_USER" == "root" ]]; then
 fi
 
 STUDENT_USER="$SUDO_USER"
+STUDENT_UID=$(id -u "$STUDENT_USER")
 STUDENT_HOME="$(getent passwd "$STUDENT_USER" | cut -d: -f6)"
 
 echo "🎯 Bound to adventurer: $STUDENT_USER"
 
 # -------------------------------------------------
-# 1. Enable lingering
+# 1. Enable lingering (root is fine)
 # -------------------------------------------------
 loginctl enable-linger "$STUDENT_USER"
 
@@ -57,7 +58,7 @@ chmod +x "$DUNGEON_DIR/firewarden.sh"
 chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/firewarden.sh"
 
 # -------------------------------------------------
-# 4. systemd user service
+# 4. systemd user service (DBUS-safe)
 # -------------------------------------------------
 USER_SYSTEMD_DIR="$STUDENT_HOME/.config/systemd/user"
 mkdir -p "$USER_SYSTEMD_DIR"
@@ -80,9 +81,12 @@ EOF
 chown "$STUDENT_USER:$STUDENT_USER" "$SERVICE_FILE"
 chmod 644 "$SERVICE_FILE"
 
-sudo -u "$STUDENT_USER" systemctl --user daemon-reload
-sudo -u "$STUDENT_USER" systemctl --user enable firewarden-chant.service
-sudo -u "$STUDENT_USER" systemctl --user start firewarden-chant.service
+# Helper for DBUS-safe systemctl
+SCMD="sudo -H -u $STUDENT_USER env XDG_RUNTIME_DIR=/run/user/$STUDENT_UID systemctl --user"
+
+$SCMD daemon-reload
+$SCMD enable firewarden-chant.service
+$SCMD start firewarden-chant.service
 
 # -------------------------------------------------
 # 5. Multi-Layer Hint (no extensions)
@@ -123,22 +127,22 @@ chmod 600 "$PLAINTEXT"
 
 # Convert to hex
 HEX_FILE="$HINT_DIR/strange_hex"
-sudo -u "$STUDENT_USER" xxd -p "$PLAINTEXT" > "$HEX_FILE"
+sudo -H -u "$STUDENT_USER" xxd -p "$PLAINTEXT" > "$HEX_FILE"
 rm -f "$PLAINTEXT"
 
 # Layer 3 (tar)
 LAYER3="$HINT_DIR/layer_three"
-sudo -u "$STUDENT_USER" tar -cf "$LAYER3" -C "$HINT_DIR" strange_hex
+sudo -H -u "$STUDENT_USER" tar -cf "$LAYER3" -C "$HINT_DIR" strange_hex
 rm -f "$HEX_FILE"
 
 # Layer 2 (tar.gz but no extension)
 LAYER2="$HINT_DIR/layer_two"
-sudo -u "$STUDENT_USER" tar -czf "$LAYER2" -C "$HINT_DIR" layer_three
+sudo -H -u "$STUDENT_USER" tar -czf "$LAYER2" -C "$HINT_DIR" layer_three
 rm -f "$LAYER3"
 
-# Layer 1 (zip but no extension, junk paths)
+# Layer 1 (zip but no extension)
 FINAL_ARCHIVE="$HINT_DIR/forgotten_scroll"
-sudo -u "$STUDENT_USER" zip -j -q "$FINAL_ARCHIVE" "$LAYER2"
+sudo -H -u "$STUDENT_USER" zip -q "$FINAL_ARCHIVE" "$LAYER2"
 rm -f "$LAYER2"
 
 chown "$STUDENT_USER:$STUDENT_USER" "$FINAL_ARCHIVE"
@@ -186,6 +190,7 @@ if [[ ! -f "$MANUSCRIPT" ]]; then
   echo "❌ The Strange Manuscript has not been restored."
   FAIL=1
 else
+  # Validate expected content
   if ! grep -q "Seek the summoner" "$MANUSCRIPT"; then
     echo "❌ Manuscript content invalid or improperly decoded."
     FAIL=1
@@ -226,8 +231,6 @@ Dungeon location:
 The chant survives logout.
 The flame answers to a name.
 Scrolls hide beneath scrolls.
-Only by decoding the scroll can you reveal
-the secrets of the strange_manuscript.
 
 To begin:
   cd ~/firewarden_chant
