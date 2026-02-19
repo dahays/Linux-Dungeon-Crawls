@@ -24,7 +24,7 @@ This dungeon emphasizes modern Linux persistence through **systemd user services
 
 ---
 
-# 🔥 Setup Instructions
+# Setup Instructions
 
 Open a terminal.
 
