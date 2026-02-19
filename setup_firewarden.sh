@@ -9,7 +9,7 @@
 set -e
 set -o pipefail
 
-echo "🔥 Summoning the Firewarden's Chant REV9.2.BETA"
+echo "🔥 Summoning the Firewarden's Chant REV9.3.BETA"
 
 # -------------------------------------------------
 # 0. Require sudo, capture invoking user
@@ -135,11 +135,13 @@ rm -f "$LAYER3"
 
 # Layer 1 (zip but no extension)
 FINAL_ARCHIVE="$HINT_DIR/forgotten_scroll"
-sudo -u "$STUDENT_USER" zip -q "$FINAL_ARCHIVE" "$LAYER2"
-rm -f "$LAYER2"
+cd "$HINT_DIR"
+sudo -u "$STUDENT_USER" zip -q forgotten_scroll layer_two
+rm -f layer_two
 
 chown "$STUDENT_USER:$STUDENT_USER" "$FINAL_ARCHIVE"
 chmod 600 "$FINAL_ARCHIVE"
+
 
 # -------------------------------------------------
 # 6. Verification Script
