@@ -226,6 +226,8 @@ Dungeon location:
 The chant survives logout.
 The flame answers to a name.
 Scrolls hide beneath scrolls.
+Only by decoding the scroll can you reveal
+the secrets of the strange_manuscript.
 
 To begin:
   cd ~/firewarden_chant
