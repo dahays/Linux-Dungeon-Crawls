@@ -9,7 +9,7 @@
 set -e
 set -o pipefail
 
-echo "🔥 Summoning the Firewarden's Chant REV9.BETA"
+echo "🔥 Summoning the Firewarden's Chant REV9.1.BETA"
 
 # -------------------------------------------------
 # 0. Require sudo, capture invoking user
@@ -58,7 +58,7 @@ chmod +x "$DUNGEON_DIR/firewarden.sh"
 chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/firewarden.sh"
 
 # -------------------------------------------------
-# 4. systemd user service (DBUS-safe)
+# 4. systemd user service
 # -------------------------------------------------
 USER_SYSTEMD_DIR="$STUDENT_HOME/.config/systemd/user"
 mkdir -p "$USER_SYSTEMD_DIR"
@@ -80,11 +80,6 @@ EOF
 
 chown "$STUDENT_USER:$STUDENT_USER" "$SERVICE_FILE"
 chmod 644 "$SERVICE_FILE"
-
-# DBUS-safe systemctl commands using login shell for proper environment
-sudo -u "$STUDENT_USER" --login systemctl --user daemon-reload
-sudo -u "$STUDENT_USER" --login systemctl --user enable firewarden-chant.service
-sudo -u "$STUDENT_USER" --login systemctl --user start firewarden-chant.service
 
 # -------------------------------------------------
 # 5. Multi-Layer Hint (no extensions)
@@ -125,22 +120,22 @@ chmod 600 "$PLAINTEXT"
 
 # Convert to hex
 HEX_FILE="$HINT_DIR/strange_hex"
-sudo -u "$STUDENT_USER" --login xxd -p "$PLAINTEXT" > "$HEX_FILE"
+sudo -u "$STUDENT_USER" xxd -p "$PLAINTEXT" > "$HEX_FILE"
 rm -f "$PLAINTEXT"
 
 # Layer 3 (tar)
 LAYER3="$HINT_DIR/layer_three"
-sudo -u "$STUDENT_USER" --login tar -cf "$LAYER3" -C "$HINT_DIR" strange_hex
+sudo -u "$STUDENT_USER" tar -cf "$LAYER3" -C "$HINT_DIR" strange_hex
 rm -f "$HEX_FILE"
 
 # Layer 2 (tar.gz but no extension)
 LAYER2="$HINT_DIR/layer_two"
-sudo -u "$STUDENT_USER" --login tar -czf "$LAYER2" -C "$HINT_DIR" layer_three
+sudo -u "$STUDENT_USER" tar -czf "$LAYER2" -C "$HINT_DIR" layer_three
 rm -f "$LAYER3"
 
 # Layer 1 (zip but no extension)
 FINAL_ARCHIVE="$HINT_DIR/forgotten_scroll"
-sudo -u "$STUDENT_USER" --login zip -q "$FINAL_ARCHIVE" "$LAYER2"
+sudo -u "$STUDENT_USER" zip -q "$FINAL_ARCHIVE" "$LAYER2"
 rm -f "$LAYER2"
 
 chown "$STUDENT_USER:$STUDENT_USER" "$FINAL_ARCHIVE"
@@ -230,8 +225,10 @@ The chant survives logout.
 The flame answers to a name.
 Scrolls hide beneath scrolls.
 
-To begin:
-  cd ~/firewarden_chant
+To awaken the Firewarden (run after first login):
+  systemctl --user daemon-reload
+  systemctl --user enable firewarden-chant.service
+  systemctl --user start firewarden-chant.service
 
 To verify victory:
   ./check_firewarden.sh
