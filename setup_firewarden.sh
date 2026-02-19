@@ -2,14 +2,14 @@
 # ======================================
 # Ghost Watch III: The Firewarden’s Chant
 # Level 6 Linux Dungeon Crawl
-# systemd user persistence + layered archives
-# REV9.4.BETA
+# systemd system-wide persistence + layered archives
+# REV9.6.BETA
 # ======================================
 
 set -e
 set -o pipefail
 
-echo "🔥 Summoning the Firewarden's Chant REV9.4.1.BETA"
+echo "🔥 Summoning the Firewarden's Chant REV9.6.BETA"
 
 # -------------------------------------------------
 # 0. Require sudo, capture invoking user
@@ -31,7 +31,7 @@ STUDENT_HOME="$(getent passwd "$STUDENT_USER" | cut -d: -f6)"
 echo "🎯 Bound to adventurer: $STUDENT_USER"
 
 # -------------------------------------------------
-# 1. Enable lingering
+# 1. Enable lingering (root is fine)
 # -------------------------------------------------
 loginctl enable-linger "$STUDENT_USER"
 
@@ -58,33 +58,32 @@ chmod +x "$DUNGEON_DIR/firewarden.sh"
 chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/firewarden.sh"
 
 # -------------------------------------------------
-# 4. systemd user service (DBUS-safe)
+# 4. system-wide systemd service (runs as student)
 # -------------------------------------------------
-USER_SYSTEMD_DIR="$STUDENT_HOME/.config/systemd/user"
-mkdir -p "$USER_SYSTEMD_DIR"
-
-SERVICE_FILE="$USER_SYSTEMD_DIR/firewarden-chant.service"
+SERVICE_FILE="/etc/systemd/system/firewarden-chant.service"
 
 cat << EOF > "$SERVICE_FILE"
 [Unit]
 Description=The Firewarden's Endless Chant
+After=network.target
 
 [Service]
+Type=simple
+User=$STUDENT_USER
 ExecStart=$DUNGEON_DIR/firewarden.sh
 Restart=always
 RestartSec=3
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target
 EOF
 
-chown "$STUDENT_USER:$STUDENT_USER" "$SERVICE_FILE"
 chmod 644 "$SERVICE_FILE"
 
-# DBUS-safe systemctl commands using proper environment
-sudo -u "$STUDENT_USER" env XDG_RUNTIME_DIR=/run/user/$STUDENT_UID systemctl --user daemon-reload
-sudo -u "$STUDENT_USER" env XDG_RUNTIME_DIR=/run/user/$STUDENT_UID systemctl --user enable firewarden-chant.service
-sudo -u "$STUDENT_USER" env XDG_RUNTIME_DIR=/run/user/$STUDENT_UID systemctl --user start firewarden-chant.service
+# Reload, enable, and start immediately
+systemctl daemon-reload
+systemctl enable firewarden-chant.service
+systemctl start firewarden-chant.service
 
 # -------------------------------------------------
 # 5. Multi-Layer Hint (no extensions)
@@ -139,17 +138,16 @@ sudo -u "$STUDENT_USER" tar -czf "$LAYER2" -C "$HINT_DIR" layer_three
 rm -f "$LAYER3"
 
 # Layer 1 (zip but no extension)
-FINAL_ARCHIVE="$HINT_DIR/forgotten_scroll.zip"
+FINAL_ARCHIVE="$HINT_DIR/forgotten_scroll"
 cd "$HINT_DIR"
 sudo -u "$STUDENT_USER" zip -q forgotten_scroll layer_two
 rm -f layer_two
 
-# ✅ Correct chown/chmod for actual file
 chown "$STUDENT_USER:$STUDENT_USER" "$FINAL_ARCHIVE"
 chmod 600 "$FINAL_ARCHIVE"
 
 # -------------------------------------------------
-# 6. Verification Script
+# 6. Verification Script (updated for system-wide service)
 # -------------------------------------------------
 cat << 'EOF' > "$DUNGEON_DIR/check_firewarden.sh"
 #!/bin/bash
@@ -159,15 +157,15 @@ echo
 
 FAIL=0
 
-# Service running?
-if systemctl --user is-active --quiet firewarden-chant.service; then
+# Service running? (system-wide)
+if systemctl is-active --quiet firewarden-chant.service; then
   echo "❌ The Firewarden still chants."
   FAIL=1
 fi
 
-# Service enabled?
-if systemctl --user is-enabled --quiet firewarden-chant.service; then
-  echo "❌ The chant will return upon login."
+# Service enabled? (system-wide)
+if systemctl is-enabled --quiet firewarden-chant.service; then
+  echo "❌ The chant will return upon boot."
   FAIL=1
 fi
 
@@ -190,7 +188,6 @@ if [[ ! -f "$MANUSCRIPT" ]]; then
   echo "❌ The Strange Manuscript has not been restored."
   FAIL=1
 else
-  # Validate expected content
   if ! grep -q "Seek the summoner" "$MANUSCRIPT"; then
     echo "❌ Manuscript content invalid or improperly decoded."
     FAIL=1
@@ -228,14 +225,7 @@ cat << EOF
 Dungeon location:
   ~/firewarden_chant
 
-The chant survives logout.
-The flame answers to a name.
-Scrolls hide beneath scrolls.
-
-To awaken the Firewarden (run after first login):
-  systemctl --user daemon-reload
-  systemctl --user enable firewarden-chant.service
-  systemctl --user start firewarden-chant.service
+The chant survives logout automatically.
 
 To verify victory:
   ./check_firewarden.sh
