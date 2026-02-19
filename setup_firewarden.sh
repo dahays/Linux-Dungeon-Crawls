@@ -3,7 +3,7 @@
 # Ghost Watch III: The Firewarden’s Chant
 # Level 6 Linux Dungeon Crawl
 # systemd system-wide persistence + layered archives
-# REV9.6.BETA
+# REV9.7.BETA
 # ======================================
 
 set -e
@@ -137,11 +137,13 @@ LAYER2="$HINT_DIR/layer_two"
 sudo -u "$STUDENT_USER" tar -czf "$LAYER2" -C "$HINT_DIR" layer_three
 rm -f "$LAYER3"
 
-# Layer 1 (zip but no extension)
+# Layer 1 (zip then remove extension safely)
 FINAL_ARCHIVE="$HINT_DIR/forgotten_scroll"
-cd "$HINT_DIR"
-sudo -u "$STUDENT_USER" zip -q forgotten_scroll layer_two
-rm -f layer_two
+
+sudo -u "$STUDENT_USER" zip -q "$HINT_DIR/forgotten_scroll.zip" "$HINT_DIR/layer_two"
+rm -f "$HINT_DIR/layer_two"
+
+mv "$HINT_DIR/forgotten_scroll.zip" "$FINAL_ARCHIVE"
 
 chown "$STUDENT_USER:$STUDENT_USER" "$FINAL_ARCHIVE"
 chmod 600 "$FINAL_ARCHIVE"
