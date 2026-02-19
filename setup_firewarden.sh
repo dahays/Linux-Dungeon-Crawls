@@ -1,221 +1,139 @@
 #!/bin/bash
-# ======================================
-# Ghost Watch III: The Firewarden’s Chant
-# Level 6 Linux Dungeon Crawl
-# Teaches systemd *user* service persistence
-# ======================================
 
-set -euo pipefail
+# 👹 Ghost Watch III: The Firewarden’s Chant
+# REV 1.2 – Clean persistence logic + improved verification alignment
 
-echo "🔥 Summoning the Firewarden's Chant REV1.1"
+clear
+echo "👹 Summoning the Firewarden's Chant REV1.2"
 
-# -------------------------------------------------
-# 0. Require sudo, capture invoking user
-# -------------------------------------------------
-if [[ "$EUID" -ne 0 ]]; then
-  echo "🚫 This ritual must be invoked with sudo."
-  exit 1
-fi
+STUDENT_USER=$(logname 2>/dev/null || echo $SUDO_USER)
+HOME_DIR=$(eval echo "~$STUDENT_USER")
+DUNGEON_DIR="$HOME_DIR/firewarden_chant"
+SERVICE_DIR="$HOME_DIR/.config/systemd/user"
+SERVICE_FILE="$SERVICE_DIR/firewarden-chant.service"
+SCRIPT_FILE="$DUNGEON_DIR/firewarden.sh"
+CHECK_FILE="$DUNGEON_DIR/check_firewarden.sh"
 
-if [[ -z "${SUDO_USER:-}" || "$SUDO_USER" == "root" ]]; then
-  echo "🚫 Cannot determine invoking user."
-  exit 1
-fi
+echo "🔥 Bound to adventurer: $STUDENT_USER"
+echo "🏰 Sanctum located at: $DUNGEON_DIR"
 
-STUDENT_USER="$SUDO_USER"
-STUDENT_HOME="$(getent passwd "$STUDENT_USER" | cut -d: -f6)"
-USER_UID="$(id -u "$STUDENT_USER")"
-
-echo "🎯 Bound to adventurer: $STUDENT_USER"
-echo "🏠 Sanctum located at: $STUDENT_HOME"
-
-# -------------------------------------------------
-# 1. Enable lingering (REQUIRED for user services)
-# -------------------------------------------------
-echo "🕯️  Ensuring the chant persists beyond logout..."
-loginctl enable-linger "$STUDENT_USER"
-
-# -------------------------------------------------
-# 2. Create dungeon directory
-# -------------------------------------------------
-DUNGEON_DIR="$STUDENT_HOME/firewarden_chant"
 mkdir -p "$DUNGEON_DIR"
-chown -R "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR"
+mkdir -p "$SERVICE_DIR"
 
-# -------------------------------------------------
-# 3. Firewarden script (endless watcher)
-# -------------------------------------------------
-cat << 'EOF' > "$DUNGEON_DIR/firewarden.sh"
+########################################
+# Create the chanting script
+########################################
+cat << 'EOF' > "$SCRIPT_FILE"
 #!/bin/bash
-set -euo pipefail
+LOG_DIR="$HOME/firewarden_chant"
+LOG_FILE="$LOG_DIR/fire.log"
 
-LOG="$HOME/firewarden_chant/fire.log"
+mkdir -p "$LOG_DIR"
 
 while true; do
-  echo "🔥 Firewarden watches at $(date)" >> "$LOG"
-  sleep 5
+    echo "$(date): The Firewarden chants eternal flame..." >> "$LOG_FILE"
+    sleep 5
 done
 EOF
 
-chmod +x "$DUNGEON_DIR/firewarden.sh"
-chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/firewarden.sh"
+chmod +x "$SCRIPT_FILE"
+chown -R "$STUDENT_USER":"$STUDENT_USER" "$DUNGEON_DIR"
 
-# -------------------------------------------------
-# 4. systemd user service
-# -------------------------------------------------
-USER_SYSTEMD_DIR="$STUDENT_HOME/.config/systemd/user"
-mkdir -p "$USER_SYSTEMD_DIR"
-chown -R "$STUDENT_USER:$STUDENT_USER" "$USER_SYSTEMD_DIR"
-
-SERVICE_FILE="$USER_SYSTEMD_DIR/firewarden-chant.service"
-
+########################################
+# Create systemd user service
+########################################
 cat << EOF > "$SERVICE_FILE"
 [Unit]
-Description=The Firewarden's Endless Chant
+Description=Firewarden Chant Service
 
 [Service]
-Type=simple
-ExecStart=$DUNGEON_DIR/firewarden.sh
+ExecStart=$SCRIPT_FILE
 Restart=always
-RestartSec=3
-StandardOutput=append:$DUNGEON_DIR/fire.log
-StandardError=append:$DUNGEON_DIR/fire.log
+RestartSec=2
 
 [Install]
 WantedBy=default.target
 EOF
 
-chown "$STUDENT_USER:$STUDENT_USER" "$SERVICE_FILE"
-chmod 644 "$SERVICE_FILE"
+chown "$STUDENT_USER":"$STUDENT_USER" "$SERVICE_FILE"
 
-# -------------------------------------------------
-# 5. Enable and start the service
-# -------------------------------------------------
-echo "🔥 Binding the chant into the system..."
-sudo -u "$STUDENT_USER" touch "$STUDENT_HOME/.hushlogin"
+########################################
+# Enable lingering (for persistence beyond logout)
+########################################
+echo "🔥 Ensuring the chant persists beyond logout..."
+loginctl enable-linger "$STUDENT_USER"
 
+########################################
+# Reload and enable service
+########################################
+sudo -u "$STUDENT_USER" systemctl --user daemon-reload
+sudo -u "$STUDENT_USER" systemctl --user enable firewarden-chant.service
+sudo -u "$STUDENT_USER" systemctl --user start firewarden-chant.service
 
-runuser -l "$STUDENT_USER" -c "XDG_RUNTIME_DIR=/run/user/$USER_UID systemctl --user daemon-reload"
-runuser -l "$STUDENT_USER" -c "XDG_RUNTIME_DIR=/run/user/$USER_UID systemctl --user enable firewarden-chant.service"
-runuser -l "$STUDENT_USER" -c "XDG_RUNTIME_DIR=/run/user/$USER_UID systemctl --user start firewarden-chant.service"
-
-# -------------------------------------------------
-# 6. Cryptic Hint (double-layer archive + GPG)
-# -------------------------------------------------
-HINT_DIR="$DUNGEON_DIR/.hints"
-mkdir -p "$HINT_DIR"
-chown "$STUDENT_USER:$STUDENT_USER" "$HINT_DIR"
-chmod 700 "$HINT_DIR"
-
-MANUSCRIPT="$HINT_DIR/strange_manuscript.txt"
-
-cat << 'EOF' > "$MANUSCRIPT"
-You uncover a thin, brittle page sealed away from sight:
-
-Find the journal control where silence sleeps
-Lingering watch, the parent that breathes life
-Analyze the logs, trace the chant
-Monitor the systemd circle to claim insight
-Explore hidden directories
-Stay the course to decrypt the unseen layers
-EOF
-
-chown "$STUDENT_USER:$STUDENT_USER" "$MANUSCRIPT"
-
-runuser -l "$STUDENT_USER" -c \
-  "gpg --batch --yes --passphrase 'FLAMES' -c '$MANUSCRIPT'"
-
-runuser -l "$STUDENT_USER" -c \
-  "zip -q '$HINT_DIR/fire_hint.zip' '$MANUSCRIPT.gpg'"
-
-tar -czf "$HINT_DIR/fire_hint.tgz" -C "$HINT_DIR" fire_hint.zip
-
-rm -f "$MANUSCRIPT" "$MANUSCRIPT.gpg" "$HINT_DIR/fire_hint.zip"
-
-chown "$STUDENT_USER:$STUDENT_USER" "$HINT_DIR/fire_hint.tgz"
-chmod 600 "$HINT_DIR/fire_hint.tgz"
-
-# -------------------------------------------------
-# 7. Verification script
-# -------------------------------------------------
-cat << 'EOF' > "$DUNGEON_DIR/check_firewarden.sh"
+########################################
+# Create verification script
+########################################
+cat << 'EOF' > "$CHECK_FILE"
 #!/bin/bash
-set -euo pipefail
 
-USER_UID="$(id -u)"
-export XDG_RUNTIME_DIR="/run/user/$USER_UID"
-
-echo "🔎 Inspecting the Firewarden's Chant..."
-echo
+echo "🔎 Verifying the Firewarden’s fate..."
 
 FAIL=0
 
+# Check if service is active
 if systemctl --user is-active --quiet firewarden-chant.service; then
-  echo "❌ The Firewarden still chants."
-  FAIL=1
+    echo "❌ The Firewarden still chants."
+    FAIL=1
+else
+    echo "✔ Service stopped."
 fi
 
+# Check if service is enabled
 if systemctl --user is-enabled --quiet firewarden-chant.service; then
-  echo "❌ The chant will return upon login."
-  FAIL=1
+    echo "❌ The chant will resurrect on login."
+    FAIL=1
+else
+    echo "✔ Startup disabled."
 fi
 
-if loginctl show-user "$USER" | grep -q "Linger=yes"; then
-  echo "❌ Lingering still enabled."
-  FAIL=1
-fi
-
+# Check for running processes
 if pgrep -f firewarden.sh > /dev/null; then
-  echo "❌ Residual Firewarden processes detected."
-  FAIL=1
+    echo "❌ Residual Firewarden processes detected."
+    FAIL=1
+else
+    echo "✔ No lingering chant processes."
 fi
 
-if [[ "$FAIL" -eq 1 ]]; then
-  echo
-  echo "The fire still smolders."
-  exit 1
+# Warn about lingering (educational only)
+if loginctl show-user "$USER" | grep -q Linger=yes; then
+    echo "⚠ Lingering is enabled (user services persist beyond logout)."
 fi
 
-echo "✔ Service stopped"
-echo "✔ Startup disabled"
-echo "✔ Lingering disabled"
-echo "✔ No residual processes"
+if [ "$FAIL" -eq 0 ]; then
+    echo "🏆 LEVEL COMPLETE — The Firewarden is silent."
+    exit 0
+else
+    echo "🔥 The ritual persists. Continue your investigation."
+    exit 1
+fi
+EOF
+
+chmod +x "$CHECK_FILE"
+chown "$STUDENT_USER":"$STUDENT_USER" "$CHECK_FILE"
+
+clear
+echo "🔥 THE FIREWARDEN'S CHANT IS ACTIVE"
 echo
-echo "🏆 LEVEL 6 COMPLETE"
-exit 0
-EOF
-
-chmod +x "$DUNGEON_DIR/check_firewarden.sh"
-chown "$STUDENT_USER:$STUDENT_USER" "$DUNGEON_DIR/check_firewarden.sh"
-
-# -------------------------------------------------
-# 8. Final message
-# -------------------------------------------------
-cat << EOF
-
-🔥 THE FIREWARDEN'S CHANT IS ACTIVE
-
-✔ Installed for user: $STUDENT_USER
-✔ Dungeon location: ~/firewarden_chant
-✔ Persistence bound through systemd (user scope)
-✔ Lingering enabled
-
-Hints:
-- The chant survives logout
-- Killing processes brings only silence, not peace
-- Read the logs, not just the process list
-- Inspect user-level systemd units
-
-To begin:
-  exec zsh
-  cd ~/firewarden_chant
-
-To verify victory:
-  ./check_firewarden.sh
-
-What you invoke
-is not always what answers.
-Trace the summoner,
-not the summoned.
-
-EOF
+echo "Installed for user: $STUDENT_USER"
+echo "Dungeon location: ~/firewarden_chant"
+echo "Persistence bound through systemd (user scope)"
+echo "Lingering enabled"
+echo
+echo "To begin:"
+echo "  cd ~/firewarden_chant"
+echo
+echo "To verify victory:"
+echo "  ./check_firewarden.sh"
+echo
+echo "Trace the summoner,"
+echo "not the summoned."
