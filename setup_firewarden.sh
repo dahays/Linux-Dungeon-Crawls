@@ -140,7 +140,10 @@ rm -f "$LAYER3"
 # Layer 1 (zip then remove extension safely)
 FINAL_ARCHIVE="$HINT_DIR/forgotten_scroll"
 
-sudo -u "$STUDENT_USER" zip -q "$HINT_DIR/forgotten_scroll.zip" "$HINT_DIR/layer_two"
+sudo -u "$STUDENT_USER" bash -c "
+cd '$HINT_DIR' && zip -q forgotten_scroll.zip layer_two
+"
+
 rm -f "$HINT_DIR/layer_two"
 
 mv "$HINT_DIR/forgotten_scroll.zip" "$FINAL_ARCHIVE"
