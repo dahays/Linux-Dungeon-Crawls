@@ -28,6 +28,12 @@ Be aware of our surroundings, there may be hidden artifacts to aid you in your q
 
 ## Available Dungeon Crawls
 
+### 🚪 The Closed Door 🚪
+
+An introductory Linux Dungeon Crawl.  Students must navigate the dungeon using basic file navigation, creation, and manipulation commands.  These Linux Dungeon Crawls will build upon skills of the previous Crawls in the series.  Look to the strange_manuscript for clues.
+
+**Crawl Instructions:** [The Closed Door](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/Closed-Door.md)
+
 ### 🏴‍☠️ The Great Linux Treasure Hunt 💰
 
 This dungeon, written by Github user [hermonm](https://github.com/hermonm), served as the inspirational jumping-off point to write the rest of these.
