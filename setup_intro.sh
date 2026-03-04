@@ -1,7 +1,7 @@
 #!/bin/bash
 # ======================================
 # Linux Dungeon Crawl I
-# The Closed Door
+# The First Door
 # Intro to Navigation & File Manipulation
 # ======================================
 
@@ -30,7 +30,7 @@ You stand in a place called dungeon_intro.
 
 Within it rests a door that is closed.
 
-Your journey begins when you open it.
+Your journey begins when the door opens.
 
 Rename the chamber called closed_door so that it reflects its new state.
 
