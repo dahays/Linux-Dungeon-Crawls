@@ -7,7 +7,7 @@
 
 set -e
 
-echo "🏰 Preparing the Dungeon Entrance..."
+echo "🏰 Preparing the Dungeon Entrance... 🚪"
 
 BASE_DIR="$HOME/dungeon_intro"
 DOOR_DIR="$BASE_DIR/closed_door"
