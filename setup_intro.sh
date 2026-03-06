@@ -108,7 +108,7 @@ echo "🔎 Inspecting the Dungeon..."
 if [ -d "$BASE_DIR/opened_door" ] && [ ! -d "$BASE_DIR/closed_door" ]; then
     echo "✔ Door has been opened."
 else
-    echo "✘ The door remains improperly named."
+    echo "✘ The door remains closed."
     PASS=false
 fi
 
