@@ -34,7 +34,7 @@ Your journey begins when the door opens.
 
 Rename the chamber called closed_door so that it reflects its new state.
 
-When the door stands opened, construct three additional rooms:
+When the door stands opened, enter and construct three additional rooms:
 
 • armory
 • treasury
@@ -95,35 +95,37 @@ EOF
 # -------------------------------------------------
 # Create Verification Script
 # -------------------------------------------------
+
 cat << 'EOF' > "$BASE_DIR/check_intro.sh"
 #!/bin/bash
 
 BASE_DIR="$HOME/dungeon_intro"
+DOOR="$BASE_DIR/opened_door"
 
 PASS=true
 
 echo "🔎 Inspecting the Dungeon..."
 
 # 1. Door renamed
-if [ -d "$BASE_DIR/opened_door" ] && [ ! -d "$BASE_DIR/closed_door" ]; then
+if [ -d "$DOOR" ] && [ ! -d "$BASE_DIR/closed_door" ]; then
     echo "✔ Door has been opened."
 else
     echo "✘ The door remains closed."
     PASS=false
 fi
 
-# 2. Required rooms exist
+# 2. Required rooms exist INSIDE opened_door
 for ROOM in armory treasury; do
-    if [ -d "$BASE_DIR/$ROOM" ]; then
-        echo "✔ $ROOM exists."
+    if [ -d "$DOOR/$ROOM" ]; then
+        echo "✔ $ROOM exists inside the opened door."
     else
-        echo "✘ $ROOM is missing."
+        echo "✘ $ROOM is missing inside opened_door."
         PASS=false
     fi
 done
 
 # 3. Laboratory destroyed
-if [ ! -d "$BASE_DIR/laboratory" ]; then
+if [ ! -d "$DOOR/laboratory" ]; then
     echo "✔ Laboratory has been destroyed."
 else
     echo "✘ Laboratory still stands."
@@ -131,14 +133,14 @@ else
 fi
 
 # 4. Files in correct locations
-if [ -f "$BASE_DIR/treasury/apprentice_notes.txt" ]; then
+if [ -f "$DOOR/treasury/apprentice_notes.txt" ]; then
     echo "✔ apprentice_notes.txt rests in the treasury."
 else
     echo "✘ apprentice_notes.txt not found in treasury."
     PASS=false
 fi
 
-if [ -f "$BASE_DIR/armory/alchemical_draft.txt" ]; then
+if [ -f "$DOOR/armory/alchemical_draft.txt" ]; then
     echo "✔ alchemical_draft.txt rests in the armory."
 else
     echo "✘ alchemical_draft.txt not found in armory."
@@ -146,8 +148,8 @@ else
 fi
 
 # 5. Content verification
-if grep -q "I have opened the door." "$BASE_DIR/armory/alchemical_draft.txt" 2>/dev/null &&
-   grep -q "The experiment begins." "$BASE_DIR/armory/alchemical_draft.txt" 2>/dev/null; then
+if grep -q "I have opened the door." "$DOOR/armory/alchemical_draft.txt" 2>/dev/null &&
+   grep -q "The experiment begins." "$DOOR/armory/alchemical_draft.txt" 2>/dev/null; then
     echo "✔ Alchemical draft contains proper inscription."
 else
     echo "✘ Alchemical draft content incorrect."
