@@ -95,6 +95,14 @@ Master the Trial of Eternal Fire by defeating your enemies in the correct order.
 
 ---
 
+### 👹 Ghost Watch III: The Firewarden’s Chant (Level 6)
+
+The Firewarden's Chant echos through the systemd.  Slay the processes and they rise again.  The flame is not wild; it is supervised.
+
+**Crawl Instructions:** [Firewardens-Chant.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/Firewardens-Chant.md)
+
+---
+
 # 🛡️ Commands to Help on Your Quests
 
 | Command | Description |
