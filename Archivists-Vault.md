@@ -31,3 +31,5 @@ cd ~/dungeon_vault/vault_entrance
 ```
 Confirm success:
 ```bash
+./check_vault.sh
+```
