@@ -35,7 +35,7 @@ The vault desires three sacred artifacts:
 
 Hints for the Wise:
 
-- Begin by asking the vault for its title; every vault must bear a name.
+- Begin by asking for the vault title; every vault must bear a name.
 - The vault itself is a container that holds your artifacts.
 - Each artifact must exist within the vault, forged by your own hands.
 - The Guardian will watch over your creation. If any artifact is missing, the vault remains sealed.
@@ -94,4 +94,4 @@ echo "✅ Dungeon prepared!"
 echo "You should navigate to:"
 echo "cd $VAULT_DIR"
 echo
-echo "You  will find a mysterious manuscript guiding your quest."
+echo "You  will find a strange manuscript guiding your quest."
