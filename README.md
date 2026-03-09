@@ -22,7 +22,7 @@ All dungeon crawls follow the same basic workflow:
 6. Check for possible "clues" within each dungeon to help get started
 7. Run the check script to verify success
 
-Be aware of our surroundings, there may be hidden artifacts to aid you in your quest.
+Be aware of your surroundings, there may be hidden artifacts to aid you in your quest.
 
 ---
 
@@ -33,6 +33,12 @@ Be aware of our surroundings, there may be hidden artifacts to aid you in your q
 An introductory Linux Dungeon Crawl.  Students must navigate the dungeon using basic file navigation, creation, and manipulation commands.  These Linux Dungeon Crawls will build upon skills of the previous Crawls in the series.  Look to the strange_manuscript for clues.
 
 **Crawl Instructions:** [The First Door](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/First-Door.md)
+
+### 🏰 The Archivist’s Vault 🔮
+
+An introductory Linux Dungeon Crawl.  Students must write and deploy a script to construct a simple dungeon.  These Linux Dungeon Crawls will build upon skills of the previous Crawls in the series.  Look to the strange_manuscript for clues.
+
+**Crawl Instructions:** [The Archivist's Vault](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/Archivists-Vault.md)
 
 ### 🏴‍☠️ The Great Linux Treasure Hunt 💰
 
