@@ -28,22 +28,28 @@ Be aware of your surroundings, there may be hidden artifacts to aid you in your 
 
 ## Available Dungeon Crawls
 
-### 🚪 The First Door 🚪
+### 🚪 The First Door 🚪 (Intro 1A)
 
 An introductory Linux Dungeon Crawl.  Students must navigate the dungeon using basic file navigation, creation, and manipulation commands.  These Linux Dungeon Crawls will build upon skills of the previous Crawls in the series.  Look to the strange_manuscript for clues.
 
 **Crawl Instructions:** [The First Door](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/First-Door.md)
 
-### 🏰 The Archivist’s Vault 🔮
+---
+
+### 🏰 The Archivist’s Vault 🔮 (Intro 1B)
 
 An introductory Linux Dungeon Crawl.  Students must write and deploy a script to construct a simple dungeon.  These Linux Dungeon Crawls will build upon skills of the previous Crawls in the series.  Look to the strange_manuscript for clues.
 
 **Crawl Instructions:** [The Archivist's Vault](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/Archivists-Vault.md)
 
-### 🏴‍☠️ The Great Linux Treasure Hunt 💰
+---
+
+### 🏴‍☠️ The Great Linux Treasure Hunt 💰 (Intro 1C)
 
 This dungeon, written by Github user [hermonm](https://github.com/hermonm), served as the inspirational jumping-off point to write the rest of these.
 A link to his original document can be found [HERE](https://docs.google.com/document/d/1jnTvguwR8JN0xp1oe4YjzHU7vwUXi7_Ni7kA6looqOs/edit?tab=t.0)
+
+---
 
 ### 🐍 The Hydra Head Hunt (Level 2)
 
@@ -51,11 +57,15 @@ A multi-process Linux challenge focused on identifying and defeating hidden and 
 
 **Crawl Instructions:** [The-Hydra-Head-Hunt.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/Hydra-Head-Hunt.md#-hydra-head-hunt)
 
+---
+
 ### 👻 The Ghost Watch (Level 3)
 
 An advanced Linux investigation challenge centered on identifying and stopping a persistent “ghost” process that respawns until the true source is discovered.
 
 **Crawl Instructions:** [The-Ghost-Watch.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/The-Ghost-Watch.md#-ghost-watch)
+
+---
 
 ### 🧟 Ghost Watch II: The Necromancer (Level 4)
 An advanced Linux dungeon crawl.
@@ -65,6 +75,8 @@ In this challenge, you face a necromancer process that continuously resurrects a
 
 **Crawl Instructions:** [Ghost-Watch-II-Necromancer.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/Ghost-Watch-II-Necromancer.md)
 
+---
+
 ### 🐉 The Dragon’s Cron (Level 5)
 
 A powerful dragon stalks the system, awakening every minute without fail. Killing symptoms will not stop it. To restore peace, you must uncover how the dragon persists and remove it at the source.
@@ -72,6 +84,8 @@ A powerful dragon stalks the system, awakening every minute without fail. Killin
 This dungeon emphasizes investigation over brute force.
 
 **Crawl Instructions:** [The-Dragon-Cron.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/The-Dragon-Cron.md#-the-dragons-cron)
+
+---
 
 ### 🔥The Trial of Eternal Fire (Levels 1-5 Cumulative)🔥
 
