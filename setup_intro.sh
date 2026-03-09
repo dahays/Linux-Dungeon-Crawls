@@ -1,6 +1,6 @@
 #!/bin/bash
 # ======================================
-# Linux Dungeon Crawl I
+# Linux Dungeon Crawl Intro 1A
 # The First Door
 # Intro to Navigation & File Manipulation
 # ======================================

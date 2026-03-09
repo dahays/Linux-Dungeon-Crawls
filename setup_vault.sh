@@ -1,6 +1,6 @@
 #!/bin/bash
 # ======================================
-# Linux Dungeon Crawl II
+# Linux Dungeon Crawl Intro 1B
 # The Archivist's Vault
 # Intro to Bash Scripting
 # ======================================
