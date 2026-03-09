@@ -9,6 +9,11 @@ This dungeon introduces basic Linux scripting, directory creation, and file mana
 
 The strange_manuscript.txt contains your instructions. Read it carefully — it will guide your actions without revealing exact commands.
 
+**Skills Practiced**
+- bash scripting using:
+- File creation
+- File and directory management
+
 ## Setup Instructions
 
 Open a terminal.
