@@ -35,7 +35,7 @@ The vault desires three sacred artifacts:
 
 Hints for the Wise:
 
-- Begin by asking for the vault title; every vault must bear a name.
+- Begin by asking for the fault title; every vault must bear a name.
 - The vault itself is a container that holds your artifacts.
 - Each artifact must exist within the vault, forged by your own hands.
 - The Guardian will watch over your creation. If any artifact is missing, the vault remains sealed.
