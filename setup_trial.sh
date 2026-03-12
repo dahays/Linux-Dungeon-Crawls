@@ -1,4 +1,10 @@
 #!/bin/bash
+# ======================================
+# Trial of Eternal Fire
+# Cumulative Level 1-5 Linux Dungeon Crawl
+# systemd, cron, process control, env manipulation, and more
+# REV9.FINAL
+# ======================================
 set -e
 set -o pipefail
 

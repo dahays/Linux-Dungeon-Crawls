@@ -1,4 +1,4 @@
-# 👻 Ghost Watch
+# 👻 Ghost Watch (Level 3)
 
 ## Overview
 An advanced Linux dungeon challenge.  

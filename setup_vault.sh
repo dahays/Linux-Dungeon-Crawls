@@ -1,8 +1,9 @@
 #!/bin/bash
 # ======================================
-# Linux Dungeon Crawl Intro 1B
 # The Archivist's Vault
+# Intro 1B Linux Dungeon Crawl
 # Intro to Bash Scripting
+# REV9.FINAL
 # ======================================
 
 set -e

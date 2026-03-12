@@ -1,7 +1,9 @@
 #!/bin/bash
 # ======================================
 # Ghost Watch III: Shadow of the Wraith
-# Level 8 - LD_PRELOAD persistence
+# Level 8 Linux Dungeon Crawl
+# LD_PRELOAD persistence
+# REV1.0
 # ======================================
 
 set -e

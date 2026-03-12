@@ -1,4 +1,4 @@
-# 🐲 Level 7: Dragon’s Awakening (~/.config/autostart)
+# 🐲 Dragon’s Awakening (Level 7) (~/.config/autostart)
 ## Overview
 
 The Dragon awakens at every login, silently executing its ritual through a GUI autostart .desktop file. Killing processes will not suffice; the threat will reappear at each session start. Students must trace, disable, and remove the autostart entry to restore control.

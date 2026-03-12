@@ -1,8 +1,9 @@
 #!/bin/bash
 # ======================================
-# Linux Dungeon Crawl Intro 1A
 # The First Door
+# Intro 1A Linux Dungeon Crawl
 # Intro to Navigation & File Manipulation
+# REV9.FINAL
 # ======================================
 
 set -e

@@ -1,7 +1,9 @@
 #!/bin/bash
 # ======================================
 # Ghost Watch II: The Necromancer
-# Teaches parent-child process control
+# Level 4 Linux Dungeon Crawl
+# parent-child process control
+# REV9.FINAL
 # ======================================
 
 set -e

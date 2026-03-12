@@ -1,5 +1,5 @@
 
-# 🏰 The First Door 🚪
+# 🏰 The First Door 🚪 (Level 1A)
 
 ## Overview
 An introductory Linux Dungeon Crawl.  Students must navigate the dungeon using basic file navigation, creation, and manipulation commands.  These Linux Dungeon Crawls will build upon skills of the previous Crawls in the series.  Look to the strange_manuscript for clues.

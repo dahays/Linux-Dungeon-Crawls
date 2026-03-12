@@ -1,7 +1,9 @@
 #!/bin/bash
 # ======================================
 # Ghost Watch III: Dragon’s Awakening
-# Level 7 - autostart persistence
+# Level 7 Linux Dungeon Crawl
+# autostart persistence
+# REV1.0
 # ======================================
 
 set -e

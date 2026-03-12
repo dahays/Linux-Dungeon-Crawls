@@ -1,4 +1,4 @@
-# 👹 Level 8: Shadow of the Wraith (LD_PRELOAD Shadowing)
+# 👹 Shadow of the Wraith (Level 8) (LD_PRELOAD Shadowing)
 ## Overview
 
 The Shadow of the Wraith introduces runtime command interception using LD_PRELOAD. Standard commands may be overridden by malicious libraries, giving the illusion of normal behavior while masking the true state of the system. Students must discover and remove the shadowing to regain normal control.

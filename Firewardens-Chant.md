@@ -1,4 +1,4 @@
-# 👹 Ghost Watch III: The Firewarden’s Chant
+# 👹 Ghost Watch III: The Firewarden’s Chant (Level 6)
 
 ## Overview
 

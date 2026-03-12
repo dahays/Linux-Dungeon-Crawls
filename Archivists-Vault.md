@@ -1,4 +1,4 @@
-# 🏰 The Archivist’s Vault 🔮
+# 🏰 The Archivist’s Vault 🔮 (Level 1B)
 
 (Linux Dungeon Crawl Intro 1B)
 

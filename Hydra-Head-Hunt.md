@@ -1,5 +1,5 @@
 
-# 🐍 Hydra Head Hunt
+# 🐍 Hydra Head Hunt (Level 2)
 
 ## Overview
 A mid-level Linux challenge. Students must discover multiple hidden “Hydra” processes, identify environment variables, detect command hijacking, and verify system safety.

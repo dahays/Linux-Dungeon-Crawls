@@ -1,7 +1,9 @@
 #!/bin/bash
 # ======================================
-# Ghost Watch - Level 3
-# Teaches process inspection, identity, and signals
+# Linux Dungeon Crawl Level 3
+# Ghost Watch
+# process inspection, identity, and signals
+# REV9.FINAL
 # ======================================
 
 set -e

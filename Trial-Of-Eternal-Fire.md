@@ -1,4 +1,4 @@
-# 🔥 Trial of Eternal Fire
+# 🔥 Trial of Eternal Fire (Levels 1-5 cumulative)
 
 ## Overview
 The Trial of Eternal Fire tests your mastery over multiple concurrent threats that refuse to die. Wraiths roam the dungeon, a Pyromancer resurrects them endlessly, and the Inferno burns persistently through cron. To claim the Flamebound Treasure, you must carefully unravel each layer of this fiery trial.

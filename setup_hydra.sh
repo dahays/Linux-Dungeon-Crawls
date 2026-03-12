@@ -1,4 +1,10 @@
 #!/bin/bash
+# ======================================
+# Hydra Head Hunt
+# Level 2 Linux Dungeon Crawl
+# Command Wrappers, Environment Variables, and Process Control
+# REV9.FINAL
+# ======================================
 set -e
 set -o pipefail
 

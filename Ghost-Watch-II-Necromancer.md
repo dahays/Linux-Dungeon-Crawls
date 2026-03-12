@@ -1,4 +1,4 @@
-# 🧟 Ghost Watch II: The Necromancer
+# 🧟 Ghost Watch II: The Necromancer (Level 4)
 
 ## Overview
 

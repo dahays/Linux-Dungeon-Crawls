@@ -1,8 +1,10 @@
 #!/bin/bash
 # ======================================
-# The Dragon's Cron - Setup Script
-# Teaches cron persistence and investigation
-# + hidden forensic archive hints
+# The Dragon's Cron
+# Level 5 Linux Dungeon Crawl
+# cron persistence and investigation
+# and hidden forensic archive hints
+# REV9.FINAL
 # ======================================
 
 set -e

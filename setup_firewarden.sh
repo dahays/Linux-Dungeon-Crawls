@@ -3,7 +3,7 @@
 # Ghost Watch III: The Firewarden’s Chant
 # Level 6 Linux Dungeon Crawl
 # systemd system-wide persistence + layered archives
-# REV9.7.BETA
+# REV9.FINAL
 # ======================================
 
 set -e
