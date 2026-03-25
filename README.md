@@ -44,7 +44,15 @@ An introductory Linux Dungeon Crawl.  Students must write and deploy a script to
 
 ---
 
-### 🏴‍☠️ The Great Linux Treasure Hunt 💰 (Intro 1C)
+### 👁️ The Shadow Account (Intro 1C)
+
+An introductory Linux Dungeon Crawl.  Students must locate and remove a malicious user and all of the user's files. These Linux Dungeon Crawls will build upon skills of the previous Crawls in the series.  Look to the strange_manuscript for clues.
+
+**Crawl Instructions:** [The Shadow Account](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/Shadow-Account.md)
+
+---
+
+### 🏴‍☠️ The Great Linux Treasure Hunt 💰 (Level 1)
 
 This dungeon, written by Github user [hermonm](https://github.com/hermonm), served as the inspirational jumping-off point to write the rest of these.
 A link to his original document can be found [HERE](https://docs.google.com/document/d/1jnTvguwR8JN0xp1oe4YjzHU7vwUXi7_Ni7kA6looqOs/edit?tab=t.0)
