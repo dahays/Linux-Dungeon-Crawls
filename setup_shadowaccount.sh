@@ -1,7 +1,7 @@
 #!/bin/bash
 # ======================================
-# Linux Dungeon Crawl I-C
 # The Shadow Account
+# Intro 1C Linux Dungeon Crawl
 # Intro to Users & Cleanup
 # ======================================
 
