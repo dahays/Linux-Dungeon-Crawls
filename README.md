@@ -52,10 +52,12 @@ An introductory Linux Dungeon Crawl.  Students must locate and remove a maliciou
 
 ---
 
-### 🏴‍☠️ The Great Linux Treasure Hunt 💰 (Level 1)
+### 🏴‍☠️ The Sunken Vault 💰 (Level 1)
 
-This dungeon, written by Github user [hermonm](https://github.com/hermonm), served as the inspirational jumping-off point to write the rest of these.
-A link to his original document can be found [HERE](https://docs.google.com/document/d/1jnTvguwR8JN0xp1oe4YjzHU7vwUXi7_Ni7kA6looqOs/edit?tab=t.0)
+An introductory Linux Dungeon Crawl that blends navigation, hidden files, process management, permissions, and basic scripting.
+Students must traverse the vault, uncover hidden clues, eliminate a lurking process, and unlock an encrypted treasure guarded by a disarm script.
+
+**Crawl Instructions:** [The-Sunken-Vault.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/The-Sunken-Vault.md)
 
 ---
 
