@@ -45,7 +45,7 @@ Run the script:
 Enter the dungeon:
 
 ```bash
-cd ~/dungeon_level1
+cd ~/vault
 ```
 
 Run the check script to confirm completion:
