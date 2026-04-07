@@ -1,16 +1,17 @@
 #!/bin/bash
 
 # ======================================
-# Linux Dungeon Crawl I
 # The Sunken Vault
-# Intro to Navigation, Files & Processes
+# Level 1 Linux Dungeon Crawl
+# navigation, files, processes, and encryption
+# REV2.0
 # ======================================
 
 set -e
 
 echo "🏰 Constructing the Sunken Vault... 🌊"
 
-BASE_DIR="$HOME/dungeon_level1"
+BASE_DIR="$HOME/vault"
 VAULT_DIR="$BASE_DIR/sunken_vault"
 
 mkdir -p "$VAULT_DIR"
@@ -134,12 +135,12 @@ if pgrep -f "ghost_pirate.sh" > /dev/null; then
     exit 1
 fi
 
-if [ ! -r "$HOME/dungeon_level1/sunken_vault/palm_tree/dig_here/.X" ]; then
+if [ ! -r "$HOME/vault/sunken_vault/palm_tree/dig_here/.X" ]; then
     echo "❌ Treasure still locked."
     exit 1
 fi
 
-echo "✅ Vault cleared. Treasure recovered!"
+echo "🏆 VAULT CLEARED. TREASURE RECOVERED!"
 EOF
 
 chmod +x "$BASE_DIR/check_sunken_vault.sh"
@@ -149,6 +150,6 @@ chmod +x "$BASE_DIR/check_sunken_vault.sh"
 # -------------------------------------------------
 clear
 echo "🏴‍☠️ The Sunken Vault awaits..."
-echo "📜 Read strange_manuscript.txt to begin."
+echo "📜 Navigate to ~/vault and read strange_manuscript.txt to begin."
 
 rm -- "$0"
