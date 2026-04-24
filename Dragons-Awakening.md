@@ -39,7 +39,7 @@ Enter the dungeon directory to begin:
 cd dragons_awakening
 ```
 
-Check Success:
+Check success
 
 A true victory leaves the autostart idle.
 ```bash
