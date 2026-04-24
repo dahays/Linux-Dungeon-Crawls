@@ -79,7 +79,7 @@ Decode layers to find the insight
 EOF
 
 # Encrypt directly to extensionless file
-gpg --batch --yes --pinentry-mode loopback --passphrase "DRAGON" \
+gpg --batch --yes --pinentry-mode loopback --passphrase "OCLRZY" \
     -o "$HINT_DIR/ash" -c "$MANUSCRIPT"
 
 # First archive (zip, no extension)
