@@ -3,7 +3,7 @@
 # Ghost Watch III: Dragon’s Awakening
 # Level 7 Linux Dungeon Crawl
 # autostart persistence
-# REV1.0
+# REV1.3
 # ======================================
 
 set -e
@@ -78,40 +78,62 @@ Seek hidden archives for the truth
 Decode layers to find the insight
 EOF
 
-# Encrypt manuscript (shift cipher of 11)
-gpg --batch --yes --passphrase "OCLRZY" -c "$MANUSCRIPT"
+# Encrypt directly to extensionless file
+gpg --batch --yes --pinentry-mode loopback --passphrase "DRAGON" \
+    -o "$HINT_DIR/ash" -c "$MANUSCRIPT"
 
-# First archive
-zip -q "$HINT_DIR/cinder" "$MANUSCRIPT.gpg"
+# First archive (zip, no extension)
+zip -q -j "$HINT_DIR/cinder.zip" "$HINT_DIR/ash"
+mv "$HINT_DIR/cinder.zip" "$HINT_DIR/cinder"
 
-# Second archive
-tar -czf "$HINT_DIR/embers" -C "$HINT_DIR" cinder
+# Second archive (tar.gz, no extension)
+tar -czf "$HINT_DIR/embers.tar.gz" -C "$HINT_DIR" cinder
+mv "$HINT_DIR/embers.tar.gz" "$HINT_DIR/embers"
 
-# Cleanup
-rm "$MANUSCRIPT" "$MANUSCRIPT.gpg" "$HINT_DIR/cinder"
+# Cleanup inner files
+rm "$MANUSCRIPT" "$HINT_DIR/ash" "$HINT_DIR/cinder"
 
 chown "$STUDENT_USER:$STUDENT_USER" "$HINT_DIR/embers"
 chmod 600 "$HINT_DIR/embers"
 
 # -------------------------------
-# 3. Verification script
+# 3. Verification script (robust)
 # -------------------------------
 cat << 'EOF' > "$DRAGON_DIR/check_awakening.sh"
 #!/bin/bash
 
 DESKTOP="$HOME/.config/autostart/dragon_awake.desktop"
 LOG="$HOME/dragons_awakening/dragon.log"
+DRAGON_SCRIPT="$HOME/dragons_awakening/dragon.sh"
 
 echo "🔎 Watching for signs of awakening..."
 echo
 
+FAIL=0
+
 if [[ -f "$DESKTOP" ]]; then
-  echo "❌ The dragon is still poised to awaken"
-  exit 1
+  echo "❌ Autostart trigger still exists"
+  FAIL=1
 fi
 
 if [[ -f "$LOG" ]]; then
-  echo "❌ The dragon has left scorch marks"
+  echo "❌ Dragon activity log still present"
+  FAIL=1
+fi
+
+if [[ -f "$DRAGON_SCRIPT" ]]; then
+  echo "❌ Dragon script still lurks in the lair"
+  FAIL=1
+fi
+
+if crontab -l 2>/dev/null | grep -q "dragon.sh"; then
+  echo "❌ Cron-based persistence detected"
+  FAIL=1
+fi
+
+if [[ $FAIL -eq 1 ]]; then
+  echo
+  echo "🔥 The dragon still stirs..."
   exit 1
 fi
 

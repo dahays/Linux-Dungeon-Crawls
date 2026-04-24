@@ -58,9 +58,7 @@ A chant properly silenced leaves no echo.
 A true victory confirms:
 
 ✔ Service stopped
-
 ✔ Startup disabled
-
 🏆 LEVEL 6 COMPLETE
 
 If the flame returns, something higher still commands it.
