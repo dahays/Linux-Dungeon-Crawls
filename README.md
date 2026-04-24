@@ -78,7 +78,6 @@ An advanced Linux investigation challenge centered on identifying and stopping a
 ---
 
 ### 🧟 Ghost Watch II: The Necromancer (Level 4)
-An advanced Linux dungeon crawl.
 
 A simple ghost is never truly gone.
 In this challenge, you face a necromancer process that continuously resurrects a ghost child. Killing the ghost alone is futile. The sins of the parent...
@@ -110,6 +109,17 @@ Master the Trial of Eternal Fire by defeating your enemies in the correct order.
 The Firewarden's Chant echos through the systemd.  Slay the processes and they rise again.  The flame is not wild; it is supervised.
 
 **Crawl Instructions:** [Firewardens-Chant.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/Firewardens-Chant.md)
+
+---
+
+### 🐲 Dragon’s Awakening (Level 7)
+
+The Dragon does not run. It waits.
+It does not persist through processes, but through invocation.
+
+Each login is a spark. Each session, a breath. And somewhere in the shadows of the filesystem, a sealed relic ensures the flame remembers how to return. Killing what you see changes nothing. The Dragon is already gone when you arrive… and already coming back when you leave.
+
+**Crawl Instructions:** [Dragons-Awakening.md](https://github.com/dahays/Linux-Dungeon-Crawls/blob/main/Dragons-Awakening.md)
 
 ---
 
